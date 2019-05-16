@@ -532,3 +532,4 @@ const adminView = `
     
 </table>
 `;
+
