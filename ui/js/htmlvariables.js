@@ -273,3 +273,138 @@ const signUpForm = `
         </fieldset>
 </div>`;
 
+
+const createNewAdForm = `
+<div id="asection">
+    <fieldset>
+        <div id="memberForm">
+            <legend><h2>Add a new ad</h2></legend>
+            <div id="info">
+                <form class="text-align-left">
+                    <p>
+                        <label for="make">Car Make:</label></br>
+                        <select id="make" name="make" onchange="modifyModelOptions();">
+                        </select>
+                    </p>
+                    <p>
+                        <label for="model">Car Model:</label></br>
+                        <select id="model" name="model">
+                        </select>
+                    </p>
+                    <p>
+                        <label for="year">Year:</label></br>
+                        <input type="number" id="model-year" placeholder="Enter Model Year"/>
+                    </p>
+                    <p>
+                        <label for="mileage">Mileage:</label></br>
+                        <input type="number" name="mileage" id="mileage" placeholder="Enter Mileage On Car"/>Miles
+                    </p>
+                    <p>
+                        <label for="condition">Condition:</label></br>
+                        <select name="condition" id="condition">
+                            <option value="new">New</option>
+                            <option value="used">Used</option>
+                        </select>
+                    </p>
+                    <p>
+                        <label for="transmission">Transmission:</label></br>
+                        <select name="transmission" id="transmission">
+                            <option value="new">Auto</option>
+                            <option value="used">Manual</option>
+                        </select>
+                    </p>
+                    <p>
+                        <label for="vin">Vehicle Inspection Number:</label></br>
+                        <input type="text" name="vin" id="vin" placeholder="Enter VIN"/>
+                    </p>
+                    <p>
+                        <label for="license">License Plate:</label></br>
+                        <input type="text" name="license" id="license" placeholder="Enter License Plate Number"/>
+                    </p>
+                    <p>
+                        <label for="owner">Owner's Full Name:</label></br>
+                        <input type="text" name="owner" id="owner" placeholder="Enter Owner's FullName"/>
+                    </p>
+                    <p>
+                        <label for="description">Car Description:</label></br>
+                        <textarea name="description" id="description"></textarea>
+                    </p>
+                    <p>
+                        <label for="price">Price:</label></br>
+                        <input type="number" name="price" id="price" placeholder="Set Your Price"/>Naira
+                    </p>
+                    <p>
+                        <label for="image1">Upload 1st image:</label></br>
+                        <input type="file" name="image1" accept="image/*">
+                    </p>
+                    <p>
+                        <label for="image2">Upload 2nd image:</label></br>
+                        <input type="file" name="image2" accept="image/*">
+                    </p>
+                    <p>
+                        <label for="image3">Upload 3rd image:</label></br>
+                        <input type="file" name="image3" accept="image/*">
+                    </p>
+                    <p>
+                        <label for="image4">Upload 4th image:</label></br>
+                        <input type="file" name="image4" accept="image/*"><br/>
+                    </p>
+                </form>
+                <p><button type="submit" id="login" onclick="AddNewAd()" class="button-enabled">Add New Ad</button></p>
+            </div>
+        </div> 
+    </fieldset>
+</div>
+`;
+
+const accountSettingsForm = `
+<div id="asection">
+    <fieldset>
+        <div id="memberForm">
+            <legend><h2>Account Settings</h2></legend>
+            <div id="info">
+            </div>
+
+            
+                <div>
+                    <fieldset>
+                        <legend>Modify Profile Pic</legend>
+                            <img src="images/no-profile-image.jpeg" class="avater" />
+                            <input type="file" name="profile-pic" accept="image/*">
+                            <p>
+                                <button type="submit" name="modify-pic" id="modify-pic" class="button-enabled">Modify</button>
+                            </p>
+                    </fieldset>
+                    <br/>
+                    <fieldset>
+                        <legend>Modify Username, Email or Password</legend>
+                            <p>
+                                <select id="data-to-modify" onchange="changeDataToModify();">
+                                    <option disabled selected>Select data to modify</option>
+                                    <option value="username">Username</option>
+                                    <option value="email">Email</option>
+                                    <option value="password">Password</option>
+                                </select>
+                            </p>
+
+                            <p>
+                                <form>
+                                    <p><input id="old-value" name="old-value" disabled/></p>
+                                    <input id="new-value" name="new-value" disabled/>
+                                    <input id="confirm-value" name="confirm-value" disabled/>
+                            </p>
+
+                            <p>
+                                <button type="submit" name="modify-pic" id="modify-pic" class="button-enabled">Modify</button>
+                                </form>
+                            </p>
+                    </fieldset>
+
+                   
+                </div>
+            </div>
+        </div> 
+    </fieldset>
+</div>
+`;
+
