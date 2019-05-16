@@ -1,3 +1,225 @@
+const adDetail = `
+<div>
+    <div class="left">
+        <p>New</br>
+        <span>&#8358;1, 500. 00</span></br>
+        Toyota Corolla 2016</br>
+        Jos</p>
+    </div>
+
+    <div class="left">
+        <p>1 hour ago</p>
+    </div>
+</div>`;
+
+const myAds = `
+<table>
+<tr>
+    <th>
+        <p>Select</p>
+    </th>
+    <th>
+        <p>Ad</p>
+    </th>
+    <th>
+        <p>Description</p>
+    </th>
+    <th>
+        <p>Bargains</p>
+    </th>
+    <th>
+        <p>Stock</p>
+    </th>
+</tr>
+<tr>
+    <td><input type="checkbox" class="large-input" onclick="toggleMenuButtons();" /></td>
+    <td>
+        <div class="ad-review" style="background-image: url('images/1.jpeg'); background-size: cover;">
+            <div>
+                <div class="left">
+                    <p>New</br>
+                    <span>&#8358;1, 500. 00</span></br>
+                    Toyota Corolla 2016</br>
+                    Jos</p>
+                </div>
+
+                <div class="left">
+                    <p>1 hour ago</p>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td>
+        <p><span>Condition</span>: New</p>
+        <p><span>Make</span>: Toyota</p>
+        <p><span>Model</span>: Corolla</p>
+        <p><span>Milleage</span>: 20000 Miles</p>
+        <p><span>Condition</span>: New</p>
+    </td>
+    <td>
+        <p><span>Iceman</span>: &#8358;2, 500. 00</p>
+        <p><span>Wallace</span>: &#8358;1, 500. 00</p>
+        <p><span>Robert</span>: &#8358;5, 500. 00</p>
+        <p><span>Henry</span>: &#8358;8, 500. 00</p>
+        <p><span>James</Base></span>: &#8358;1, 500. 00</p>
+    </td>
+    <td>
+        <img src="images/sold.jpeg" />
+    </td>
+</tr>
+
+<tr>
+    <th>
+        <p>Select</p>
+    </th>
+    <th>
+        <p>Ad</p>
+    </th>
+    <th>
+        <p>Description</p>
+    </th>
+    <th>
+        <p>Bargains</p>
+    </th>
+    <th>
+        <p>Stock</p>
+    </th>
+</tr>
+<tr>
+    <td><input type="checkbox" class="large-input" onclick="toggleMenuButtons();"/></td>
+    <td>
+        <div class="ad-review" style="background-image: url('images/1.jpeg'); background-size: cover;">
+            <div>
+                <div class="left">
+                    <p>New</br>
+                    <span>&#8358;1, 500. 00</span></br>
+                    Toyota Corolla 2016</br>
+                    Jos</p>
+                </div>
+
+                <div class="left">
+                    <p>1 hour ago</p>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td>
+        <p><span>Condition</span>: New</p>
+        <p><span>Make</span>: Toyota</p>
+        <p><span>Model</span>: Corolla</p>
+        <p><span>Milleage</span>: 20000 Miles</p>
+        <p><span>Condition</span>: New</p>
+    </td>
+    <td>
+        <p><span>Iceman</span>: &#8358;2, 500. 00</p>
+        <p><span>Wallace</span>: &#8358;1, 500. 00</p>
+        <p><span>Robert</span>: &#8358;5, 500. 00</p>
+        <p><span>Henry</span>: &#8358;8, 500. 00</p>
+        <p><span>James</Base></span>: &#8358;1, 500. 00</p>
+    </td>
+    <td>
+        <h1>Available</h1>
+    </td>
+</tr>
+
+<tr>
+    <th>
+        <p>Select</p>
+    </th>
+    <th>
+        <p>Ad</p>
+    </th>
+    <th>
+        <p>Description</p>
+    </th>
+    <th>
+        <p>Bargains</p>
+    </th>
+    <th>
+        <p>Stock</p>
+    </th>
+</tr>
+<tr>
+    <td><input type="checkbox" class="large-input" onclick="toggleMenuButtons();"/></td>
+    <td>
+        <div class="ad-review" style="background-image: url('images/1.jpeg'); background-size: cover;">
+            <div>
+                <div class="left">
+                    <p>New</br>
+                    <span>&#8358;1, 500. 00</span></br>
+                    Toyota Corolla 2016</br>
+                    Jos</p>
+                </div>
+
+                <div class="left">
+                    <p>1 hour ago</p>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td>
+        <p><span>Condition</span>: New</p>
+        <p><span>Make</span>: Toyota</p>
+        <p><span>Model</span>: Corolla</p>
+        <p><span>Milleage</span>: 20000 Miles</p>
+        <p><span>Condition</span>: New</p>
+    </td>
+    <td>
+        <p><span>Iceman</span>: &#8358;2, 500. 00</p>
+        <p><span>Wallace</span>: &#8358;1, 500. 00</p>
+        <p><span>Robert</span>: &#8358;5, 500. 00</p>
+        <p><span>Henry</span>: &#8358;8, 500. 00</p>
+        <p><span>James</Base></span>: &#8358;1, 500. 00</p>
+    </td>
+    <td>
+        <h1>Available</h1>
+    </td>
+</tr>
+
+</table>
+`;
+
+const viewImage = `
+    <div id="asection" class="asection">
+        <div class="close-two" onclick="closePopUp();">
+            x
+        </div>
+            <fieldset>
+                <div class="detail">
+                    <p>New</br>
+                    <span>&#8358;1, 500. 00</span></br>
+                    Toyota Corolla 2016</br>
+                    Jos</p>
+                </div>
+
+                <div class="left">
+                    <div>
+                        <p id="info"></p>
+                        <p><input type="number" name="client-price" id="client-price" placeholder="Enter your bargain price" autofocus/></p>
+                        <button class="button"><i class="material-icons">add_shopping_cart</i> Place order</button>
+                    </div>
+                    <div>
+                        <button class="button"><i class="material-icons red-icon">flag</i>Report</button>
+                    </div>
+                </div>
+
+                <div id="view-image" class="view-image">
+                    <img src="./images/10.jpeg"/>
+                </div>
+
+                <div class="gallery">
+                    <img src="./images/10.jpeg"/>
+                    <img src="./images/10.jpeg"/>
+                    <img src="./images/10.jpeg"/>
+                    <img src="./images/10.jpeg"/>
+                </div>
+            </fieldset>
+
+    </div>
+</div>
+`;
+
+
 const signInForm = `
 <div id="asection" class="asection-min">
     <div class="close" onclick="closePopUp();">
