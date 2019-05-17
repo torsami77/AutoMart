@@ -66,11 +66,14 @@ const sortCategory = (check) => {
     }
 
     let newOptions = `<option value="${base}" disabled selected>All ${base.join(', ')} vehicles</option>`;
-
     if(base.length === 1){
         Object.values(sortObject).forEach(
             (value) => {
-                newOptions = newOptions + `<option value="${base.join(',')},${value[0]}">${value[0]}</option>`;
+                let valueToUse = value[0];
+                if(valueToUse === 'Sort by Body Type'){
+                    valueToUse = 'BodyType';
+                }
+                newOptions = newOptions + `<option value="${base.join(',')},${valueToUse}">${value[0]}</option>`;
             }
         )
 
@@ -83,8 +86,11 @@ const sortCategory = (check) => {
             (key) => {
                 if(key === base[base.length - 1]){
                     newOptions = `<option value="${base}" disabled selected>All ${base.join(', ')} vehicles</option>`;
+                    if(base.join(',') === 'new,BodyType'){
+                        newOptions = `<option value="${base}" disabled selected>Select Body Type</option>`;
+                    }
                     for(let i = 1; i < sortObject[key].length; i++){
-                        newOptions = newOptions + `<option value="${base.join(',')},${sortObject[key][i]}" >${sortObject[key][i]}</option>`;
+                        newOptions = newOptions + `<option value="${base.join(', ')},${sortObject[key][i]}" >${sortObject[key][i]}</option>`;
                     }   
                 }
             }
@@ -103,6 +109,7 @@ const sortCategory = (check) => {
 }
 
 const sortObject = {
+    BodyType: ['Sort by Body Type', 'Car', 'Truck', 'Trailer', 'Van'],
     BMX: ['BMX', 'Concept', 'M3', 'M5', 'X3', 'X5', 'Z4'],
     Ferrari: ['Ferrari', 'Daytona', '250 GTO', '275', '599 GTB Fiorano', 'F430', '250', 'F40', 'Enzo Ferrari', '456 GT', '612 Scaglietti', 'Califonia', '575M Maranello', 'Testarossa'],
     Ford: ['Ford', 'Ecosport', 'Fiesta', 'Flex', 'Focus', 'Galaxy'],
@@ -114,12 +121,15 @@ const sortObject = {
 };
 
 //userpage
+
 const showUserOptions = (close) => {
     if(document.getElementById('user-options').style.display === 'block'){
         document.getElementById('user-options').style.display = 'none';
+        userOptionInt = 0
         return false;
     };
        document.getElementById('user-options').style.display = 'block';
+       userOptionInt = 1
        return false;
 }
 
