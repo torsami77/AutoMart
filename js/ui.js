@@ -25,7 +25,6 @@ const moreAds = () => {
     if(document.getElementById('user-options')){
         document.getElementById('user-options').style.display = 'none';
     }
-
 }
 
 const viewVehicle = () => {
@@ -35,11 +34,12 @@ const viewVehicle = () => {
 }
 
 const memberArea = (requiredForm) => {
-    let form;
+    let form = signInForm;
+    if(requiredForm === 'forgotPassword'){
+        form = forgotPasswordForm ;
+    }
     if (requiredForm === 'signup'){
         form = signUpForm;
-    }else{
-        form = signInForm;
     }
     document.getElementById('pop-up').style.display = 'block';
     document.getElementById('pop-up').innerHTML = form;
@@ -121,6 +121,11 @@ const sortObject = {
 };
 
 //userpage
+document.addEventListener("click", (event) => {
+	if (event.target.closest("#right-pane")) return;
+    document.getElementById('user-options').style.display = 'none';
+});
+
 
 const showUserOptions = (close) => {
     if(document.getElementById('user-options').style.display === 'block'){
@@ -157,10 +162,15 @@ const toggleUserpage = (view) => {
     if(document.getElementById('make')){
 
     let makeOptions = `<option value="" disabled selected>Select the car make</option>`;
+    let skipVehicleMake = 1;
     Object.values(sortObject).forEach(
         (value) => {
-            makeOptions = makeOptions + `<option value="${value[0]}">${value[0]}</option>`;
+            if(skipVehicleMake !== 1){
+                makeOptions = makeOptions + `<option value="${value[0]}">${value[0]}</option>`;
+            }
+            skipVehicleMake ++ ;
         }
+       
     )
     document.getElementById('make').innerHTML = makeOptions;
     }
@@ -193,14 +203,17 @@ const changeDataToModify = () => {
         document.getElementById('old-value').type = 'text';
         document.getElementById('old-value').placeholder = 'Enter Old Username'
         document.getElementById('old-value').disabled = false;
+        document.getElementById('old-v-icon').innerHTML = 'person';
 
         document.getElementById('new-value').type = 'text';
         document.getElementById('new-value').placeholder = 'Enter New Username'
         document.getElementById('new-value').disabled = false;
+        document.getElementById('new-v-icon').innerHTML = 'person';
 
         document.getElementById('confirm-value').type = 'text';
         document.getElementById('confirm-value').placeholder = 'Confirm New Username'
         document.getElementById('confirm-value').disabled = false;
+        document.getElementById('confirm-v-icon').innerHTML = 'person';
 
         return false;
     }
@@ -209,14 +222,20 @@ const changeDataToModify = () => {
         document.getElementById('old-value').type = 'email';
         document.getElementById('old-value').placeholder = 'Enter Old Email'
         document.getElementById('old-value').disabled = false;
+        document.getElementById('old-v-icon').innerHTML = 'email';
+
 
         document.getElementById('new-value').type = 'email';
         document.getElementById('new-value').placeholder = 'Enter New Email'
         document.getElementById('new-value').disabled = false;
+        document.getElementById('new-v-icon').innerHTML = 'email';
+
 
         document.getElementById('confirm-value').type = 'email';
         document.getElementById('confirm-value').placeholder = 'Confirm New Email'
         document.getElementById('confirm-value').disabled = false;
+        document.getElementById('confirm-v-icon').innerHTML = 'email';
+
 
         return false;
     }
@@ -225,14 +244,20 @@ const changeDataToModify = () => {
         document.getElementById('old-value').type = 'password';
         document.getElementById('old-value').placeholder = 'Enter Old Password'
         document.getElementById('old-value').disabled = false;
+        document.getElementById('old-v-icon').innerHTML = 'lock';
+
 
         document.getElementById('new-value').type = 'password';
         document.getElementById('new-value').placeholder = 'Enter New Password'
         document.getElementById('new-value').disabled = false;
+        document.getElementById('new-v-icon').innerHTML = 'lock';
+
 
         document.getElementById('confirm-value').type = 'password';
         document.getElementById('confirm-value').placeholder = 'Confirm New Password'
         document.getElementById('confirm-value').disabled = false;
+        document.getElementById('confirm-v-icon').innerHTML = 'lock';
+
 
         return false;
     }

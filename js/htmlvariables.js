@@ -231,14 +231,41 @@ const signInForm = `
                 <div id="info">
                 </div>
                 <p>Don't have an account? 
-                <span class="link" onclick="memberForm('signup')">Sign up here</span>
+                <span class="link" onclick="memberArea('signup')">Sign up here</span>
                 </p>
                 <div>
                     <form>
                         <p><i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Enter your email" autofocus required /></p>
                         <p><i class="material-icons">lock</i><input type="password" name="password" id="password" class="input-field" placeholder="Create a password" required/></p>
                         <p><button type="submit" id="login" onclick="signIn();" class="button-enabled">Sign In</button></p>
-                        <p class="link">Forgot password? Click here</p>
+                        <p class="link" onclick="memberArea('forgotPassword');">Forgot password? Click here</p>
+                    </form>
+                </div>
+            </div> 
+        </fieldset>
+</div>
+`;
+
+const forgotPasswordForm = `
+<div id="asection" class="asection-min">
+    <div class="close" onclick="closePopUp();">
+        x
+    </div>
+        <fieldset>
+            <div id="memberForm">
+                <legend><h2>Forgotten Password!</h2></legend>
+                <div id="info">
+                </div>
+                <div>
+                    <form>
+                        <p><i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Enter your email" autofocus required /></p>
+                        <p><button type="submit" id="recover-Password" onclick="sendPasswordLink();" class="button-enabled">Email me password reset link</button></p>
+                        <p>Don't have an account? 
+                            <span class="link" onclick="memberArea('signup')">Sign up here</span>
+                        </p>
+                        <p>Still remember password? 
+                            <span class="link" onclick="memberArea('signin');">Sign in here</span>
+                        </p>    
                     </form>
                 </div>
             </div> 
@@ -257,16 +284,18 @@ const signUpForm = `
                 <div id="info">
                 </div>
                 <p>Already own an account? 
-                    <span class="link" onclick="memberForm('signin');">Sign in here</span>
+                    <span class="link" onclick="memberArea('signin');">Sign in here</span>
                 </p>
                 <div>
                     <form>
                         <p><i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Provide your email" autofocus required/></p>
-                        <p><i class="material-icons">person</i><input type="text" name="username" id="username" class="input-field" placeholder="Create a username" autofocus required /></p>
+                        <p><i class="material-icons">person</i><input type="text" name="firstname" id="firstname" class="input-field" placeholder="Enter your first name" autofocus required /></p>
+                        <p><i class="material-icons">person</i><input type="text" name="lastname" id="lastname" class="input-field" placeholder="Enter your last name" autofocus required /></p>
                         <p><i class="material-icons">lock</i><input type="password" name="password" id="password" class="input-field" placeholder="Create a password" required/></p>
                         <p><i class="material-icons">lock</i><input type="password" name="verify" id="verify" class="input-field" placeholder="Verify your password" required/></p>
+                        <p><i class="material-icons">location_on</i><input type="text" id="location" name="location" placeholder="Enter your current location" required/></p>
                         <p><button type="submit" id="login" onclick="signIn();" class="button-enabled">Sign Up</button></p>
-                        <p class="link">Forgot password? Click here</p>
+                        <p class="link" onclick="memberArea('forgotPassword');">Forgot password? Click here</p>
                     </form>
                 </div>
             </div>  
@@ -291,6 +320,16 @@ const createNewAdForm = `
                         </select>
                     </p>
                     <p>
+                        <label for="bodytype">Body Type:</label></br>
+                        <select id="bodytype" name="bodytype">
+                            <option selected disable>Select Body Type</option>
+                            <option value="saloon">Saloon</option>
+                            <option value="truck">Truck</option>
+                            <option value="trailer">Trailer</option>
+                            <option value"van">Van</option>
+                        </select>
+                    </p>
+                    <p>
                         <label for="year">Year:</label></br>
                         <input type="number" id="model-year" placeholder="Enter Model Year"/>
                     </p>
@@ -301,6 +340,7 @@ const createNewAdForm = `
                     <p>
                         <label for="condition">Condition:</label></br>
                         <select name="condition" id="condition">
+                            <option selected disable>Select Condition</option>
                             <option value="new">New</option>
                             <option value="used">Used</option>
                         </select>
@@ -308,6 +348,7 @@ const createNewAdForm = `
                     <p>
                         <label for="transmission">Transmission:</label></br>
                         <select name="transmission" id="transmission">
+                            <option selected disable>Select Transmission</option>
                             <option value="new">Auto</option>
                             <option value="used">Manual</option>
                         </select>
@@ -321,12 +362,12 @@ const createNewAdForm = `
                         <input type="text" name="license" id="license" placeholder="Enter License Plate Number"/>
                     </p>
                     <p>
-                        <label for="owner">Owner's Full Name:</label></br>
-                        <input type="text" name="owner" id="owner" placeholder="Enter Owner's FullName"/>
+                        <label for="state">State:</label></br>
+                        <input type="text" name="owner" id="owner" placeholder="Enter vehicle location"/>
                     </p>
                     <p>
                         <label for="description">Car Description:</label></br>
-                        <textarea name="description" id="description"></textarea>
+                        <textarea rows="4" cols="25" name="description" id="description" placeholder="Enter car description here..."></textarea>
                     </p>
                     <p>
                         <label for="price">Price:</label></br>
@@ -375,6 +416,16 @@ const accountSettingsForm = `
                             </p>
                     </fieldset>
                     <br/>
+
+                    <fieldset>
+                        <legend>Update My Location</legend>
+                            <form>
+                                <p><i class="material-icons">location_on</i><input type="text" id="location" name="location" placeholder="Enter your current location" required/></p>
+                                <button type="submit" id="update-location" name="update-location" onclick="updateLocation();">Update Location</button>
+                            </form>
+                    </fieldset>
+                    <br/>
+
                     <fieldset>
                         <legend>Modify Username, Email or Password</legend>
                             <p>
@@ -388,9 +439,9 @@ const accountSettingsForm = `
 
                             <p>
                                 <form>
-                                    <p><input id="old-value" name="old-value" disabled/></p>
-                                    <input id="new-value" name="new-value" disabled/>
-                                    <input id="confirm-value" name="confirm-value" disabled/>
+                                    <p><i class="material-icons" id="old-v-icon"></i><input id="old-value" name="old-value" disabled/></p></br>
+                                    <p><i class="material-icons" id="new-v-icon"></i><input id="new-value" name="new-value" disabled/></p>
+                                    <p><i class="material-icons" id="confirm-v-icon"></i><input id="confirm-value" name="confirm-value" disabled/></p>
                             </p>
 
                             <p>
