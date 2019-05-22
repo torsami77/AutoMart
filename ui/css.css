@@ -1,0 +1,553 @@
+body {
+    background-color: rgb(150, 150, 150);
+    padding: 0;
+    margin: 0;
+}
+
+header {
+    margin: 0px;
+    background-color: rgb(150, 150, 150);
+    color: #00007C;
+    border-bottom-style: 3px solid #00007C;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    position: fixed;
+    overflow: none;
+    width: 100%;
+    z-index: 999;
+    padding: 10px 40px;
+    font-size: 35px;
+    clear: both;
+    height: 13%;
+}
+
+.material-icons {
+    vertical-align: middle;
+}
+
+.search {
+    margin-left: 29%;
+    width: 360px;
+    padding-top: 15px;
+    height: 5px;
+}
+
+.search-bar {
+    width: 300px
+}
+
+.logo-frame {
+    border: 3px solid #00007C;
+    width: 150px;
+    height: 35px;
+    border-radius: 15px;
+    padding: 20px 4px;
+    float: left;
+}
+
+.logo { font-family: 'Sancreek', cursive;
+    line-height: 25px;
+    width: 150px;
+    clear: both;
+    color: #00007c;
+}
+
+.logo>div {
+    float:left;
+    font-size: 60px
+}
+
+.logo p {
+    font-size: 18px;
+    line-height: 0px;
+    margin-top: 0px;
+    margin-bottom: 13px;
+    margin-right: 13px !important;
+}
+
+.logo-icon {
+    vertical-align: middle;
+    margin-top: -20px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    font-size: 75px !important;
+}
+
+.dash {
+    background-color: #00007c;
+    width: 40px;
+    height: 5px;	
+}
+
+.right-pane {
+    float: right;
+    width: 25%;
+    font-size: 15px;
+}
+
+button, .button-enabled {
+    font-family: cursive;
+    font-size: large;
+    cursor: pointer;
+    background-color: #00008B;
+    color: white;
+  }
+
+.button-disabled {
+    background-color: rgb(150, 150, 150);
+    cursor: ;
+}
+
+.button {
+    background-color: #00008B; 
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button:hover {
+    border: 2px solid rgb(255, 255, 255);
+    background-color: #00002c;
+    padding: 18px;
+}
+
+.button-enabled:hover {
+    border: 2px solid rgb(255, 255, 255);
+    background-color: #00002c;
+}
+
+.menu {
+    margin-top: 8%;
+    background-color: rgb(255, 255, 255);
+    color: #00007C;
+    border: 3px solid #00007C;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    position: fixed;
+    overflow: none;
+    width: 100%;
+    z-index: 995;
+    padding: 10px 40px;
+    font-size: 20px;
+    clear: both;
+    height: 5%;
+}
+
+.sort {
+    background-color: rgb(200, 200, 200);
+    border-radius: 6px;
+    width: 300px;
+    height: 30px;
+    padding: 2px 4px;
+}
+
+.controls {
+  float: right;
+  padding-right: 5%;
+  display: none;
+}
+
+.avater {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+
+.status-image {
+    width: 150px;
+    height: 150px;
+}
+
+.profile {
+    border-radius: 25px;
+    width: 105px;
+    margin: -20px;
+    padding-left: 22px;
+    padding-top: 10px;
+}
+
+.profile:hover {
+    border: 2px solid #ffffff;
+    padding-left: 20px;
+    padding-top: 8px;
+}
+
+.user-options {
+    position: fixed;
+    z-index: 999;
+    width: 200px;
+    background-color: rgb(200, 200, 200);
+    margin-top: 10px;
+    display: none;
+}
+
+.user-options li {
+    border: 2px solid #00007C;
+    list-style-type: none;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px; 
+}
+
+.user-options li:hover {
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.sort span {
+    font-size: 5px;
+    float: left;
+    margin-top: -17px !important;
+}
+
+table {
+    color: #00007C;
+    border: 3px solid #00007C;
+    border-collapse:collapse;
+}
+
+th,td {
+    border: 2px solid #00007C;
+    width: 150px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+td {
+    height: 60px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.large-input {
+    width: 50px;
+    height: 50px;
+    margin-left: 20px;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.pop-up {
+    background-color: rgb(224, 224, 224, 0.5);
+    width: 100%;
+    margin-top: 12%;
+    height: 80%;
+    clear: both;
+    position: fixed;
+    overflow: none;
+    width: 100%;
+    z-index: 999;
+    color: #00007C;
+    padding-top: 2%;
+    display: none;
+}
+
+#asection {
+    background-color: rgb(150, 150, 150);
+    margin: 0 auto;
+    width: 30%;
+    text-align: center;
+    overflow: none;
+}
+
+.asection {
+    width: 80% !important;
+}
+
+.asection fieldset {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.asection div {
+    text-align: left;
+}
+
+.view-image img {
+    width: 450px;
+    height: 250px;
+}
+
+.gallery img {
+    width: 150px;
+    height: 100px;
+    border: 1px solid #00007C;
+    margin-right: 6px;
+}
+
+.detail {
+    float: right;
+    background-color: rgb(200, 200, 200);
+    width: 27%;
+    padding: 10px;
+    height: 320px;
+}
+
+.input-field {
+    border-radius: 4px;
+    padding: 2px 2px;
+    height: 15px;
+  }
+  
+.input-field:focus {
+    background-color: rgb(255, 255, 180);
+    outline: none;
+}
+
+.link {
+    text-decoration: underline;
+    color:blue;
+    border: none;
+    cursor:pointer;
+  }
+
+.close {
+    background-color: rgb(255, 255, 255);
+    border: 2px solid #00007C;
+    border-radius: 50px;
+    width: 35px;
+    height: 40px;
+    padding-top: 0px;
+    font-size: 30px;
+    position: fixed;
+    margin-top: -20px;
+    margin-left: 28%;
+    float: right;
+    cursor: pointer;
+}
+
+.close-two {
+    background-color: rgb(255, 255, 255);
+    border: 2px solid #00007C;
+    border-radius: 50px;
+    width: 30px;
+    height: 40px;
+    padding-left: 12px;
+    font-size: 30px;
+    position: fixed;
+    margin-top: -20px;
+    margin-left: 78%;
+    float: right;
+    cursor: pointer;
+}
+
+.main {
+    margin-top: 13%;
+    position: absolute;
+    width: 100%;
+}
+
+.section {
+    padding: 10px 25px;
+    clear: both;
+    color: #00007C;
+}
+
+.ad-review {
+    border: 2px solid #00007C;
+    width: 300px;
+    height: 200px;
+    float: left;
+    color: #00003c;
+    cursor: pointer;
+}
+
+.ad-review>div {
+    height: 90px;
+    background-color: rgb(200, 200, 200, 0.5);
+    padding-left: 10px;
+    margin-top: 100px;
+    font-weight: bold;
+}
+
+.ad-review span {
+    font-size: 18px;
+}
+
+.left {
+    float: left;
+    margin-right: 35px;
+}
+
+.text-align-left {
+    text-align: left;
+    padding-left: 20%;
+}
+
+.right {
+    float: right;
+    margin-right: 100px;
+}
+
+i.red-icon {
+    color: red;
+}
+
+.load-div {
+    float: left;
+    margin-top: 3%;
+    margin-bottom: 5%;
+    padding-left: 45%;
+
+}
+
+footer {
+    padding-top: 15px;
+    width: 100%;
+    background-color: blue;
+    height: 200px;
+    color: rgb(255, 255, 255);
+    clear: both;
+}
+
+footer .bottom {
+    background-color: #00007C;
+    margin-top: 20px;
+    height: 50px;
+}
+
+footer>div {
+    padding-left: 20%;
+    padding-top: 10px;
+    clear: both;
+}
+
+@media (max-width: 1024px) {
+    .menu {
+        margin-top: 10%;
+    }
+    .section {
+        margin-top: 5%;
+    }
+
+    .asection {
+        zoom: 0.8;
+    }
+} 
+
+@media (max-width: 768px) {
+    header {
+        height: 9%;
+    }
+
+    .right-pane {
+        margin-right: -5%; 
+        padding-right: 100px;
+    }
+
+    .menu {
+       margin-top: 15%;
+       height: 30px;
+    }
+
+    .controls {
+        margin-right: 5%;
+    }
+
+    .user-options {
+        margin-left: -13%;
+    }
+
+    footer {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .main {
+        margin-top: 30%;
+    }
+
+    .search-bar {
+        width: 180px;
+    }
+
+    .ad-review {
+        width: 170px;
+        height: 180px;
+    }
+
+    .section {
+        margin-left: 2px;
+    }
+
+    .status-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .ad-review>div {
+        margin-top: 50px;
+        clear: none;
+    }
+
+    p {
+        font-size: 12px;
+    }
+
+    .ad-review span {
+        font-size: 15px;
+    }
+
+    .asection-min {
+        width: 36% !important;
+    }
+
+    .close {
+        margin-left: 33%;
+    }
+
+    .close-two {
+        margin-left: 76%;
+    }
+}
+
+
+@media (max-width: 480px) {
+    header {
+        zoom: 0.5;
+    }
+
+    .menu {
+        zoom: 0.4;
+        margin-top: 18%;
+    }
+
+    .right-pane {
+        zoom: 0.9;
+       padding-right: 7%;
+        width: 35%;
+    }
+
+    .search-bar {
+        zoom: 0.7;
+    }
+
+    .section, .bsection {
+        zoom: 0.5;
+    }
+
+    .asection-min {
+      width: 80% !important;
+    }
+
+    .close {
+        margin-left: 73%;
+    }
+
+    .asection {
+        zoom: 0.5;
+    }
+
+    .close-two {
+        margin-left: 76%;
+    }
+}
