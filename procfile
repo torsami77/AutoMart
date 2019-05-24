@@ -1,0 +1,1 @@
+web: npm run build && nodemon build/app.js

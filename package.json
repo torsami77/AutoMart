@@ -4,28 +4,27 @@
   "description": "Your Favourite platform to buy and sale vehicles...",
   "main": "./src/app.js",
   "scripts": {
-    "clean": "rm -rf build && mkdir build",
-    "build-server": "babel -d ./build ./src -s",
-    "build": "npm run clean && npm run build-server",
-    "start": "nodemon --exec babel-node ./build/app.js",
-    "test": "nyc --reporter=html --reporter=text mocha --compilers js:babel-register --recursive ./test/",
-    "babel-node": "babel-preset-env",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "heroku-postbuild": "npm install --production"
+    "build": "babel src -d build",
+    "start": "npm run build && nodemon build/app.js",
+    "test": "nyc --reporter=html --reporter=text mocha --require @babel/register --recursive ./test/",
+    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
+    "heroku-postbuild": "npm install --production",
+    "serve": "node build/app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/torsami77/AutoMart.git"
   },
   "keywords": [
+    "auto",
+    "mart",
     "buy",
     "sell",
+    "bid",
     "bargain",
-    "find",
-    "vehicles",
     "cars",
-    "auto",
-    "mart"
+    "truck",
+    "van"
   ],
   "author": "Samson Samuel",
   "license": "ISC",
@@ -34,30 +33,30 @@
   },
   "homepage": "https://github.com/torsami77/AutoMart#readme",
   "devDependencies": {
-    "@babel/preset-env": "^7.1.6",
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^10.0.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "babel-eslint": "^8.2.6",
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
-    "eslint": "^5.3.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.6",
+    "nodemon": "^1.19.0",
     "nyc": "^14.1.1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "chai-http": "^4.2.0",
-    "cookie-parser": "^1.4.3",
+    "cookie-parser": "^1.4.4",
     "es6-promise": "^4.2.6",
     "event-stream": "^3.3.4",
-    "express": "^4.16.4",
+    "express": "^4.17.0",
     "isomorphic-fetch": "^2.2.1",
     "jsonwebtoken": "^8.4.0",
     "pg": "^7.7.0",
@@ -69,5 +68,21 @@
     "rules": {
       "linebreak-style": 0
     }
+  },
+  "nyc": {
+    "_comment": "Purpose of this part: to do code coverage within Mocha/Chai using Istanbul",
+    "register": "babel-register",
+    "include": [
+      "**/*.js",
+      "./*.js"
+    ],
+    "exclude": [
+      "**/node_modules/**",
+      "**/test/**",
+      "**/coverage/**",
+      "**/ui/**",
+      "**/build/**"
+    ],
+    "all": true
   }
 }

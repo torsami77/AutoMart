@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/json' }));
-app.use(express.static('ui'));
+app.use(express.static('./ui'));
 app.use(cookieParser());
 
 

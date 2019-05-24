@@ -1,0 +1,24 @@
+sudo: false
+
+language: node_js
+
+node_js:
+  - node
+
+env:
+- NODE_ENV=test
+
+cache:
+  directories:
+    - node_modules
+
+before_install:
+  - npm config set spin false
+  - npm install -g standard
+
+after_success:
+- nyc npm test
+- nyc npm test && nyc report --reporter=text-lcov | coveralls
+
+script:
+  - npm test
