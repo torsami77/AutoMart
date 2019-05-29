@@ -1,10 +1,15 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import logger from 'morgan';
+import Debug from 'debug';
 
+dotenv.config();
 const PORT = process.env.PORT || 5000;
 const app = express();
+const debug = Debug('http');
 
 
 const allowCrossDomain = (req, res, next) => {
@@ -14,7 +19,7 @@ const allowCrossDomain = (req, res, next) => {
   next();
 };
 
-
+app.use(logger('dev'));
 app.use(allowCrossDomain);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,8 +34,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`server running on port ${PORT}`);
+  debug(`server running on port ${PORT}`);
 });
 
 export default { app };
