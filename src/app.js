@@ -3,13 +3,11 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import logger from 'morgan';
-import Debug from 'debug';
+import signUp from './ctl/signUp';
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 const app = express();
-const debug = Debug('http');
 
 
 const allowCrossDomain = (req, res, next) => {
@@ -19,7 +17,6 @@ const allowCrossDomain = (req, res, next) => {
   next();
 };
 
-app.use(logger('dev'));
 app.use(allowCrossDomain);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -32,9 +29,10 @@ app.use(cookieParser());
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('./ui/index.html'));
 });
+app.post('/api/v1/signup', signUp);
 
 app.listen(PORT, () => {
-  debug(`server running on port ${PORT}`);
+  console.log(`server running on port ${PORT}`);
 });
 
 export default { app };
