@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src -d build",
     "start": "npm run build && nodemon build/app.js",
-    "test": "nyc --reporter=html --reporter=text mocha --require @babel/register --recursive ./test/",
+    "test": "nyc --reporter=html --reporter=text mocha --exit --require @babel/register --recursive ./test/",
     "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "heroku-postbuild": "npm install --production",
     "serve": "node build/app.js"
