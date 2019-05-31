@@ -36,7 +36,7 @@ describe('Users Sign Up Tests', () => {
       .send(assumedData.noEmailUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Please Enter a Valid Email');
         done();
       });
@@ -48,7 +48,7 @@ describe('Users Sign Up Tests', () => {
       .send(assumedData.noUsernameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Please Provide a Username');
         done();
       });
@@ -60,7 +60,7 @@ describe('Users Sign Up Tests', () => {
       .send(assumedData.noFirstNameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Please Enter your First Name');
         done();
       });
@@ -72,7 +72,7 @@ describe('Users Sign Up Tests', () => {
       .send(assumedData.noLastNameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Please Enter your Last Name');
         done();
       });
@@ -83,9 +83,9 @@ describe('Users Sign Up Tests', () => {
       .post('/api/v1/signup')
       .send(assumedData.noPasswordUsers)
       .end((err, res) => {
-        res.should.have.status(400);
+        res.should.have.status(401);
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Please Provide a Password');
         done();
       });
@@ -96,9 +96,9 @@ describe('Users Sign Up Tests', () => {
       .post('/api/v1/signup')
       .send(assumedData.lessPass)
       .end((err, res) => {
-        res.should.have.status(400);
+        res.should.have.status(401);
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Password is Too Short!');
         done();
       });
@@ -109,9 +109,9 @@ describe('Users Sign Up Tests', () => {
       .post('/api/v1/signup')
       .send(assumedData.passMismatchUsers)
       .end((err, res) => {
-        res.should.have.status(400);
+        res.should.have.status(401);
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Verifiable Password Does not Match!');
         done();
       });

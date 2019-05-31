@@ -24,29 +24,28 @@ const cars = [
     manufacturer: 'Toyota',
     model: 'Venza',
     body_type: 'Van',
+    order: [
+      {
+        id: 1,
+        buyer: 1,
+        car_id: 1,
+        amount: 1500.00,
+        status: 'pending',
+        flags: [
+          {
+            id: 1,
+            car_id: 1,
+            created_on: 'Wed May 29 2019 15:56:22 GMT+0100 (West Africa Standard Time)',
+            reason: 'pricing',
+            description: 'Give reasonable discount',
+          },
+        ],
+      },
+    ],
   },
 ];
 
-const order = [
-  {
-    id: 1,
-    buyer: 1,
-    car_id: 1,
-    amount: 1500.00,
-    status: 'pending',
-  },
-];
-
-const flags = [
-  {
-    id: 1,
-    car_id: 1,
-    created_on: 'Wed May 29 2019 15:56:22 GMT+0100 (West Africa Standard Time)',
-    reason: 'pricing',
-    description: 'Give reasonable discount',
-  },
-];
 
 export default {
-  users, cars, order, flags,
+  users, cars,
 };
