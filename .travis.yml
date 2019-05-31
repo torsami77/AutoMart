@@ -6,7 +6,7 @@ node_js:
   - node
 
 env:
-- NODE_ENV=test
+- SECRET_KEY=abcd1234
 
 cache:
   directories:

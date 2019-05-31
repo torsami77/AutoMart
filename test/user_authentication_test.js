@@ -1,18 +1,20 @@
-/*
+
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../src/app';
-import fakeData from './faker/fake';
+import assumedData from './assumed/assume';
 
 chai.use(chaiHttp);
 
 chai.should();
-const expect = chai.expect();
+const { expect } = chai;
 
+const api = chai.request('http://localhost:5000');
 
 let token;
 let userId;
 
+/*
 describe('Auto Mart', () => {
   it('should get 404 page', (done) => {
     chai.request(app)
@@ -26,12 +28,12 @@ describe('Auto Mart', () => {
       });
   });
 });
-
+*/
 describe('Users Sign Up Tests', () => {
   it('should NOT let user sign up without email', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signup')
-      .send(fakeData.noEmailUsers)
+    api
+      .post('/api/v1/signup')
+      .send(assumedData.noEmailUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
@@ -41,9 +43,9 @@ describe('Users Sign Up Tests', () => {
   });
 
   it('should NOT let user sign up without username', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signup')
-      .send(fakeData.noUsernameUsers)
+    api
+      .post('/api/v1/signup')
+      .send(assumedData.noUsernameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
@@ -53,9 +55,9 @@ describe('Users Sign Up Tests', () => {
   });
 
   it('should NOT let user sign up without firstname', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signup')
-      .send(fakeData.noFirstNameUsers)
+    api
+      .post('/api/v1/signup')
+      .send(assumedData.noFirstNameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
@@ -65,9 +67,9 @@ describe('Users Sign Up Tests', () => {
   });
 
   it('should NOT let user sign up without lastname', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signup')
-      .send(fakeData.noLastNameUsers)
+    api
+      .post('/api/v1/signup')
+      .send(assumedData.noLastNameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
@@ -77,9 +79,9 @@ describe('Users Sign Up Tests', () => {
   });
 
   it('should NOT let user sign up without password', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signup')
-      .send(fakeData.noPasswordUsers)
+    api
+      .post('/api/v1/signup')
+      .send(assumedData.noPasswordUsers)
       .end((err, res) => {
         res.should.have.status(400);
         res.body.should.be.a('object');
@@ -90,9 +92,9 @@ describe('Users Sign Up Tests', () => {
   });
 
   it('should NOT let user sign up with a less than 8 character password', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signup')
-      .send(fakeData.lessPass)
+    api
+      .post('/api/v1/signup')
+      .send(assumedData.lessPass)
       .end((err, res) => {
         res.should.have.status(400);
         res.body.should.be.a('object');
@@ -103,9 +105,9 @@ describe('Users Sign Up Tests', () => {
   });
 
   it('should not let user sign up with mismatch password', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signup')
-      .send(fakeData.passMismatchUsers)
+    api
+      .post('/api/v1/signup')
+      .send(assumedData.passMismatchUsers)
       .end((err, res) => {
         res.should.have.status(400);
         res.body.should.be.a('object');
@@ -116,28 +118,31 @@ describe('Users Sign Up Tests', () => {
   });
 
   it('should let users sign up successfully', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signup')
-      .send(fakeData.newUsers)
+    api
+      .post('/api/v1/signup')
+      .send(assumedData.newUsers)
       .end((err, res) => {
         res.should.have.status(201);
         res.body.should.be.a('object');
         res.body.data.should.be.a('object');
         expect(res)
-          .to.have.nested.property('body.data[0]')
-          .that.includes.all.keys(['token', 'id', 'first_name', 'last_name', 'email', 'admin']);
+          .to.have.nested.property('body.data')
+          .that.includes.all.keys(['id', 'token', 'first_name', 'last_name', 'email']);
+        res.body.data.id.should.be.a('number');
         res.body.data.token.should.be.a('string');
-        res.body.data.id.should.be.a('integer');
         res.body.data.first_name.should.be.a('string');
         res.body.data.last_name.should.be.a('string');
         res.body.data.email.should.be.a('string');
-        res.body.data.admin.should.be.a('boolean');
+        res.body.data.should.have.property('success').equals('true');
+        res.body.data.should.have.property('message').equals('Your Signed up was successful');
         userId = res.body.data.id;
         done();
       });
   });
 });
 
+
+/*
 describe('Users Sign In Tests', () => {
   it('should NOT let users sign in with wrong credentials', (done) => {
     const User = {
