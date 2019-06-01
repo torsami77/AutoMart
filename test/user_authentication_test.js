@@ -142,57 +142,67 @@ describe('Users Sign Up Tests', () => {
 });
 
 
-/*
 describe('Users Sign In Tests', () => {
-  it('should NOT let users sign in with wrong credentials', (done) => {
-    const User = {
-      username: 'invalidUser',
-      password: fakeData.newUsers.password,
-    };
-    chai.request(app)
-      .post('/api/v1/auth/signin')
-      .send(User)
+  it('should NOT let users sign in with no Email', (done) => {
+    api
+      .post('/api/v1/signin')
+      .send(assumedData.noEmailUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.data.should.be.a('object');
-        res.body.data.should.have.property('status').equal(400);
-        res.body.data.should.have.property('error').equal('Invalid signin credentials!');
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('error').equal('Please Enter a Valid Email!');
+        done();
+      });
+  });
+
+  it('should NOT let users sign in with no Password', (done) => {
+    api
+      .post('/api/v1/signin')
+      .send(assumedData.noPasswordUsers)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('error').equal('Please enter your password!');
+        done();
+      });
+  });
+
+  it('should NOT let users sign in with Unregistered Account', (done) => {
+    api
+      .post('/api/v1/signin')
+      .send(assumedData.falseUsers)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('error').equal('Invalid Signin Credentials!');
         done();
       });
   });
 
   it('should NOT let users signin with wrong password', (done) => {
-    const User = {
-      username: fakeData.newUsers.email,
-      password: 'wrongpassword',
-    };
-    chai.request(app)
-      .post('/api/v1/auth/signin')
-      .send(User)
+    api
+      .post('/api/v1/signin')
+      .send(assumedData.passMismatchUsers)
       .end((err, res) => {
-        res.should.have.status(400);
+        res.should.have.status(401);
         res.body.should.be.a('object');
-        res.body.data.should.be.a('object');
-        res.body.data.should.have.property('status').equal(400);
-        res.body.data.should.have.property('error').equal('Invalid signin credentials!');
+        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('error').equal('Invalid Signin Credentials!');
         done();
       });
   });
 
   it('should let users sign in successfully', (done) => {
-    const User = {
-      username: fakeData.newUsers.email,
-      password: fakeData.newUsers.password,
-    };
-    chai.request(app)
-      .post('/api/v1/auth/signin')
-      .send(User)
+    api
+      .post('/api/v1/signin')
+      .send(assumedData.newUsers)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(200);
-        res.body.data.should.have.property('message').equal('Sign in Successful!');
-        res.body.data.should.have.property('Token');
+        res.body.data.should.have.property('message').equal('Auth successful!');
+        res.body.data.should.have.property('token');
         token = res.body.Token;
         done();
       });
@@ -200,4 +210,3 @@ describe('Users Sign In Tests', () => {
 });
 
 export default { token, userId };
-*/

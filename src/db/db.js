@@ -8,7 +8,7 @@ const users = [
     password: 'password101',
     address: 'Jos',
     is_admin: false,
-    created_on: 'Wed May 29 2019 15:56:22 GMT+0100 (West Africa Standard Time)',
+    created_on: '2019-06-01T11:05:17.601Z',
   },
 
 ];
