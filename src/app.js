@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import signUp from './ctl/signUp';
+import signIn from './ctl/signIn';
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve('./ui/index.html'));
 });
 app.post('/api/v1/signup', signUp);
+app.post('/api/v1/signin', signIn);
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);

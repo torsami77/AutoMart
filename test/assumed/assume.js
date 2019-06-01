@@ -50,8 +50,8 @@ const assumedData = {
     firstName: 'Samson',
     lastName: 'Samuel',
     username: 'sami77',
-    password: 'password101',
-    verify: 'password101x',
+    password: 'password101x',
+    verify: 'password101',
     address: 'Jos',
     is_admin: false,
   },
@@ -74,7 +74,7 @@ const assumedData = {
     address: 'Jos',
     is_admin: false,
   },
-  anotherUsers: {
+  falseUsers: {
     email: 'shembell@automart.com',
     firstName: 'Shembell',
     lastName: 'Samuel',
