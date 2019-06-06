@@ -16,6 +16,7 @@ const signUp = (req, res) => {
   let {
     username, firstName, lastName, address,
   } = req.body;
+  // eslint-disable-next-line prefer-const
   let checker = [username, firstName, lastName, address];
 
   let i = -1;
@@ -132,14 +133,15 @@ const signUp = (req, res) => {
           field: 'password',
         });
       }
-
+      const id = parseInt(db.users.length + 1, 10);
       const token = jwt.sign({
         email,
         hash,
+        id,
       }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
       const newUser = {
-        id: parseInt(db.users.length + 1, 10),
+        id,
         email,
         first_name: firstName,
         last_name: lastName,
