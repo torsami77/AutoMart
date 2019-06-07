@@ -12,7 +12,6 @@ const { expect } = chai;
 
 const api = chai.request('http://localhost:5000');
 
-
 /*
 describe('Auto Mart', () => {
   it('should get 404 page', (done) => {
@@ -134,8 +133,6 @@ describe('Users Sign Up Tests', () => {
         res.body.data.email.should.be.a('string');
         res.body.data.should.have.property('success').equals('true');
         res.body.data.should.have.property('message').equals('Your Signed up was successful');
-        fs.writeFile(`${__dirname}/assumed/token.txt`, res.body.data.id, () => {
-        });
         done();
       });
   });
@@ -203,7 +200,7 @@ describe('Users Sign In Tests', () => {
         res.body.should.have.property('status').equal(200);
         res.body.data.should.have.property('message').equal('Auth successful!');
         res.body.data.should.have.property('token');
-        fs.writeFile(`${__dirname}/assumed/token.txt`, res.body.data.token, () => {
+        fs.writeFileSync(`${__dirname}/assumed/token.txt`, res.body.data.token, () => {
         });
         done();
       });

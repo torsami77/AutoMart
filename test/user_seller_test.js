@@ -6,7 +6,6 @@ import util from 'util';
 import app from '../src/app';
 import assumedData from './assumed/assume';
 
-
 chai.use(chaiHttp);
 
 chai.should();

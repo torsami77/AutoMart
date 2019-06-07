@@ -1,4 +1,14 @@
 const assumedData = {
+  sellerUser: {
+    email: 'seller@automart.com',
+    firstName: 'Samson',
+    lastName: 'Samuel',
+    username: 'samsam',
+    password: 'password101',
+    verify: 'password101',
+    address: 'Jos',
+    is_admin: false,
+  },
   newUsers: {
     email: 'torsami@automart.com',
     firstName: 'Samson',
