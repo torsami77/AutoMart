@@ -1,6 +1,7 @@
-
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import fs from 'fs';
+// eslint-disable-next-line no-unused-vars
 import app from '../src/app';
 import assumedData from './assumed/assume';
 
@@ -10,9 +11,6 @@ chai.should();
 const { expect } = chai;
 
 const api = chai.request('http://localhost:5000');
-
-let token;
-let userId;
 
 /*
 describe('Auto Mart', () => {
@@ -135,7 +133,6 @@ describe('Users Sign Up Tests', () => {
         res.body.data.email.should.be.a('string');
         res.body.data.should.have.property('success').equals('true');
         res.body.data.should.have.property('message').equals('Your Signed up was successful');
-        userId = res.body.data.id;
         done();
       });
   });
@@ -203,10 +200,9 @@ describe('Users Sign In Tests', () => {
         res.body.should.have.property('status').equal(200);
         res.body.data.should.have.property('message').equal('Auth successful!');
         res.body.data.should.have.property('token');
-        token = res.body.Token;
+        fs.writeFileSync(`${__dirname}/assumed/token.txt`, res.body.data.token, () => {
+        });
         done();
       });
   });
 });
-
-export default { token, userId };

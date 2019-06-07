@@ -1,14 +1,16 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import signUp from './ctl/signUp';
 import signIn from './ctl/signIn';
+import seller from './ctl/seller';
+import mynodeconfig from './mynodeconfig';
 
-dotenv.config();
+
 const PORT = process.env.PORT || 5000;
 const app = express();
+const { verifyToken, upload } = mynodeconfig;
 
 
 const allowCrossDomain = (req, res, next) => {
@@ -32,6 +34,9 @@ app.get('/', (req, res) => {
 });
 app.post('/api/v1/signup', signUp);
 app.post('/api/v1/signin', signIn);
+app.post('/api/v1/car', verifyToken, upload.single('carImage'), seller.postAd);
+app.patch('/api/v1/car/:carId/price', verifyToken, seller.updatePrice);
+app.patch('/api/v1/car/:carId/status', verifyToken, seller.markAsSold);
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);

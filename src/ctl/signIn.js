@@ -51,10 +51,12 @@ const signIn = (req, res) => {
       });
     }
     if (ismatched) {
+      const { id } = searchedUser.id;
       bcrypt.hash(password, 10, (error, hash) => {
         const token = jwt.sign({
           email,
           hash,
+          id,
         }, process.env.SECRET_KEY, { expiresIn: '1h' });
         res.cookie('username', searchedUser.username);
         res.cookie('token', token);
