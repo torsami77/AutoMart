@@ -5,6 +5,7 @@ import path from 'path';
 import signUp from './ctl/signUp';
 import signIn from './ctl/signIn';
 import seller from './ctl/seller';
+import viewer from './ctl/viewer';
 import mynodeconfig from './mynodeconfig';
 
 
@@ -35,8 +36,11 @@ app.get('/', (req, res) => {
 app.post('/api/v1/signup', signUp);
 app.post('/api/v1/signin', signIn);
 app.post('/api/v1/car', verifyToken, upload.single('carImage'), seller.postAd);
+app.get('/api/v1/car', viewer.dynamicView);
+app.get('/api/v1/car/:carId/', viewer.specificCar);
 app.patch('/api/v1/car/:carId/price', verifyToken, seller.updatePrice);
 app.patch('/api/v1/car/:carId/status', verifyToken, seller.markAsSold);
+
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
