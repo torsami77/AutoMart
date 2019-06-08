@@ -20,146 +20,162 @@ class Seller {
     } = req.body;
 
     if (!manufacturer) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'manufacturer field cannot be empty!',
         success: 'false',
         field: 'manufacturer',
       });
+      return false;
     }
 
     if (!model) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'model field cannot be empty!',
         success: 'false',
         field: 'model',
       });
+      return false;
     }
 
     if (!bodyType) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'body type field cannot be empty!',
         success: 'false',
         field: 'bodyType',
       });
+      return false;
     }
 
     if (!year) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'year field cannot be empty!',
         success: 'false',
         field: 'year',
       });
+      return false;
     }
 
     if (isNaN(parseInt(year, 10))) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'invalid year input',
         success: 'false',
         field: 'year',
       });
+      return false;
     }
 
     if (!mileage) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'mileage field cannot be empty!',
         success: 'false',
         field: 'mileage',
       });
+      return false;
     }
 
     if (isNaN(parseFloat(mileage))) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'invalid mileage input',
         success: 'false',
         field: 'mileage',
       });
+      return false;
     }
 
     if (!state) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'state field cannot be empty!',
         success: 'false',
         field: 'state',
       });
+      return false;
     }
 
     if (!transmission) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'transmission field cannot be empty!',
         success: 'false',
         field: 'transmission',
       });
+      return false;
     }
 
     if (!vehicleInspectionNumber) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'vehicle inspection number field cannot be empty!',
         success: 'false',
         field: 'vehicleInspectionNumber',
       });
+      return false;
     }
 
     if (!licence) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'licence field cannot be empty!',
         success: 'false',
         field: 'licence',
       });
+      return false;
     }
 
     if (!description) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'description field cannot be empty!',
         success: 'false',
         field: 'description',
       });
+      return false;
     }
 
     if (!price) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'price field cannot be empty!',
         success: 'false',
         field: 'price',
       });
+      return false;
     }
 
     if (isNaN(parseFloat(price))) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'invalid price input',
         success: 'false',
         field: 'price',
       });
+      return false;
     }
     if (!req.file) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'Upload at least one image!',
         success: 'false',
         field: 'carImage',
       });
+      return false;
     }
 
     if (!req.file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
-      return res.status(422).send({
+      res.status(422).send({
         status: 422,
         error: 'Please provide a valid image file!',
         success: 'false',
         field: 'carImage',
       });
+      return false;
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -182,7 +198,7 @@ class Seller {
           transmission, vehicleInspectionNumber, licence, description, imageGallery, orders, flags,
         };
         db.cars.push(newCar);
-        return res.status(201).send({
+        res.status(201).send({
           status: 201,
           data: {
             id,
@@ -198,13 +214,15 @@ class Seller {
             success: 'true',
           },
         });
+        return false;
       }
-      return res.status(500).send({
+      res.status(500).send({
         status: 500,
         error: 'No response from Cloudinary!, Please try again ',
         success: 'false',
         field: 'Cloudinary',
       });
+      return false;
     });
     return false;
   }
@@ -212,21 +230,23 @@ class Seller {
   static updatePrice(req, res) {
 
     if (!req.body.price || Number.isNaN(parseFloat(req.body.price))) {
-      return res.status(401).send({
+      res.status(401).send({
         status: 401,
         error: 'Invalid Price value!',
         success: 'false',
         field: 'Price',
       });
+      return false;
     }
 
     if (isNaN(parseInt(req.params.carId, 10))) {
-      return res.status(401).send({
+      res.status(401).send({
         status: 401,
         error: 'Invalid Param Request!',
         success: 'false',
         field: 'Price',
       });
+      return false;
     }
     const carId = parseInt(req.params.carId, 10);
     const newPrice = parseFloat(req.body.price);
@@ -236,7 +256,7 @@ class Seller {
         if (car.status !== 'sold' && car.owner === req.userData.id) {
           car.price = newPrice;
 
-          return res.status(201).send({
+          res.status(201).send({
             status: 201,
             data: {
               id: req.userData.id,
@@ -252,32 +272,36 @@ class Seller {
               field: 'Price',
             },
           });
+          return false;
         }
-        return res.status(403).send({
+        res.status(403).send({
           status: 403,
           error: 'You cannot change the price of this Ad!',
           success: 'false',
           field: 'Price',
         });
+        return false;
       }
-      return res.status(404).send({
+      res.status(404).send({
         status: 404,
         error: 'Ad not found in database!',
         success: 'false',
         field: 'Price',
       });
+      return false;
     });
     return false;
   }
 
   static markAsSold(req, res) {
     if (Number.isNaN(parseInt(req.params.carId, 10))) {
-      return res.status(401).send({
+      res.status(401).send({
         status: 401,
         error: 'Invalid Param Request!',
         success: 'false',
         field: 'sold',
       });
+      return false;
     }
     const carId = parseInt(req.params.orderId, 10);
 
@@ -285,7 +309,7 @@ class Seller {
       if (car.id === carId && car.owner === req.userData.id) {
         car.status = 'sold';
 
-        return res.status(201).send({
+        res.status(201).send({
           status: 201,
           data: {
             id: req.userData.id,
@@ -301,13 +325,15 @@ class Seller {
             field: 'sold',
           },
         });
+        return false;
       }
-      return res.status(403).send({
+      res.status(403).send({
         status: 403,
         error: 'You are not allowed to mark this Ad as sold!',
         success: 'false',
         field: 'Price',
       });
+      return false;
     });
     return false;
   }
