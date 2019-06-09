@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import db from '../db/db';
+import admin from './admin';
 
 const app = express();
 
@@ -135,10 +136,7 @@ class Viewer {
     }
     // If status=available not specified, search falls back to admin's view all (sold and available)
     // admin.viewAll(req, res);
-    return res.status(403).send({
-      status: 403,
-      error: 'You are not Admin',
-    });
+    admin.viewAll(req, res);
   }
 }
 

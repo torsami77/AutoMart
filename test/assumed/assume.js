@@ -317,8 +317,16 @@ const assumedData = {
   },
 
   admin: {
-    email: 'admin@automart.com',
-    password: 'adminPassword101?',
+    id: 2,
+    email: 'george@automart.com',
+    firstName: 'George',
+    lastName: 'Sunday',
+    username: 'Leke',
+    password: 'password101',
+    verify: 'password',
+    address: 'Jos',
+    is_admin: true,
+    created_on: '2019-06-01T11:05:17.601Z',
   },
 };
 

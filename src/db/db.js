@@ -5,12 +5,22 @@ const users = [
     first_name: 'Samson',
     last_name: 'Samuel',
     username: 'sami',
-    password: 'password101',
+    password: '$2y$12$.Q1A5rIvpMHwlXaq7QMneOCa6Zv5kS.Z.7t4tbPPfRg4BmXrdtva2',
     address: 'Jos',
     is_admin: false,
     created_on: '2019-06-01T11:05:17.601Z',
   },
-
+  {
+    id: 2,
+    email: 'george@automart.com',
+    first_name: 'George',
+    last_name: 'Sunday',
+    username: 'Leke',
+    password: '$2a$10$91EiXTaYsD3IxbHFUlRW/uW8crhztFfdZXeqdG5svnNa8yy0xSzjS',
+    address: 'Jos',
+    is_admin: true,
+    created_on: '2019-06-01T11:05:17.601Z',
+  },
 ];
 
 const cars = [
@@ -52,6 +62,42 @@ const cars = [
   },
   {
     id: 2,
+    owner: 2,
+    created_on: '2019-06-08T19:36:58.679Z',
+    state: 'used',
+    status: 'available',
+    price: 1000.00,
+    manufacturer: 'toyota',
+    model: 'camry',
+    bodyType: 'SUV',
+    year: 2019,
+    mileage: 2000,
+    transmission: 'auto',
+    vehicleIinspectionNumber: '123456js',
+    licence: 'PLA-BASSA-624',
+    description: 'well well well story story story',
+    imageGallery: [],
+    orders: [
+      {
+        id: 1,
+        buyer: 1,
+        car_id: 1,
+        amount: [1500.00],
+        status: 'pending',
+      },
+    ],
+    flags: [
+      {
+        id: 1,
+        car_id: 1,
+        created_on: '2019-06-08T19:36:58.679Z',
+        reason: 'pricing',
+        description: 'Give reasonable discount',
+      },
+    ],
+  },
+  {
+    id: 3,
     owner: 2,
     created_on: '2019-06-08T19:36:58.679Z',
     state: 'used',
