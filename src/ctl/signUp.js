@@ -17,18 +17,6 @@ const signUp = (req, res) => {
     username, firstName, lastName, address,
   } = req.body;
   // eslint-disable-next-line prefer-const
-  let checker = [username, firstName, lastName, address];
-
-  let i = -1;
-  checker.forEach((item) => {
-    i += 1;
-    if (item !== '' && typeof (item) !== 'undefined') {
-      checker[i] = item.replace(/[^0-9A-Za-z,]/g, '').toLowerCase();
-    }
-  });
-
-  [username, firstName, lastName, address] = checker;
-
 
   const {
     email, password, verify,
@@ -53,7 +41,7 @@ const signUp = (req, res) => {
     });
   }
 
-  if (undefined === firstName || firstName === '') {
+  if (undefined === firstName || firstName === ' ') {
     return res.status(401).send({
       status: 401,
       error: 'Please Enter your First Name',
@@ -63,7 +51,7 @@ const signUp = (req, res) => {
   }
 
 
-  if (undefined === lastName || lastName === '') {
+  if (undefined === lastName || lastName === ' ') {
     return res.status(401).send({
       status: 401,
       error: 'Please Enter your Last Name',
@@ -72,7 +60,7 @@ const signUp = (req, res) => {
     });
   }
 
-  if (undefined === address || address === '') {
+  if (undefined === address || address === ' ') {
     return res.status(401).send({
       status: 401,
       error: 'Please Enter your Address',
@@ -81,7 +69,7 @@ const signUp = (req, res) => {
     });
   }
 
-  if (undefined === password || password === '') {
+  if (undefined === password || password === ' ') {
     return res.status(401).send({
       status: 401,
       error: 'Please Provide a Password',

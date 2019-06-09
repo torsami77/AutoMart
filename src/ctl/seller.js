@@ -1,10 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import db from '../db/db';
-import mynodeconfig from '../mynodeconfig';
+import cloudUpload from '../mid/cloudinaryAndMulter';
 
 const app = express();
-const { cloudinary } = mynodeconfig;
+const { cloudinary } = cloudUpload;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -14,12 +14,12 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 class Seller {
   static postAd(req, res) {
-    const {
+    let {
       // eslint-disable-next-line max-len
       manufacturer, model, bodyType, year, mileage, state, transmission, vehicleInspectionNumber, licence, description, price,
     } = req.body;
 
-    if (!manufacturer) {
+    if (!manufacturer || manufacturer === ' ') {
       res.status(422).send({
         status: 422,
         error: 'manufacturer field cannot be empty!',
@@ -29,7 +29,7 @@ class Seller {
       return false;
     }
 
-    if (!model) {
+    if (!model || model === ' ') {
       res.status(422).send({
         status: 422,
         error: 'model field cannot be empty!',
@@ -39,7 +39,7 @@ class Seller {
       return false;
     }
 
-    if (!bodyType) {
+    if (!bodyType || bodyType === ' ') {
       res.status(422).send({
         status: 422,
         error: 'body type field cannot be empty!',
@@ -89,7 +89,7 @@ class Seller {
       return false;
     }
 
-    if (!state) {
+    if (!state || state === ' ') {
       res.status(422).send({
         status: 422,
         error: 'state field cannot be empty!',
@@ -99,7 +99,7 @@ class Seller {
       return false;
     }
 
-    if (!transmission) {
+    if (!transmission || transmission === ' ') {
       res.status(422).send({
         status: 422,
         error: 'transmission field cannot be empty!',
@@ -109,7 +109,7 @@ class Seller {
       return false;
     }
 
-    if (!vehicleInspectionNumber) {
+    if (!vehicleInspectionNumber || vehicleInspectionNumber === ' ') {
       res.status(422).send({
         status: 422,
         error: 'vehicle inspection number field cannot be empty!',
@@ -119,7 +119,7 @@ class Seller {
       return false;
     }
 
-    if (!licence) {
+    if (!licence || licence === ' ') {
       res.status(422).send({
         status: 422,
         error: 'licence field cannot be empty!',
@@ -129,7 +129,7 @@ class Seller {
       return false;
     }
 
-    if (!description) {
+    if (!description || description === ' ') {
       res.status(422).send({
         status: 422,
         error: 'description field cannot be empty!',
@@ -186,7 +186,10 @@ class Seller {
         const flags = [];
         const id = db.cars.length + 1;
         const createdOn = new Date();
-        const status = 'Available';
+        const status = 'available';
+        price = parseFloat(price);
+        mileage = parseFloat(mileage);
+        year = parseFloat(year);
 
         const newCar = {
           id,
@@ -228,8 +231,7 @@ class Seller {
   }
 
   static updatePrice(req, res) {
-
-    if (!req.body.price || Number.isNaN(parseFloat(req.body.price))) {
+    if (isNaN(parseFloat(req.body.price))) {
       res.status(401).send({
         status: 401,
         error: 'Invalid Price value!',
@@ -251,37 +253,49 @@ class Seller {
     const carId = parseInt(req.params.carId, 10);
     const newPrice = parseFloat(req.body.price);
 
+    let checker = 0;
+    let theCar;
     db.cars.map((car) => {
       if (car.id === carId) {
+        checker = 1;
         if (car.status !== 'sold' && car.owner === req.userData.id) {
           car.price = newPrice;
-
-          res.status(201).send({
-            status: 201,
-            data: {
-              id: req.userData.id,
-              email: req.userData.email,
-              created_on: car.created_on,
-              manufacturer: car.manufacturer,
-              model: car.model,
-              price: car.price,
-              state: car.state,
-              status: car.status,
-              message: 'New price Updated!',
-              success: 'True',
-              field: 'Price',
-            },
-          });
-          return false;
+          checker = 2;
+          theCar = car;
         }
-        res.status(403).send({
-          status: 403,
-          error: 'You cannot change the price of this Ad!',
-          success: 'false',
-          field: 'Price',
-        });
-        return false;
       }
+      return false;
+    });
+    if (checker === 2) {
+      res.status(201).send({
+        status: 201,
+        data: {
+          id: req.userData.id,
+          email: req.userData.email,
+          created_on: theCar.created_on,
+          manufacturer: theCar.manufacturer,
+          model: theCar.model,
+          price: theCar.price,
+          state: theCar.state,
+          status: theCar.status,
+          message: 'New price Updated!',
+          success: 'True',
+          field: 'Price',
+        },
+      });
+      return false;
+    }
+    if (checker === 1) {
+      res.status(403).send({
+        status: 403,
+        error: 'You cannot change the price of this Ad!',
+        success: 'false',
+        field: 'Price',
+      });
+      return false;
+    }
+
+    if (checker === 0) {
       res.status(404).send({
         status: 404,
         error: 'Ad not found in database!',
@@ -289,12 +303,12 @@ class Seller {
         field: 'Price',
       });
       return false;
-    });
+    }
     return false;
   }
 
   static markAsSold(req, res) {
-    if (Number.isNaN(parseInt(req.params.carId, 10))) {
+    if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(401).send({
         status: 401,
         error: 'Invalid Param Request!',
@@ -303,30 +317,38 @@ class Seller {
       });
       return false;
     }
-    const carId = parseInt(req.params.orderId, 10);
+    const carId = parseInt(req.params.carId, 10);
 
+    let newStatus;
+    let theCar;
     db.cars.map((car) => {
       if (car.id === carId && car.owner === req.userData.id) {
         car.status = 'sold';
-
-        res.status(201).send({
-          status: 201,
-          data: {
-            id: req.userData.id,
-            email: req.userData.email,
-            created_on: car.created_on,
-            manufacturer: car.manufacturer,
-            model: car.model,
-            price: car.price,
-            state: car.state,
-            status: car.status,
-            message: 'Car marked as sold!',
-            success: 'True',
-            field: 'sold',
-          },
-        });
-        return false;
+        newStatus = 'sold';
+        theCar = car;
       }
+      return false;
+    });
+    if (newStatus) {
+      res.status(201).send({
+        status: 201,
+        data: {
+          id: req.userData.id,
+          email: req.userData.email,
+          created_on: theCar.created_on,
+          manufacturer: theCar.manufacturer,
+          model: theCar.model,
+          price: theCar.price,
+          state: theCar.state,
+          status: theCar.status,
+          message: 'Car marked as sold!',
+          success: 'True',
+          field: 'sold',
+        },
+      });
+      return false;
+    // eslint-disable-next-line no-else-return
+    } else {
       res.status(403).send({
         status: 403,
         error: 'You are not allowed to mark this Ad as sold!',
@@ -334,8 +356,7 @@ class Seller {
         field: 'Price',
       });
       return false;
-    });
-    return false;
+    }
   }
 }
 
