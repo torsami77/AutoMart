@@ -1,3 +1,5 @@
+const carId = 1;
+
 const assumedData = {
   sellerUser: {
     email: 'seller@automart.com',
@@ -245,6 +247,78 @@ const assumedData = {
   },
   invalidPrice: {
     price: 'price',
+  },
+  newOrder: {
+    carId,
+    amount: 200,
+  },
+  updateOrder: {
+    order: carId,
+    amount: 300,
+  },
+  orderNotFound: {
+    carId: 0,
+    amount: 200,
+  },
+  invalidOrderReff: {
+    carId: ',jkk',
+    amount: 200,
+  },
+  invalidOrderAmount: {
+    carId,
+    amount: 'jkjk',
+  },
+  newOrderUpdate: {
+    carId,
+    amount: 200,
+  },
+  updateOrderUpdate: {
+    carId,
+    amount: 300,
+  },
+  orderNotFoundUpdate: {
+    carId: 0,
+    amount: 200,
+  },
+  invalidOrderReffUpdate: {
+    carId: ',jkk',
+    amount: 200,
+  },
+  AdFoundorderNotFound: {
+    carId: 0,
+    amount: 200,
+
+  },
+  invalidOrderAmountUpdate: {
+    carId,
+    amount: 'jkjk',
+  },
+  newFlag: {
+    carId,
+    reason: 'Price too low',
+    description: 'Seller might be trying to defraud',
+  },
+  flagNoRef: {
+    reason: 'Price too low',
+    description: 'Seller might be trying to defraud',
+  },
+  flagNoReason: {
+    carId,
+    description: 'Seller might be trying to defraud',
+  },
+  flagNoDescription: {
+    carId,
+    reason: 'Price too low',
+  },
+  newFlagNotFound: {
+    carId: 0,
+    reason: 'Price too low',
+    description: 'Seller might be trying to defraud',
+  },
+
+  admin: {
+    email: 'admin@automart.com',
+    password: 'adminPassword101?',
   },
 };
 

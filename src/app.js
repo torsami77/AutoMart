@@ -6,12 +6,14 @@ import signUp from './ctl/signUp';
 import signIn from './ctl/signIn';
 import seller from './ctl/seller';
 import viewer from './ctl/viewer';
-import mynodeconfig from './mynodeconfig';
+import buyer from './ctl/buyer';
+import verifyToken from './mid/verifyToken';
+import cloudUpload from './mid/cloudinaryAndMulter';
 
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-const { verifyToken, upload } = mynodeconfig;
+const { upload } = cloudUpload;
 
 
 const allowCrossDomain = (req, res, next) => {
@@ -36,10 +38,13 @@ app.get('/', (req, res) => {
 app.post('/api/v1/signup', signUp);
 app.post('/api/v1/signin', signIn);
 app.post('/api/v1/car', verifyToken, upload.single('carImage'), seller.postAd);
-app.get('/api/v1/car', viewer.dynamicView);
-app.get('/api/v1/car/:carId/', viewer.specificCar);
 app.patch('/api/v1/car/:carId/price', verifyToken, seller.updatePrice);
 app.patch('/api/v1/car/:carId/status', verifyToken, seller.markAsSold);
+app.get('/api/v1/car', viewer.dynamicView);
+app.get('/api/v1/car/:carId/', viewer.specificCar);
+app.post('/api/v1/flag', verifyToken, buyer.flag);
+app.post('/api/v1/order', verifyToken, buyer.order);
+app.patch('/api/v1/order/:orderId/price', verifyToken, buyer.updateOrder);
 
 
 app.listen(PORT, () => {

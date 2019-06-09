@@ -17,7 +17,7 @@ const cars = [
   {
     id: 1,
     owner: 1,
-    created_on: 'Wed May 29 2019 15:56:22 GMT+0100 (West Africa Standard Time)',
+    created_on: '2019-06-08T19:36:58.679Z',
     state: 'new',
     status: 'available',
     price: 1500.00,
@@ -36,7 +36,7 @@ const cars = [
         id: 1,
         buyer: 1,
         car_id: 1,
-        amount: 1500.00,
+        amount: [1500.00],
         status: 'pending',
       },
     ],
@@ -44,7 +44,7 @@ const cars = [
       {
         id: 1,
         car_id: 1,
-        created_on: 'Wed May 29 2019 15:56:22 GMT+0100 (West Africa Standard Time)',
+        created_on: '2019-06-08T19:36:58.679Z',
         reason: 'pricing',
         description: 'Give reasonable discount',
       },
@@ -53,7 +53,7 @@ const cars = [
   {
     id: 2,
     owner: 2,
-    created_on: 'Wed May 29 2019 15:56:22 GMT+0100 (West Africa Standard Time)',
+    created_on: '2019-06-08T19:36:58.679Z',
     state: 'used',
     status: 'available',
     price: 1000.00,
@@ -72,7 +72,7 @@ const cars = [
         id: 1,
         buyer: 1,
         car_id: 1,
-        amount: 1500.00,
+        amount: [1500.00],
         status: 'pending',
       },
     ],
@@ -80,7 +80,7 @@ const cars = [
       {
         id: 1,
         car_id: 1,
-        created_on: 'Wed May 29 2019 15:56:22 GMT+0100 (West Africa Standard Time)',
+        created_on: '2019-06-08T19:36:58.679Z',
         reason: 'pricing',
         description: 'Give reasonable discount',
       },
