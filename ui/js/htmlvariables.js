@@ -289,8 +289,8 @@ const signUpForm = `
                 <div>
                     <form>
                         <p><i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Provide your email" autofocus required/></p>
-                        <p><i class="material-icons">person</i><input type="text" name="firstname" id="firstname" class="input-field" placeholder="Enter your first name" autofocus required /></p>
-                        <p><i class="material-icons">person</i><input type="text" name="lastname" id="lastname" class="input-field" placeholder="Enter your last name" autofocus required /></p>
+                        <p><i class="material-icons">person</i><input type="text" name="first-name" id="first-name" class="input-field" placeholder="Enter your first name" autofocus required /></p>
+                        <p><i class="material-icons">person</i><input type="text" name="last-name" id="last-name" class="input-field" placeholder="Enter your last name" autofocus required /></p>
                         <p><i class="material-icons">lock</i><input type="password" name="password" id="password" class="input-field" placeholder="Create a password" required/></p>
                         <p><i class="material-icons">lock</i><input type="password" name="verify" id="verify" class="input-field" placeholder="Verify your password" required/></p>
                         <p><i class="material-icons">location_on</i><input type="text" id="location" name="location" placeholder="Enter your current location" required/></p>
