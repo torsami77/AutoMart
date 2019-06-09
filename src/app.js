@@ -7,6 +7,7 @@ import signIn from './ctl/signIn';
 import seller from './ctl/seller';
 import viewer from './ctl/viewer';
 import buyer from './ctl/buyer';
+import admin from './ctl/admin';
 import verifyToken from './mid/verifyToken';
 import cloudUpload from './mid/cloudinaryAndMulter';
 
@@ -45,7 +46,7 @@ app.get('/api/v1/car/:carId/', viewer.specificCar);
 app.post('/api/v1/flag', verifyToken, buyer.flag);
 app.post('/api/v1/order', verifyToken, buyer.order);
 app.patch('/api/v1/order/:orderId/price', verifyToken, buyer.updateOrder);
-
+app.delete('/api/v1/car/:carId/', verifyToken, admin.delete);
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);

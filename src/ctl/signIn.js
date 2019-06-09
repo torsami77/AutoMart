@@ -16,7 +16,7 @@ const signIn = (req, res) => {
   const { email, password } = req.body;
   const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-  if (undefined === email || !email.match(mailformat)) {
+  if (undefined === email || (!email.match(mailformat))) {
     return res.status(401).send({
       status: 401,
       error: 'Please Enter a Valid Email!',
@@ -51,7 +51,7 @@ const signIn = (req, res) => {
       });
     }
     if (ismatched) {
-      const { id } = searchedUser.id;
+      const { id } = searchedUser;
       bcrypt.hash(password, 10, (error, hash) => {
         const token = jwt.sign({
           email,

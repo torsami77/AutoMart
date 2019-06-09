@@ -96,66 +96,65 @@ const signUp = (req, res) => {
     });
   }
 
-  db.users.map((user) => {
-    if (user.email === email) {
-      return res.status(401).send({
-        status: 401,
-        error: 'Email is associated with another user!',
-        success: 'false',
-        field: 'email',
-      });
-    }
-    if (user.username === username) {
-      return res.status(401).send({
-        status: 401,
-        error: 'Username already taken by another user!',
-        success: 'false',
-        field: 'username',
-      });
-    }
-    bcrypt.hash(password, 10, (error, hash) => {
-      if (error) {
-        return res.status(401).send({
-          status: 404,
-          error,
-          field: 'password',
-        });
-      }
-      const id = parseInt(db.users.length + 1, 10);
-      const token = jwt.sign({
-        email,
-        hash,
-        id,
-      }, process.env.SECRET_KEY, { expiresIn: '1h' });
-
-      const newUser = {
-        id,
-        email,
-        first_name: firstName,
-        last_name: lastName,
-        password: hash,
-        address,
-        is_admin: false,
-        created_on: new Date(),
-      };
-      db.users.push(newUser);
-
-      res.cookie('username', username);
-      res.cookie('token', token);
-      return res.status(201).send({
-        status: 201,
-        data: {
-          id: newUser.id,
-          token,
-          first_name: newUser.first_name,
-          last_name: newUser.last_name,
-          email: newUser.email,
-          success: 'true',
-          message: 'Your Signed up was successful',
-        },
-      });
+  const emailSearch = db.users.find(user => user.email === email);
+  const userNameSearch = db.users.find(user => user.username === username);
+  if (emailSearch) {
+    return res.status(401).send({
+      status: 401,
+      error: 'Email is associated with another user!',
+      success: 'false',
+      field: 'email',
     });
-    return false;
+  }
+  if (userNameSearch) {
+    return res.status(401).send({
+      status: 401,
+      error: 'Username already taken by another user!',
+      success: 'false',
+      field: 'username',
+    });
+  }
+  bcrypt.hash(password, 10, (error, hash) => {
+    if (error) {
+      return res.status(401).send({
+        status: 404,
+        error,
+        field: 'password',
+      });
+    }
+    const id = parseInt(db.users.length + 1, 10);
+    const token = jwt.sign({
+      email,
+      hash,
+      id,
+    }, process.env.SECRET_KEY, { expiresIn: '1h' });
+
+    const newUser = {
+      id,
+      email,
+      first_name: firstName,
+      last_name: lastName,
+      password: hash,
+      address,
+      is_admin: false,
+      created_on: new Date(),
+    };
+    db.users.push(newUser);
+
+    res.cookie('username', username);
+    res.cookie('token', token);
+    return res.status(201).send({
+      status: 201,
+      data: {
+        id: newUser.id,
+        token,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
+        email: newUser.email,
+        success: 'true',
+        message: 'Your Signed up was successful',
+      },
+    });
   });
   return false;
 };
