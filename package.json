@@ -1,7 +1,7 @@
 {
   "name": "automart",
   "version": "1.0.0",
-  "description": "Your Favourite platform to buy and sale vehicles...",
+  "description": "Your Favourite platform to buy and sale vehicles..",
   "main": "./src/app.js",
   "scripts": {
     "build": "babel src -d build",
