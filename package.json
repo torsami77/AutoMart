@@ -4,7 +4,6 @@
   "description": "Your Favourite platform to buy and sale vehicles...",
   "main": "./src/app.js",
   "scripts": {
-    "build": "babel src -d build",
     "start": "npm run build && nodemon build/app.js",
     "test": "nyc --reporter=html --reporter=text mocha --exit --require @babel/register --recursive ./test/",
     "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
