@@ -91,5 +91,8 @@
       "**/build/**"
     ],
     "all": true
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
