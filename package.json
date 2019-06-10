@@ -94,6 +94,6 @@
     "all": true
   },
   "engines": {
-    "node": "10.x"
+    "node": "10.13.0"
   }
 }
