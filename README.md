@@ -1,4 +1,4 @@
-
+![Build Status](https://travis-ci.com/torsami77/AutoMart.svg?branch=develop)](https://travis-ci.com/torsami77/AutoMart)
 
 [![Coverage Status](https://coveralls.io/repos/github/torsami77/AutoMart/badge.svg?branch=ft-api-v1-166108765)](https://coveralls.io/github/torsami77/AutoMart?branch=ft-api-v1-166108765)
 
