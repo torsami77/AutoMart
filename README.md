@@ -1,4 +1,4 @@
-![Build Status](https://travis-ci.com/torsami77/AutoMart.svg?branch=develop)](https://travis-ci.com/torsami77/AutoMart)
+![Build Status](https://travis-ci.com/torsami77/AutoMart.svg?branch=develop)
 
 [![Coverage Status](https://coveralls.io/repos/github/torsami77/AutoMart/badge.svg?branch=ft-api-v1-166108765)](https://coveralls.io/github/torsami77/AutoMart?branch=ft-api-v1-166108765)
 
@@ -22,15 +22,15 @@ Thanks.
 
 links to ui templates
 
-https://torsami77.github.io/AutoMart/index.html
+https://automart77.herokuapp.com/
 
-https://torsami77.github.io/AutoMart/userpage.html
+https://automart77.herokuapp.com/userpage.html
 
-https://torsami77.github.io/AutoMart/adminsignup.html
+https://automart77.herokuapp.com/adminsignup.html
 
-https://torsami77.github.io/AutoMart/admin.html
+https://automart77.herokuapp.com/admin.html
 
-https://torsami77.github.io/AutoMart/createnewpassword.html
+https://automart77.herokuapp.com/createnewpassword.html
 
 
 
