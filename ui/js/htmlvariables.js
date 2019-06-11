@@ -34,7 +34,7 @@ const myAds = `
 <tr>
     <td><input type="checkbox" class="large-input" onclick="toggleMenuButtons();" /></td>
     <td>
-        <div class="ad-review" style="background-image: url('images/1.jpeg'); background-size: cover;">
+        <div class="ad-review" style="background-image: url('https://res.cloudinary.com/torsami77/image/upload/v1560088728/jt97ipjlo34avx8qeedf.jpg'); background-size: cover;">
             <div>
                 <div class="left">
                     <p>New</br>
@@ -64,7 +64,7 @@ const myAds = `
         <p><span>James</Base></span>: &#8358;1, 500. 00</p>
     </td>
     <td>
-        <img src="images/sold.jpeg" />
+        <img src="https://res.cloudinary.com/torsami77/image/upload/v1560170479/sold_lhhjz5.jpg" />
     </td>
 </tr>
 
@@ -88,7 +88,7 @@ const myAds = `
 <tr>
     <td><input type="checkbox" class="large-input" onclick="toggleMenuButtons();"/></td>
     <td>
-        <div class="ad-review" style="background-image: url('images/1.jpeg'); background-size: cover;">
+        <div class="ad-review" style="background-image: url('https://res.cloudinary.com/torsami77/image/upload/v1560088728/jt97ipjlo34avx8qeedf.jpg'); background-size: cover;">
             <div>
                 <div class="left">
                     <p>New</br>
@@ -142,7 +142,7 @@ const myAds = `
 <tr>
     <td><input type="checkbox" class="large-input" onclick="toggleMenuButtons();"/></td>
     <td>
-        <div class="ad-review" style="background-image: url('images/1.jpeg'); background-size: cover;">
+        <div class="ad-review" style="background-image: url('https://res.cloudinary.com/torsami77/image/upload/v1560088728/jt97ipjlo34avx8qeedf.jpg'); background-size: cover;">
             <div>
                 <div class="left">
                     <p>New</br>
@@ -204,14 +204,14 @@ const viewImage = `
                 </div>
 
                 <div id="view-image" class="view-image">
-                    <img src="./images/10.jpeg"/>
+                    <img src="https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg"/>
                 </div>
 
                 <div class="gallery">
-                    <img src="./images/10.jpeg"/>
-                    <img src="./images/10.jpeg"/>
-                    <img src="./images/10.jpeg"/>
-                    <img src="./images/10.jpeg"/>
+                    <img src="https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg"/>
+                    <img src="https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg"/>
+                    <img src="https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg"/>
+                    <img src="https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg"/>
                 </div>
             </fieldset>
 
@@ -409,7 +409,7 @@ const accountSettingsForm = `
                 <div>
                     <fieldset>
                         <legend>Modify Profile Pic</legend>
-                            <img src="images/no-profile-image.jpeg" class="avater" />
+                            <img src="https://res.cloudinary.com/torsami77/image/upload/v1560170510/no-profile-image_fu64pb.jpg" class="avater" />
                             <input type="file" name="profile-pic" accept="image/*">
                             <p>
                                 <button type="submit" name="modify-pic" id="modify-pic" class="button-enabled">Modify</button>

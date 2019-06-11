@@ -8,7 +8,7 @@ const moreAds = () => {
 
     for(let i = 1; i <= 24; i++){
         let elChild = document.createElement('div');
-        elChild.style.backgroundImage = `url('images/${i}.jpeg')`;
+        elChild.style.backgroundImage = `url('https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg')`;
         elChild.style.backgroundSize = `cover`;
         elChild.classList.add('ad-review');
         elChild.onclick = () => {viewVehicle()};
