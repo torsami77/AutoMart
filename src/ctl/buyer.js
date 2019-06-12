@@ -112,6 +112,7 @@ class Buyer {
           } else {
             checkAd = 4;
           }
+          return false;
         });
       }
       return false;

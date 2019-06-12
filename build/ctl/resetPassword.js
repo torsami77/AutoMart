@@ -1,135 +1,195 @@
-/*
-import express from 'express';
-import bodyParser from 'body-parser';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import db from '../db/db';
-import automail from '../mid/automailer';
+"use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-const app = express();
+var _express = _interopRequireDefault(require("express"));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.text());
-app.use(bodyParser.json({ type: 'application/json' }));
+var _bodyParser = _interopRequireDefault(require("body-parser"));
 
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
-const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 
-class Password {
-  static reset(req, res) {
-    if (!req.body.email || !req.body.email.match(mailformat)) {
-      return res.status(401).send({
-        status: 401,
-        error: 'Please provide a valid email!',
-        success: 'false',
-        field: 'email',
-      });
-    }
-    const foundUser = db.users.find(user => user.email === req.body.email);
-    if (foundUser) {
-      const hash = foundUser.password;
-      const { id } = foundUser;
-      const firstName = foundUser.first_name;
-      const { email } = req.body;
-      const token = jwt.sign({
-        email,
-        hash,
-        id,
-      }, process.env.SECRET_KEY, { expiresIn: '1h' });
-      const subject = 'Pasword reset link';
-      const text = `<html>
-      Hello ${firstName},</br>
-      <p>You are receive this email because there was an action to reset your email on <br/>
-      automart. he you would like to proceed please click the link below</p>
+var _db = _interopRequireDefault(require("../db/db"));
 
-      <p><a href="www.automart.com/createnewpassword/${hash}">www.automart.com/createnewpassword/${hash}</a></p>
-      
-      <p>Best regards<br/>
-      Auto Mart Team</br>
-      </p>
+var _automailer = _interopRequireDefault(require("../mid/automailer"));
 
-      <strong>Your favourite platform to buy and sal Cars</strong>
-      </html>`;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-      const sendMail = automail(email, subject, text);
-      if (sendMail) {
-        return res.status(200).send({
-          status: 200,
-          data: {
-            message: 'password reset link sent to your email',
-            success: 'true',
-            field: 'passordReset',
-          },
-        });
-      // eslint-disable-next-line no-else-return
-      } else {
-        return res.status(500).send({
-          status: 500,
-          error: 'Request incomplete please try again',
-        });
-      }
-    // eslint-disable-next-line no-else-return
-    } else {
-      return res.status(403).send({
-        status: 403,
-        error: 'No user found with such email',
-        success: 'false',
-      });
-    }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var app = (0, _express["default"])();
+app.use(_bodyParser["default"].json());
+app.use(_bodyParser["default"].urlencoded({
+  extended: false
+}));
+app.use(_bodyParser["default"].text());
+app.use(_bodyParser["default"].json({
+  type: 'application/json'
+}));
+var mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+
+var Password =
+/*#__PURE__*/
+function () {
+  function Password() {
+    _classCallCheck(this, Password);
   }
 
-  static createNewPassword(req, res) {
-    if (!req.body.password) {
-      return res.status(401).send({
-        status: 401,
-        error: 'Please Create a New Password!',
-        success: 'false',
-        field: 'password',
+  _createClass(Password, null, [{
+    key: "resetRequest",
+    value: function resetRequest(req, res) {
+      if (undefined === req.body.email) {
+        return res.status(401).send({
+          status: 400,
+          error: 'Please provide a valid email!',
+          success: 'false',
+          field: 'email'
+        }); // eslint-disable-next-line no-else-return
+      }
+
+      if (req.body.email === ' ' || !req.body.email.match(mailformat)) {
+        return res.status(401).send({
+          status: 400,
+          error: 'Please provide a valid email!',
+          success: 'false',
+          field: 'email'
+        });
+      }
+
+      var token;
+
+      var foundUser = _db["default"].users.find(function (user) {
+        return user.email === req.body.email;
       });
+
+      if (foundUser) {
+        var hash = foundUser.password;
+        var id = foundUser.id;
+        var firstName = foundUser.first_name;
+        var email = req.body.email;
+        token = _jsonwebtoken["default"].sign({
+          email: email,
+          hash: hash,
+          id: id
+        }, process.env.SECRET_KEY, {
+          expiresIn: '1h'
+        });
+        var subject = 'AUTOMART: Pasword reset link';
+        var text = "\n      Hello ".concat(firstName, ",\n      You are receive this email because there was an action to reset your email on \n      automart. If you would like to proceed please copy the link below and paste in your browser address bar.\n\n      www.automart.com/createnewpassword/").concat(token, "\n      \n      Best regards\n      Auto Mart Team\n\n      Your favourite platform to buy and sale Cars\n      ");
+        var mailOptions = {
+          from: 'bootcamp@automart.com',
+          to: email,
+          subject: subject,
+          text: text
+        };
+
+        _automailer["default"].sendMail(mailOptions).then(function () {
+          return res.status(200).send({
+            status: 200,
+            data: {
+              message: 'password reset link sent to your email',
+              success: 'true',
+              field: 'passordReset',
+              token: token
+            }
+          });
+        })["catch"](function () {
+          return res.status(500).send({
+            success: 'false',
+            status: 500,
+            error: 'Request incomplete please try again'
+          });
+        });
+      } else {
+        return res.status(404).send({
+          status: 404,
+          error: 'No user found with such email',
+          success: 'false'
+        });
+      }
+
+      return false;
     }
-    if (req.body.password.length < 8) {
-      return res.status(401).send({
-        status: 401,
-        error: 'Password too Short!',
-        success: 'false',
-        field: 'password',
-      });
-    }
-    if (req.body.verify !== req.body.password) {
-      return res.status(401).send({
-        status: 401,
-        error: 'Verify Password Does\'t match!',
-        success: 'false',
-        field: 'verify',
-      });
-    }
-    const { email, id } = req.userData;
-    bcrypt.hash(password, 10, (error, hash) => {
-      const token = jwt.sign({
-        email,
-        hash,
-        id,
-      }, process.env.SECRET_KEY, { expiresIn: '1h' });
-      db.map.users((user) => {
-        if (user.id === id && user.email === email) {
-          user.password = hash;
-                }
-                return res.status(200).send({
-                    status: 200,
-                    data: {
-                        token,
-                        message: 'Your password has been reset Successfully',
-                        success: 'true',
-                    }
-                })    
-            });
+  }, {
+    key: "createNewPassword",
+    value: function createNewPassword(req, res) {
+      if (!req.body.password) {
+        return res.status(401).send({
+          status: 400,
+          error: 'Please Enter a New Password!',
+          success: 'false',
+          field: 'password'
+        });
+      }
+
+      if (req.body.password.length < 8) {
+        return res.status(401).send({
+          status: 400,
+          error: 'Password too Short!',
+          success: 'false',
+          field: 'password'
+        });
+      }
+
+      if (req.body.verify !== req.body.password) {
+        return res.status(401).send({
+          status: 400,
+          error: 'Password Does\'t match!',
+          success: 'false',
+          field: 'verify'
+        });
+      }
+
+      var _req$userData = req.userData,
+          email = _req$userData.email,
+          id = _req$userData.id;
+
+      _bcryptjs["default"].hash(req.body.password, 10, function (error, hash) {
+        var token = _jsonwebtoken["default"].sign({
+          email: email,
+          hash: hash,
+          id: id
+        }, process.env.SECRET_KEY, {
+          expiresIn: '1h'
         });
 
-    }
-}
+        var foundUser = _db["default"].users.find(function (user) {
+          return user.id === id && user.email === email;
+        });
 
-export default Password;
-*/
-"use strict";
+        if (foundUser) {
+          foundUser.password = hash;
+          return res.status(200).send({
+            status: 200,
+            data: {
+              token: token,
+              message: 'Your password has been reset Successfully!',
+              success: 'true'
+            }
+          }); // eslint-disable-next-line no-else-return
+        } else {
+          return res.status(401).send({
+            status: 401,
+            error: 'User Invalid token',
+            succcess: 'false'
+          });
+        }
+      });
+
+      return false;
+    }
+  }]);
+
+  return Password;
+}();
+
+var _default = Password;
+exports["default"] = _default;
