@@ -1,4 +1,3 @@
-/*
 import express from 'express';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
@@ -18,80 +17,96 @@ app.use(bodyParser.json({ type: 'application/json' }));
 const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 class Password {
-  static reset(req, res) {
-    if (!req.body.email || !req.body.email.match(mailformat)) {
+  static resetRequest(req, res) {
+    if (undefined === req.body.email) {
       return res.status(401).send({
-        status: 401,
+        status: 400,
+        error: 'Please provide a valid email!',
+        success: 'false',
+        field: 'email',
+      });
+    // eslint-disable-next-line no-else-return
+    }
+
+    if (req.body.email === ' ' || !req.body.email.match(mailformat)) {
+      return res.status(401).send({
+        status: 400,
         error: 'Please provide a valid email!',
         success: 'false',
         field: 'email',
       });
     }
+
+    let token;
     const foundUser = db.users.find(user => user.email === req.body.email);
     if (foundUser) {
       const hash = foundUser.password;
       const { id } = foundUser;
       const firstName = foundUser.first_name;
       const { email } = req.body;
-      const token = jwt.sign({
+      token = jwt.sign({
         email,
         hash,
         id,
       }, process.env.SECRET_KEY, { expiresIn: '1h' });
-      const subject = 'Pasword reset link';
-      const text = `<html>
-      Hello ${firstName},</br>
-      <p>You are receive this email because there was an action to reset your email on <br/>
-      automart. he you would like to proceed please click the link below</p>
+      const subject = 'AUTOMART: Pasword reset link';
+      const text = `
+      Hello ${firstName},
+      You are receive this email because there was an action to reset your email on 
+      automart. If you would like to proceed please copy the link below and paste in your browser address bar.
 
-      <p><a href="www.automart.com/createnewpassword/${hash}">www.automart.com/createnewpassword/${hash}</a></p>
+      www.automart.com/createnewpassword/${token}
       
-      <p>Best regards<br/>
-      Auto Mart Team</br>
-      </p>
+      Best regards
+      Auto Mart Team
 
-      <strong>Your favourite platform to buy and sal Cars</strong>
-      </html>`;
+      Your favourite platform to buy and sale Cars
+      `;
 
-      const sendMail = automail(email, subject, text);
-      if (sendMail) {
-        return res.status(200).send({
+      const mailOptions = {
+        from: 'bootcamp@automart.com',
+        to: email,
+        subject,
+        text,
+      };
+
+      automail.sendMail(mailOptions)
+        .then(() => res.status(200).send({
           status: 200,
           data: {
             message: 'password reset link sent to your email',
             success: 'true',
             field: 'passordReset',
+            token,
           },
-        });
-      // eslint-disable-next-line no-else-return
-      } else {
-        return res.status(500).send({
+        }))
+        .catch(() => res.status(500).send({
+          success: 'false',
           status: 500,
           error: 'Request incomplete please try again',
-        });
-      }
-    // eslint-disable-next-line no-else-return
+        }));
     } else {
-      return res.status(403).send({
-        status: 403,
+      return res.status(404).send({
+        status: 404,
         error: 'No user found with such email',
         success: 'false',
       });
     }
+    return false;
   }
 
   static createNewPassword(req, res) {
     if (!req.body.password) {
       return res.status(401).send({
-        status: 401,
-        error: 'Please Create a New Password!',
+        status: 400,
+        error: 'Please Enter a New Password!',
         success: 'false',
         field: 'password',
       });
     }
     if (req.body.password.length < 8) {
       return res.status(401).send({
-        status: 401,
+        status: 400,
         error: 'Password too Short!',
         success: 'false',
         field: 'password',
@@ -99,36 +114,42 @@ class Password {
     }
     if (req.body.verify !== req.body.password) {
       return res.status(401).send({
-        status: 401,
-        error: 'Verify Password Does\'t match!',
+        status: 400,
+        error: 'Password Does\'t match!',
         success: 'false',
         field: 'verify',
       });
     }
     const { email, id } = req.userData;
-    bcrypt.hash(password, 10, (error, hash) => {
+    bcrypt.hash(req.body.password, 10, (error, hash) => {
       const token = jwt.sign({
         email,
         hash,
         id,
       }, process.env.SECRET_KEY, { expiresIn: '1h' });
-      db.map.users((user) => {
-        if (user.id === id && user.email === email) {
-          user.password = hash;
-                }
-                return res.status(200).send({
-                    status: 200,
-                    data: {
-                        token,
-                        message: 'Your password has been reset Successfully',
-                        success: 'true',
-                    }
-                })    
-            });
-        });
 
-    }
+      const foundUser = db.users.find(user => user.id === id && user.email === email);
+      if (foundUser) {
+        foundUser.password = hash;
+        return res.status(200).send({
+          status: 200,
+          data: {
+            token,
+            message: 'Your password has been reset Successfully!',
+            success: 'true',
+          },
+        });
+      // eslint-disable-next-line no-else-return
+      } else {
+        return res.status(400).send({
+          status: 401,
+          error: 'User Invalid token',
+          succcess: 'false',
+        });
+      }
+    });
+    return false;
+  }
 }
 
 export default Password;
-*/

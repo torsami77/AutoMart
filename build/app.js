@@ -25,6 +25,8 @@ var _buyer = _interopRequireDefault(require("./ctl/buyer"));
 
 var _admin = _interopRequireDefault(require("./ctl/admin"));
 
+var _resetPassword = _interopRequireDefault(require("./ctl/resetPassword"));
+
 var _verifyToken = _interopRequireDefault(require("./mid/verifyToken"));
 
 var _cloudinaryAndMulter = _interopRequireDefault(require("./mid/cloudinaryAndMulter"));
@@ -67,6 +69,15 @@ app.post('/api/v1/flag', _verifyToken["default"], _buyer["default"].flag);
 app.post('/api/v1/order', _verifyToken["default"], _buyer["default"].order);
 app.patch('/api/v1/order/:orderId/price', _verifyToken["default"], _buyer["default"].updateOrder);
 app["delete"]('/api/v1/car/:carId/', _verifyToken["default"], _admin["default"]["delete"]);
+app.post('/api/v1/password/reset', _resetPassword["default"].resetRequest);
+app.post('/api/v1/password/createnew', _verifyToken["default"], _resetPassword["default"].createNewPassword);
+app.all('*', function (req, res) {
+  res.status(404).send({
+    status: 404,
+    error: 'Endpoint not found!',
+    success: false
+  });
+});
 app.listen(PORT, function () {
   console.log("server running on port ".concat(PORT));
 });

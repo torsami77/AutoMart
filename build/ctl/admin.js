@@ -90,8 +90,8 @@ function () {
       employJwt(req, res);
 
       if (!req.params.carId || isNaN(parseInt(req.params.carId, 10))) {
-        return res.status(401).send({
-          status: 401,
+        return res.status(400).send({
+          status: 400,
           error: 'Please provide a valid Ad reference!',
           success: 'false',
           field: 'order'

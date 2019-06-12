@@ -40,8 +40,8 @@ function () {
     key: "order",
     value: function order(req, res) {
       if (isNaN(parseFloat(req.body.amount))) {
-        res.status(401).send({
-          status: 401,
+        res.status(400).send({
+          status: 400,
           error: 'Please provide a valid price value!',
           success: 'false',
           field: 'amount'
@@ -50,8 +50,8 @@ function () {
       }
 
       if (isNaN(parseInt(req.body.carId, 10))) {
-        res.status(401).send({
-          status: 401,
+        res.status(400).send({
+          status: 400,
           error: 'Please provide a valid order reference!',
           success: 'false',
           field: 'carId'
@@ -107,8 +107,8 @@ function () {
     key: "updateOrder",
     value: function updateOrder(req, res) {
       if (isNaN(parseInt(req.params.orderId, 10))) {
-        return res.status(401).send({
-          status: 401,
+        return res.status(400).send({
+          status: 400,
           error: 'Please provide a valid order reference!',
           success: 'false',
           field: 'order'
@@ -116,8 +116,8 @@ function () {
       }
 
       if (isNaN(parseFloat(req.body.amount))) {
-        return res.status(401).send({
-          status: 401,
+        return res.status(400).send({
+          status: 400,
           error: 'Please provide a valid price value!',
           success: 'false',
           field: 'car'
@@ -125,8 +125,8 @@ function () {
       }
 
       if (isNaN(parseInt(req.body.carId, 10))) {
-        return res.status(401).send({
-          status: 401,
+        return res.status(400).send({
+          status: 400,
           error: 'Please provide a valid AD reference!',
           suceess: 'false',
           field: 'car'
@@ -148,6 +148,8 @@ function () {
             } else {
               checkAd = 4;
             }
+
+            return false;
           });
         }
 
@@ -155,8 +157,8 @@ function () {
       });
 
       if (checkAd === 4) {
-        res.status(401).send({
-          status: 401,
+        res.status(403).send({
+          status: 403,
           error: 'This Order cannot be updated anymore!',
           success: 'false',
           field: 'order'
@@ -206,8 +208,8 @@ function () {
     key: "flag",
     value: function flag(req, res) {
       if (isNaN(parseInt(req.body.carId, 10))) {
-        return res.status(401).send({
-          status: 401,
+        return res.status(400).send({
+          status: 400,
           error: 'Please provide a valid Ad reference!',
           success: 'false',
           field: 'carId'
@@ -215,8 +217,8 @@ function () {
       }
 
       if (!req.body.reason || req.body.reason === ' ') {
-        return res.status(401).send({
-          status: 401,
+        return res.status(400).send({
+          status: 400,
           error: 'Please indicate your reason for this red flag!',
           success: 'false',
           field: 'reason'
@@ -224,8 +226,8 @@ function () {
       }
 
       if (!req.body.description || req.body.description === ' ') {
-        return res.status(401).send({
-          status: 401,
+        return res.status(400).send({
+          status: 400,
           error: 'Please enter description for your red flag!',
           success: 'false',
           field: 'description'

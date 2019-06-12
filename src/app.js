@@ -8,6 +8,7 @@ import seller from './ctl/seller';
 import viewer from './ctl/viewer';
 import buyer from './ctl/buyer';
 import admin from './ctl/admin';
+import password from './ctl/resetPassword';
 import verifyToken from './mid/verifyToken';
 import cloudUpload from './mid/cloudinaryAndMulter';
 
@@ -36,6 +37,7 @@ app.use(cookieParser());
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('./ui/index.html'));
 });
+
 app.post('/api/v1/signup', signUp);
 app.post('/api/v1/signin', signIn);
 app.post('/api/v1/car', verifyToken, upload.single('carImage'), seller.postAd);
@@ -47,6 +49,15 @@ app.post('/api/v1/flag', verifyToken, buyer.flag);
 app.post('/api/v1/order', verifyToken, buyer.order);
 app.patch('/api/v1/order/:orderId/price', verifyToken, buyer.updateOrder);
 app.delete('/api/v1/car/:carId/', verifyToken, admin.delete);
+app.post('/api/v1/password/reset', password.resetRequest);
+app.post('/api/v1/password/createnew', verifyToken, password.createNewPassword);
+app.all('*', (req, res) => {
+  res.status(404).send({
+    status: 404,
+    error: 'Endpoint not found!',
+    success: false,
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);

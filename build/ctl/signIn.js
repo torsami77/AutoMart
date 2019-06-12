@@ -34,8 +34,8 @@ var signIn = function signIn(req, res) {
   var mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
   if (undefined === email || !email.match(mailformat)) {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Please Enter a Valid Email!',
       success: 'false',
       field: 'email'
@@ -43,8 +43,8 @@ var signIn = function signIn(req, res) {
   }
 
   if (undefined === password) {
-    return res.status(401).json({
-      status: 401,
+    return res.status(400).json({
+      status: 400,
       error: 'Please enter your password!',
       success: 'false',
       field: 'password'
@@ -86,8 +86,8 @@ var signIn = function signIn(req, res) {
 
         res.cookie('username', searchedUser.username);
         res.cookie('token', token);
-        return res.status(200).json({
-          status: 200,
+        return res.status(202).json({
+          status: 202,
           data: {
             success: 'true',
             message: 'Auth successful!',
