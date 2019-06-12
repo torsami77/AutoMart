@@ -26,7 +26,7 @@ describe('User Seller Activities', () => {
       .send(assumedData.newAdvert)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(403);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Unauthorised User!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -52,7 +52,7 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(403);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Unauthorised User!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -77,7 +77,7 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('manufacturer field cannot be empty!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -102,7 +102,7 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('model field cannot be empty!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -127,7 +127,7 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('body type field cannot be empty!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -152,8 +152,34 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('year field cannot be empty!');
+        res.body.should.have.property('success').equal('false');
+        done();
+      });
+  });
+
+  it('Should NOT let Auth User (Seller) to post new Advert with INVALID YEAR input', (done) => {
+    api
+      .post('/api/v1/car')
+      .set('authorization', token)
+      .set('Accept', 'application.json')
+      .field('manufacturer', assumedData.newAdvert.manufacturer)
+      .field('model', assumedData.newAdvert.model)
+      .field('bodyType', assumedData.newAdvert.year)
+      .field('year', 'year')
+      .field('mileage', assumedData.newAdvert.mileage)
+      .field('state', assumedData.newAdvert.state)
+      .field('transmission', assumedData.newAdvert.transmission)
+      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('licence', assumedData.newAdvert.licence)
+      .field('description', assumedData.newAdvert.description)
+      .field('price', assumedData.newAdvert.price)
+      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('error').equal('invalid year input!');
         res.body.should.have.property('success').equal('false');
         done();
       });
@@ -177,7 +203,7 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('state field cannot be empty!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -202,7 +228,7 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('transmission field cannot be empty!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -227,7 +253,7 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('vehicle inspection number field cannot be empty!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -252,7 +278,7 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('licence field cannot be empty!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -277,8 +303,34 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('mileage field cannot be empty!');
+        res.body.should.have.property('success').equal('false');
+        done();
+      });
+  });
+
+  it('Should NOT let Auth User (Seller) to post new Advert with INVALID MILEAGE input', (done) => {
+    api
+      .post('/api/v1/car')
+      .set('authorization', token)
+      .set('Accept', 'application.json')
+      .field('manufacturer', assumedData.newAdvert.manufacturer)
+      .field('model', assumedData.newAdvert.model)
+      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('year', assumedData.newAdvert.year)
+      .field('mileage', 'mileage')
+      .field('state', assumedData.newAdvert.state)
+      .field('transmission', assumedData.newAdvert.transmission)
+      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('licence', assumedData.newAdvert.licence)
+      .field('description', assumedData.newAdvert.description)
+      .field('price', assumedData.newAdvert.price)
+      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('error').equal('invalid mileage input!');
         res.body.should.have.property('success').equal('false');
         done();
       });
@@ -302,7 +354,7 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('description field cannot be empty!');
         res.body.should.have.property('success').equal('false');
         done();
@@ -327,8 +379,34 @@ describe('User Seller Activities', () => {
       .attach('carImage', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('price field cannot be empty!');
+        res.body.should.have.property('success').equal('false');
+        done();
+      });
+  });
+
+  it('Should NOT let Auth User (Seller) to post new Advert with INVALID PRICE input', (done) => {
+    api
+      .post('/api/v1/car')
+      .set('authorization', token)
+      .set('Accept', 'application.json')
+      .field('manufacturer', assumedData.newAdvert.manufacturer)
+      .field('model', assumedData.newAdvert.model)
+      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('year', assumedData.newAdvert.year)
+      .field('mileage', assumedData.newAdvert.mileage)
+      .field('state', assumedData.newAdvert.state)
+      .field('transmission', assumedData.newAdvert.transmission)
+      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('licence', assumedData.newAdvert.licence)
+      .field('price', 'price')
+      .field('description', assumedData.newAdvert.description)
+      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('error').equal('invalid price input!');
         res.body.should.have.property('success').equal('false');
         done();
       });
@@ -353,7 +431,7 @@ describe('User Seller Activities', () => {
       .field('price', assumedData.newAdvert.price)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(422);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Upload at least one image!');
         done();
       });
@@ -446,7 +524,7 @@ describe('User Seller Activities', () => {
       .send(assumedData.invalidPrice)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Invalid Price value!');
         done();
       });
@@ -459,7 +537,7 @@ describe('User Seller Activities', () => {
       .send(assumedData.newPrice)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Invalid Param Request!');
         done();
       });
@@ -467,3 +545,4 @@ describe('User Seller Activities', () => {
 });
 
 export default carId;
+

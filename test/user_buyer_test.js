@@ -26,7 +26,7 @@ describe('User Buyer Activities', () => {
       .send(assumedData.newOrder)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(403);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Unauthorised User!');
         done();
@@ -40,7 +40,7 @@ describe('User Buyer Activities', () => {
       .send(assumedData.invalidOrderReff)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Please provide a valid order reference!');
         done();
@@ -54,7 +54,7 @@ describe('User Buyer Activities', () => {
       .send(assumedData.invalidOrderAmount)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Please provide a valid price value!');
         done();
@@ -106,7 +106,7 @@ describe('User Buyer Activities', () => {
       .send(assumedData.newOrderUpdate)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(403);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Unauthorised User!');
         done();
@@ -120,7 +120,7 @@ describe('User Buyer Activities', () => {
       .send(assumedData.invalidOrderReffUpdate)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Please provide a valid order reference!');
         done();
@@ -134,7 +134,7 @@ describe('User Buyer Activities', () => {
       .send(assumedData.invalidOrderAmountUpdate)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Please provide a valid price value!');
         done();
@@ -199,7 +199,7 @@ describe('User Buyer Activities', () => {
       .send(assumedData.flagNoRef)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Please provide a valid Ad reference!');
         done();
@@ -213,7 +213,7 @@ describe('User Buyer Activities', () => {
       .send(assumedData.flagNoReason)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Please indicate your reason for this red flag!');
         done();
@@ -227,7 +227,7 @@ describe('User Buyer Activities', () => {
       .send(assumedData.flagNoDescription)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Please enter description for your red flag!');
         done();

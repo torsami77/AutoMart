@@ -39,8 +39,8 @@ var verifyToken = function verifyToken(req, res, next) {
   } catch (error) {
     res.cookie('userData', null);
     res.cookie('token', null);
-    return res.status(403).send({
-      status: 403,
+    return res.status(401).send({
+      status: 401,
       error: 'Unauthorised User!',
       success: 'false'
     });

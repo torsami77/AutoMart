@@ -1,10 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import fs from 'fs';
-import util from 'util';
 // eslint-disable-next-line no-unused-vars
 import app from '../src/app';
-import assumedData from './assumed/assume';
 
 chai.use(chaiHttp);
 
@@ -20,7 +17,7 @@ describe('User Viewer Activities', () => {
       .get('/api/v1/car/:carId/')
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Please provide a valid Ad reference!');
         done();
