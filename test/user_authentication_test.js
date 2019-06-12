@@ -12,21 +12,21 @@ const { expect } = chai;
 
 const api = chai.request('http://localhost:5000');
 
-/*
+
 describe('Auto Mart', () => {
-  it('should get 404 page', (done) => {
-    chai.request(app)
+  it('Should get 404 response', (done) => {
+    api
       .get('/invalidendpoint')
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.should.have.status(404);
+        res.body.should.have.status(404);
         res.body.should.have.property('status').eql(404);
-        res.body.should.have.property('data').equal('Invalid endpoint');
+        res.body.should.have.property('error').equal('Endpoint not found!');
         done();
       });
   });
 });
-*/
+
 describe('Users Sign Up Tests', () => {
   it('should NOT let user sign up without email', (done) => {
     api
@@ -34,7 +34,7 @@ describe('Users Sign Up Tests', () => {
       .send(assumedData.noEmailUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Enter a Valid Email');
         done();
       });
@@ -46,7 +46,7 @@ describe('Users Sign Up Tests', () => {
       .send(assumedData.noUsernameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Provide a Username');
         done();
       });
@@ -58,7 +58,7 @@ describe('Users Sign Up Tests', () => {
       .send(assumedData.noFirstNameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Enter your First Name');
         done();
       });
@@ -70,8 +70,20 @@ describe('Users Sign Up Tests', () => {
       .send(assumedData.noLastNameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Enter your Last Name');
+        done();
+      });
+  });
+
+  it('should NOT let user sign up without address', (done) => {
+    api
+      .post('/api/v1/signup')
+      .send(assumedData.noAddressUsers)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(400);
+        res.body.should.have.property('error').equal('Please Enter your Address');
         done();
       });
   });
@@ -81,9 +93,9 @@ describe('Users Sign Up Tests', () => {
       .post('/api/v1/signup')
       .send(assumedData.noPasswordUsers)
       .end((err, res) => {
-        res.should.have.status(401);
+        res.should.have.status(400);
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Provide a Password');
         done();
       });
@@ -94,9 +106,9 @@ describe('Users Sign Up Tests', () => {
       .post('/api/v1/signup')
       .send(assumedData.lessPass)
       .end((err, res) => {
-        res.should.have.status(401);
+        res.should.have.status(400);
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Password is Too Short!');
         done();
       });
@@ -107,9 +119,9 @@ describe('Users Sign Up Tests', () => {
       .post('/api/v1/signup')
       .send(assumedData.passMismatchUsers)
       .end((err, res) => {
-        res.should.have.status(401);
+        res.should.have.status(400);
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Verifiable Password Does not Match!');
         done();
       });
@@ -147,7 +159,7 @@ describe('Users Sign In Tests', () => {
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Enter a Valid Email!');
         done();
       });
@@ -159,7 +171,7 @@ describe('Users Sign In Tests', () => {
       .send(assumedData.noPasswordUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please enter your password!');
         done();
       });
@@ -195,9 +207,9 @@ describe('Users Sign In Tests', () => {
       .post('/api/v1/signin')
       .send(assumedData.newUsers)
       .end((err, res) => {
-        res.should.have.status(200);
+        res.should.have.status(202);
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(200);
+        res.body.should.have.property('status').equal(202);
         res.body.data.should.have.property('message').equal('Auth successful!');
         res.body.data.should.have.property('token');
         fs.writeFileSync(`${__dirname}/assumed/token.txt`, res.body.data.token, () => {

@@ -20,8 +20,8 @@ class Seller {
     } = req.body;
 
     if (!manufacturer || manufacturer === ' ') {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'manufacturer field cannot be empty!',
         success: 'false',
         field: 'manufacturer',
@@ -30,8 +30,8 @@ class Seller {
     }
 
     if (!model || model === ' ') {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'model field cannot be empty!',
         success: 'false',
         field: 'model',
@@ -40,8 +40,8 @@ class Seller {
     }
 
     if (!bodyType || bodyType === ' ') {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'body type field cannot be empty!',
         success: 'false',
         field: 'bodyType',
@@ -50,8 +50,8 @@ class Seller {
     }
 
     if (!year) {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'year field cannot be empty!',
         success: 'false',
         field: 'year',
@@ -62,7 +62,7 @@ class Seller {
     if (isNaN(parseInt(year, 10))) {
       res.status(422).send({
         status: 422,
-        error: 'invalid year input',
+        error: 'invalid year input!',
         success: 'false',
         field: 'year',
       });
@@ -70,8 +70,8 @@ class Seller {
     }
 
     if (!mileage) {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'mileage field cannot be empty!',
         success: 'false',
         field: 'mileage',
@@ -82,7 +82,7 @@ class Seller {
     if (isNaN(parseFloat(mileage))) {
       res.status(422).send({
         status: 422,
-        error: 'invalid mileage input',
+        error: 'invalid mileage input!',
         success: 'false',
         field: 'mileage',
       });
@@ -90,8 +90,8 @@ class Seller {
     }
 
     if (!state || state === ' ') {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'state field cannot be empty!',
         success: 'false',
         field: 'state',
@@ -100,8 +100,8 @@ class Seller {
     }
 
     if (!transmission || transmission === ' ') {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'transmission field cannot be empty!',
         success: 'false',
         field: 'transmission',
@@ -110,8 +110,8 @@ class Seller {
     }
 
     if (!vehicleInspectionNumber || vehicleInspectionNumber === ' ') {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'vehicle inspection number field cannot be empty!',
         success: 'false',
         field: 'vehicleInspectionNumber',
@@ -120,8 +120,8 @@ class Seller {
     }
 
     if (!licence || licence === ' ') {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'licence field cannot be empty!',
         success: 'false',
         field: 'licence',
@@ -130,8 +130,8 @@ class Seller {
     }
 
     if (!description || description === ' ') {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'description field cannot be empty!',
         success: 'false',
         field: 'description',
@@ -140,8 +140,8 @@ class Seller {
     }
 
     if (!price) {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'price field cannot be empty!',
         success: 'false',
         field: 'price',
@@ -152,15 +152,15 @@ class Seller {
     if (isNaN(parseFloat(price))) {
       res.status(422).send({
         status: 422,
-        error: 'invalid price input',
+        error: 'invalid price input!',
         success: 'false',
         field: 'price',
       });
       return false;
     }
     if (!req.file) {
-      res.status(422).send({
-        status: 422,
+      res.status(400).send({
+        status: 400,
         error: 'Upload at least one image!',
         success: 'false',
         field: 'carImage',
@@ -232,8 +232,8 @@ class Seller {
 
   static updatePrice(req, res) {
     if (isNaN(parseFloat(req.body.price))) {
-      res.status(401).send({
-        status: 401,
+      res.status(400).send({
+        status: 400,
         error: 'Invalid Price value!',
         success: 'false',
         field: 'Price',
@@ -242,8 +242,8 @@ class Seller {
     }
 
     if (isNaN(parseInt(req.params.carId, 10))) {
-      res.status(401).send({
-        status: 401,
+      res.status(400).send({
+        status: 400,
         error: 'Invalid Param Request!',
         success: 'false',
         field: 'Price',
@@ -309,8 +309,8 @@ class Seller {
 
   static markAsSold(req, res) {
     if (isNaN(parseInt(req.params.carId, 10))) {
-      res.status(401).send({
-        status: 401,
+      res.status(400).send({
+        status: 400,
         error: 'Invalid Param Request!',
         success: 'false',
         field: 'sold',

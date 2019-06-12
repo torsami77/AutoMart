@@ -24,8 +24,8 @@ const signUp = (req, res) => {
   const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
   if (undefined === username || username === '') {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Please Provide a Username',
       success: 'false',
       field: 'username',
@@ -33,8 +33,8 @@ const signUp = (req, res) => {
   }
 
   if (undefined === email || !email.match(mailformat)) {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Please Enter a Valid Email',
       success: 'false',
       field: 'email',
@@ -42,8 +42,8 @@ const signUp = (req, res) => {
   }
 
   if (undefined === firstName || firstName === ' ') {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Please Enter your First Name',
       success: 'false',
       field: 'first-name',
@@ -52,8 +52,8 @@ const signUp = (req, res) => {
 
 
   if (undefined === lastName || lastName === ' ') {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Please Enter your Last Name',
       success: 'false',
       field: 'last-name',
@@ -61,8 +61,8 @@ const signUp = (req, res) => {
   }
 
   if (undefined === address || address === ' ') {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Please Enter your Address',
       success: 'false',
       field: 'username',
@@ -70,8 +70,8 @@ const signUp = (req, res) => {
   }
 
   if (undefined === password || password === ' ') {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Please Provide a Password',
       success: 'false',
       field: 'password',
@@ -79,8 +79,8 @@ const signUp = (req, res) => {
   }
 
   if (undefined !== password && password.length < 8) {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Password is Too Short!',
       success: 'false',
       field: 'password',
@@ -88,8 +88,8 @@ const signUp = (req, res) => {
   }
 
   if (verify !== password) {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Verifiable Password Does not Match!',
       success: 'false',
       field: 'password',
@@ -99,16 +99,16 @@ const signUp = (req, res) => {
   const emailSearch = db.users.find(user => user.email === email);
   const userNameSearch = db.users.find(user => user.username === username);
   if (emailSearch) {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Email is associated with another user!',
       success: 'false',
       field: 'email',
     });
   }
   if (userNameSearch) {
-    return res.status(401).send({
-      status: 401,
+    return res.status(400).send({
+      status: 400,
       error: 'Username already taken by another user!',
       success: 'false',
       field: 'username',
@@ -116,8 +116,8 @@ const signUp = (req, res) => {
   }
   bcrypt.hash(password, 10, (error, hash) => {
     if (error) {
-      return res.status(401).send({
-        status: 404,
+      return res.status(500).send({
+        status: 500,
         error,
         field: 'password',
       });

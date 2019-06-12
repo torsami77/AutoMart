@@ -176,7 +176,7 @@ function () {
             }
           }); // eslint-disable-next-line no-else-return
         } else {
-          return res.status(401).send({
+          return res.status(400).send({
             status: 401,
             error: 'User Invalid token',
             succcess: 'false'

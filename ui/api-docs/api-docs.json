@@ -1,0 +1,1010 @@
+{  
+    "swagger":"2.0",
+    "info":{  
+       "description":"This documentation defines API instrumentation for [https://automart77.herokuapp.com/].  (Feel free to input numbers as string while testing, it would be parsed as number by the server)",
+       "version" : "v1",
+       "title":"Auto Mart",
+       "contact":{  
+          "email":"torsami77@hotmail.com"
+       },
+       "license":{  
+          "name":"Apache 2.0",
+          "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
+       }
+    },
+    "host":"https://automart77.herokuapp.com",
+    "basePath":"",
+    "tags":[  
+       {  
+          "name":"Authentication",
+          "description":"Users sign up and sign in",
+          "externalDocs": {
+             "description": "Token must be attached to headers as 'authorization' for authentication"
+          }
+       },
+       {  
+          "name":"Seller",
+          "description":"Able to Post ADs, Update ADs and Make Sales"
+       },
+       {  
+          "name":"Viewer",
+          "description":"Fetches and presents ADs"
+       },
+       {  
+         "name":"Buyer",
+         "description":"Able to Place Orders, Update Orders and Raise Red Flags"
+       },
+       {  
+         "name":"Admin",
+         "description":"Priviledge to view sold and unsold ADs, and to Delete ADs ",
+         "externalDocs": {
+            "description": "Demo Admin account for testing: email: george@automart.com, password: password101"
+            }
+       }
+    ],
+    "schemes":[  
+       "https"
+    ],
+    "paths":{  
+       "/api/v1/signup":{  
+          "post":{  
+             "tags":[  
+                "Authentication"
+             ],
+             "summary":"Registers a new user",
+             "description":"",
+             "operationId":"signUp",
+             "consumes":[  
+                "application/json"
+             ],
+             "produces":[  
+                "application/json"
+             ],
+             "parameters":[  
+                {  
+                   "in":"body",
+                   "name":"body",
+                   "description":"New user data that needs to be collected",
+                   "required":true,
+                   "schema":{  
+                      "$ref":"#/definitions/signUp"
+                   }
+                }
+             ],
+             "responses":{  
+                "400":{  
+                   "description":"Invalid input"
+                },
+                "201":{  
+                  "description":"Successful signup"
+               }
+             }
+          }
+         },
+      "/api/v1/signin":{
+            "post":{  
+               "tags":[  
+                  "Authentication"
+               ],
+               "summary":"Sign in a user",
+               "description":"",
+               "operationId":"signIn",
+               "consumes":[  
+                  "application/json"
+               ],
+               "produces":[  
+                  "application/json"
+               ],
+               "parameters":[  
+                  {  
+                     "in":"body",
+                     "name":"body",
+                     "description":"Validates user sign in credentials",
+                     "required":true,
+                     "schema":{  
+                        "$ref":"#/definitions/signIn"
+                     }
+                  }
+               ],
+               "responses":{  
+                  "400":{  
+                     "description":"Invalid input"
+                  },
+                  "401":{  
+                     "description":"Unauthorised"
+                  },
+                  "202":{  
+                    "description":"Successful signin"
+                 }
+               },
+               "security":[  
+               ]
+            }
+         },
+         "/api/v1/password/reset":{  
+            "post":{  
+               "tags":[  
+                  "Authentication"
+               ],
+               "summary":"Request for Password Reset",
+               "description":"",
+               "operationId":"requestReset",
+               "consumes":[  
+                  "application/json"
+               ],
+               "produces":[  
+                  "application/json"
+               ],
+               "parameters":[  
+                  {  
+                     "in":"body",
+                     "name":"email",
+                     "type": "string",
+                     "description":"Account email will be validated against and emailed a token ",
+                     "required":true,
+                     "schema":{  
+                        "$ref":"#/definitions/requestReset"
+                     }
+                  }
+               ],
+               "responses":{  
+                  "400":{  
+                     "description":"Invalid Email input"
+                  },
+                  "401":{  
+                     "description":"Unauthorised"
+                  },
+                  "200":{  
+                    "description":"Token link sent to users email"
+                 }
+               },
+               "security":[  
+               ]
+            }
+           },
+           "/api/v1/password/createnew":{  
+            "post":{  
+               "tags":[  
+                  "Authentication"
+               ],
+               "summary":"Creates New Password for User",
+               "description":"",
+               "operationId":"The emailed token must be attached to headers as 'authorization'",
+               "consumes":[  
+                  "application/json"
+               ],
+               "produces":[  
+                  "application/json"
+               ],
+               "parameters":[  
+                  {  
+                     "in":"body",
+                     "name":"password",
+                     "type": "string",
+                     "description":"",
+                     "required":true,
+                     "schema":{  
+                        "$ref":"#/definitions/createnew"
+                     }
+                  },
+                  {  
+                     "in":"body",
+                     "name":"verify",
+                     "type": "string",
+                     "description":"New generated password must be confirmed",
+                     "required":true,
+                     "schema":{  
+                        "$ref":"#/definitions/createnew"
+                     }
+                  }
+               ],
+               "responses":{  
+                  "400":{  
+                     "description":"Invalid input"
+                  },
+                  "401":{  
+                     "description":"Unauthorised"
+                  },
+                  "200":{  
+                    "description":"New Password Created Successfully"
+                 }
+               },
+               "security":[  
+                  {  
+                     "petstore_auth":[  
+                        "write:pets",
+                        "read:pets"
+                     ]
+                  }
+               ]
+            }
+           },
+       "/api/v1/car/":{  
+         "post":{  
+            "tags":[  
+               "Seller"
+            ],
+            "summary":"Adds a new AD",
+            "description":"",
+            "operationId":"postAd",
+            "consumes":[  
+               "multipart/form-data"
+            ],
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "in":"body",
+                  "name":"multipart/form-data",
+                  "description":"New Vehicle AD detail",
+                  "required":true,
+                  "schema":{  
+                     "$ref":"#/definitions/postAd"
+                  }
+               },
+               {  
+                  "name":"carImage",
+                  "in":"formData",
+                  "description":"image file to upload",
+                  "required":false,
+                  "type":"file"
+               }
+            ],
+            "responses":{ 
+               "400":{  
+                  "description":"Invalid input"
+               }, 
+               "401":{  
+                  "description":"unauthorised"
+               },
+               "201":{  
+                 "description":"AD posted successfuly"
+              }
+            },
+            "security":[  
+               {  
+                  "petstore_auth":[  
+                     "write:pets",
+                     "read:pets"
+                  ]
+               }
+            ]
+         }
+       },
+       "/api/v1/car/:carId/price":{  
+         "patch":{  
+            "tags":[  
+               "Seller"
+            ],
+            "summary":"Updates Price of a posted AD",
+            "description":"",
+            "operationId":"updatePrice",
+            "consumes":[  
+               "application/json"
+            ],
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "in":"body",
+                  "name":"body",
+                  "description":"new price update",
+                  "required":true,
+                  "schema":{  
+                     "$ref":"#/definitions/updatePrice"
+                  }
+               },
+               {  
+                  "name":"carId",
+                  "in":"path",
+                  "description":"ID of AD to update",
+                  "required":true,
+                  "type":"integer",
+                  "format":"int64"
+               }
+            ],
+            "responses":{ 
+               "400":{  
+                  "description":"Invalid input"
+               }, 
+               "401":{  
+                  "description":"Unauthorised"
+               },
+               "201":{  
+                 "description":"Price Updated Sucessfully"
+              },
+              "404":{  
+               "description":"AD not found"
+            }
+            },
+            "security":[  
+               {  
+                  "petstore_auth":[  
+                     "write:pets",
+                     "read:pets"
+                  ]
+               }
+            ]
+         }
+       },
+       "/api/v1/car/:carId/status":{  
+         "patch":{  
+            "tags":[  
+               "Seller"
+            ],
+            "summary":"Marks ADs as Sold",
+            "description":"A User can only mark AD posted by him/her as sold",
+            "operationId":"markAsSold",
+            "consumes":[  
+               "application/json"
+            ],
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "name":"carId",
+                  "in":"path",
+                  "description":"ID of AD to mark as sold",
+                  "required":true,
+                  "type":"integer",
+                  "format":"int64"
+               }
+            ],
+            "responses":{  
+               "400":{  
+                  "description":"Invalid input"
+               },
+               "401":{  
+                  "description":"Unauthorised"
+               },
+               "201":{  
+                 "description":"AD has been marked sold Sucessfully"
+              },
+              "404":{  
+               "description":"AD not found"
+            }
+            },
+            "security":[  
+               {  
+                  "petstore_auth":[  
+                     "write:pets",
+                     "read:pets"
+                  ]
+               }
+            ]
+         }
+       },
+       "/api/v1/car?status=available":{  
+         "get":{  
+            "tags":[  
+               "Viewer"
+            ],
+            "summary":"Sorts ADs by user preference for user view",
+            "description":"Multiple preference could be provided as url queries with the following variables: 'status, state, minPrice, maxPrice, manufacturer, model, bodyType'. e.g. /api/v1/car?status=available&state=new&maxPrice=3000 ......",
+            "operationId":"dynamicView",
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "name":"status",
+                  "in":"query",
+                  "description":"'available' most be the value of this variable, Only Users with Admin priviledges are allowed to view sold ADs",
+                  "required":true,
+                  "type":"string"
+               },
+               {  
+                  "name":"minPrice",
+                  "in":"query",
+                  "description":"If this is not indicated, the default value is 0",
+                  "type":"string",
+                  "format":"int64"
+               },
+               {  
+                  "name":"maxPrice",
+                  "in":"query",
+                  "description":"This parameter narrows HIGHEST PRICE range of viewer preference",
+                  "type":"string",
+                  "format":"int64"
+               },
+               {  
+                  "name":"manufacturer",
+                  "in":"query",
+                  "description":"This parameter narrows ADs by MAKE (manufacturer) of viewer preference",
+                  "type":"string"
+               },
+               {  
+                  "name":"bodyType",
+                  "in":"query",
+                  "description":"This parameter narrows ADs by BODY TYPE of viewer preference",
+                  "type":"string"
+               },
+               {  
+                  "name":"state",
+                  "in":"query",
+                  "description":"This parameter narrows ADs by STATE of viewer preference. e.g. new, used",
+                  "type":"string"
+               },
+               {  
+                  "name":"model",
+                  "in":"query",
+                  "description":"This parameter narrows ADs by maker's MODEL of viewer preference.",
+                  "type":"string"
+               }
+            ],
+            "responses":{  
+               "200":{  
+                  "description":"successful operation"
+               },
+               "400":{  
+                  "description":"Invalid input"
+               },
+               "401":{  
+                  "description":"Unauthorised"
+               },
+               "403":{  
+                  "description":"Forbidden, (Only Admin priviledge would be allowed to view sold and unsold ADs)"
+               },
+               "404":{  
+                  "description":"AD not found"
+               }
+            },
+            "security":[  
+            ]
+         }
+      },
+       "/api/v1/car/:carId/":{  
+          "get":{  
+             "tags":[  
+                "Viewer"
+             ],
+             "summary":"Find AD by ID",
+             "description":"Returns a single AD",
+             "operationId":"specificCar",
+             "produces":[  
+                "application/json"
+             ],
+             "parameters":[  
+                {  
+                   "name":"carId",
+                   "in":"path",
+                   "description":"ID of AD to return",
+                   "required":true,
+                   "type":"integer",
+                   "format":"int64"
+                }
+             ],
+             "responses":{  
+                "200":{  
+                   "description":"successful operation",
+                   "schema":{  
+                      "$ref":"#/definitions/Car"
+                   }
+                },
+                "400":{  
+                   "description":"Invalid ID supplied"
+                },
+                "404":{  
+                   "description":"Ad not found"
+                }
+             },
+             "security":[  
+             ]
+          }
+         },
+       "/api/v1/order":{
+          "post":{  
+             "tags":[  
+                "Buyer"
+             ],
+             "summary":"Places Order on posted AD",
+            "description":"",
+            "operationId":"updatePrice",
+            "consumes":[  
+               "application/json"
+            ],
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "in":"body",
+                  "name":"body",
+                  "description":"Bidding Amount",
+                  "required":true,
+                  "schema":{  
+                     "$ref":"#/definitions/order"
+                  }
+               }
+            ],
+            "responses":{ 
+               "400":{  
+                  "description":"Invalid input"
+               }, 
+               "401":{  
+                  "description":"Unauthorised"
+               },
+               "201":{  
+                 "description":"Price Updated Sucessfully"
+              },
+              "404":{  
+               "description":"AD not found"
+            }
+            },
+            "security":[  
+               {  
+                  "petstore_auth":[  
+                     "write:pets",
+                     "read:pets"
+                  ]
+               }
+            ]
+          }
+       },
+       "/api/v1/order/:orderId/price":{  
+         "patch":{  
+            "tags":[  
+               "Buyer"
+            ],
+            "summary":"Updates Amount of a Placed Order",
+            "description":"",
+            "operationId":"updateOrder",
+            "consumes":[  
+               "application/json"
+            ],
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "in":"body",
+                  "name":"body",
+                  "description":"new amount update, and AD id",
+                  "required":true,
+                  "schema":{  
+                     "$ref":"#/definitions/order"
+                  }
+               },
+               {  
+                  "name":"orderId",
+                  "in":"path",
+                  "description":"ID of Order to update",
+                  "required":true,
+                  "type":"integer",
+                  "format":"int64"
+               }
+            ],
+            "responses":{ 
+               "400":{  
+                  "description":"Invalid input"
+               }, 
+               "401":{  
+                  "description":"Unauthorised"
+               },
+               "403":{  
+                  "description":"Forbidden (Users can't update orders on sold ADs)"
+               },
+               "201":{  
+                 "description":"Amount Updated Sucessfully"
+              },
+              "404":{  
+               "description":"AD not found"
+            }
+            },
+            "security":[  
+               {  
+                  "petstore_auth":[  
+                     "write:pets",
+                     "read:pets"
+                  ]
+               }
+            ]
+         }
+       },
+
+       "/api/v1/flag":{  
+         "patch":{  
+            "tags":[  
+               "Buyer"
+            ],
+            "summary":"Raise a Red Flag",
+            "description":"A User can raise a red flag to indicate suspicious fraudulent ADs",
+            "operationId":"flag",
+            "consumes":[  
+               "application/json"
+            ],
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "name":"body",
+                  "in":"body",
+                  "description":"Reference, Reason and Description of Red Flag",
+                  "required":true,
+                  "schema":{  
+                     "$ref":"#/definitions/flag"
+                  }               
+               }
+            ],
+            "responses":{  
+               "400":{  
+                  "description":"Invalid input"
+               },
+               "401":{  
+                  "description":"Unauthorised"
+               },
+               "201":{  
+                 "description":"AD has been red flagged"
+              },
+              "404":{  
+               "description":"AD not found"
+            }
+            },
+            "security":[  
+               {  
+                  "petstore_auth":[  
+                     "write:pets",
+                     "read:pets"
+                  ]
+               }
+            ]
+         }
+       },
+       "/api/v1/car":{  
+         "get":{  
+            "tags":[  
+               "Admin"
+            ],
+            "summary":"Gets all ADs both sold and unsold",
+            "description":"User priviledge will be verified before the respond to return array of sold and unsold categories of ADs",
+            "operationId":"viewAll",
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               
+            ],
+            "responses":{  
+               "200":{  
+                  "description":"successful operation"
+               },
+               "401":{  
+                  "description":"Unauthorised"
+               },
+               "403":{  
+                  "description":"Forbidden, (Only Admin priviledge would be allowed to view sold and unsold ADs)"
+               },
+               "404":{  
+                  "description":"AD not found"
+               }
+            },
+            "security":[  
+               {  
+                  "api_key":[  
+
+                  ]
+               }
+            ]
+         }
+      },
+      "/api/v1/car/:carId":{ 
+         "delete":{  
+            "tags":[  
+               "Admin"
+            ],
+            "summary":"Deletes AD referenced by ID",
+            "description":"",
+            "operationId":"delete",
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "name":"carId",
+                  "in":"path",
+                  "description":"ID of the order that needs to be deleted",
+                  "required":true,
+                  "type":"integer",
+                  "minimum":1.0,
+                  "format":"int64"
+               }
+            ],
+            "responses":{  
+               "200":{  
+                  "description":"Deleted Successfully"
+               },
+               "400":{  
+                  "description":"Invalid ID Input"
+               },
+               "404":{  
+                  "description":"Order not found"
+               }
+            },
+            "security":[  
+               {  
+                  "petstore_auth":[  
+                     "write:pets",
+                     "read:pets"
+                  ]
+               }
+            ]
+         }
+      }
+    },
+    "securityDefinitions":{  
+       "automart":{  
+          "type":"oauth2",
+          "flow":"implicit"
+       }
+    },
+    "definitions":{  
+       "signUp":{  
+          "type":"object",
+          "properties":{  
+            "email":{  
+               "type":"string"
+            },
+             "username":{  
+                "type":"string"
+             },
+             "firstName":{  
+                "type":"string"
+             },
+             "lastName":{  
+                "type":"string"
+             },
+             "password":{  
+                "type":"string"
+             },
+             "verify":{  
+                "type":"string"
+             },
+             "address":{  
+                "type":"string"
+             }
+          },
+          "xml":{  
+             "name":"signUp"
+          }
+       },
+       "signIn":{  
+         "type":"object",
+         "properties":{  
+           "email":{  
+              "type":"string"
+           },
+           "password":{
+              "type":"string"
+           }
+         },
+           "xml":{
+               "name":"signIn"
+           }
+         },
+       "postAd":{  
+         "type":"multipart/form-data",
+         "properties":{  
+           "manufacturer":{  
+              "type":"string"
+           },
+            "model":{  
+               "type":"string"
+            },
+            "bodyType":{  
+               "type":"string"
+            },
+            "year":{  
+               "type":"integer"
+            },
+            "mileage":{  
+               "type":"integer"
+            },
+            "state":{  
+               "type":"string"
+            },
+            "transmission":{  
+               "type":"string"
+            },
+            "vehicleInspectionNumber":{  
+               "type":"string"
+            },
+            "licence":{  
+               "type":"string"
+            },
+            "description":{  
+               "type":"string"
+            },
+            "price":{  
+               "type":"integer"
+            },
+            "carImage":{  
+               "type":"file"
+            }
+         },
+         "xml":{  
+            "name":"postAd"
+         }
+      },
+      "updatePrice":{  
+         "type":"object",
+         "properties":{  
+           "price":{  
+              "type":"integer"
+           }
+         },
+           "xml":{
+               "name":"updatePrice"
+           }
+      },
+
+      "order":{  
+         "type":"object",
+         "properties":{  
+           "amount":{  
+              "type":"integer",
+              "example": "30,500"
+           }
+         }
+      },
+      "flag":{  
+         "type":"object",
+         "properties":{  
+            "carId":{  
+               "type":"integer",
+               "example": "2"
+            },
+            "reason":{  
+               "type":"string",
+               "example": "Price too low"
+            },
+            "description":{  
+               "type":"string",
+               "example": "price of vehicles of the same spec should times three the amount on this one"
+            }
+         }
+      },
+      "carId":{  
+         "type":"integer",
+         "example": "1"
+      },
+       "Car" : {
+         "type":"object",
+         "required":[  
+            "name",
+            "photoUrls"
+         ],
+         "properties":{  
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "owner":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "created_on":{  
+               "type":"string",
+               "example":"2019-06-08T19:36:58.679Z"
+            },
+            "state":{  
+               "type":"string",
+               "example":"used"
+            },
+            "manufacturer":{  
+               "type":"string",
+               "example":"toyota"
+            },
+            "model":{  
+               "type":"string",
+               "example":"venza"
+            },
+            "year":{  
+               "type":"integer",
+               "example":"2019"
+            },
+            "bodyType":{  
+               "type":"string",
+               "example":"salon"
+            },
+            "transmission":{  
+               "type":"string",
+               "example":"auto"
+            },
+            "mileage":{  
+               "type":"integer",
+               "example":"500.06"
+            },
+            "vehicleInspectionNumber":{  
+               "type":"string",
+               "example":"ASDFG12345"
+            },
+            "licence":{  
+               "type":"string",
+               "example":"PLA-BSA-123"
+            },
+            "description":{  
+               "type":"string",
+               "example":"venza is queit a cool design"
+            },
+            "price":{  
+               "type":"integer",
+               "example":"3,500"
+            },
+            "imageGallerry":{  
+               "type":"array",
+               "example":"['https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg', 'https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg']"
+            },
+            "orders":{  
+               "type":"array",
+               "example":"[{id: 1, buyer: 24, car_id: 4, amount: [1500.00], status: 'pending', },]"
+            },
+            "flags":{  
+               "type":"array",
+               "example":"[{id: 1, car_id: 5, created_on: '2019-06-08T19:36:58.679Z', reason: 'pricing', description: 'Give reasonable discount', },]"
+            }
+         }
+       },
+       "Error Response":{  
+          "type":"object",
+          "properties":{  
+             "code":{  
+                "type":"integer",
+                "format":"int32",
+                "example": 400
+             },
+             "success":{  
+                "type":"string",
+                "example": "false"
+             },
+             "error":{  
+                "type":"string",
+                "example": "Provide a valid email"
+             },
+             "field":{  
+               "type":"string",
+               "example": "email"
+            }
+          }
+       },
+       "Success Response":{  
+         "type":"object",
+         "properties":{  
+            "code":{  
+               "type":"integer",
+               "format":"int32",
+               "example": 200
+            },
+            "data:":{
+               "type": "array",
+               "example": "{..},{..}"
+            },
+            "data":{
+               "type":"object",
+               "properties": {
+                  "success":{  
+                     "type":"string",
+                     "example": "true"
+                  },
+                  "message":{  
+                     "type":"string",
+                     "example": "New password created successfully"
+                  },
+                  "field":{  
+                     "type":"string",
+                     "example": "password"
+                  }
+               }
+            }
+            
+         }
+      }
+    },
+    "externalDocs":{  
+       "description":"Find out more about Swagger",
+       "url":"http://swagger.io"
+    }
+ }

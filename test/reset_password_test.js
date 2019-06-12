@@ -64,7 +64,7 @@ describe('CREATE NEW PASSWORD', () => {
       .post('/api/v1/password/createnew/')
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(403);
+        res.body.should.have.property('status').equal(401);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Unauthorised User!');
         done();

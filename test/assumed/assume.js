@@ -21,6 +21,15 @@ const assumedData = {
     address: 'Jos',
     is_admin: false,
   },
+  noAddressUsers: {
+    email: 'torsami@automart.com',
+    firstName: 'Samson',
+    lastName: 'Samuel',
+    username: 'sami77',
+    password: 'password101',
+    verify: 'password101',
+    is_admin: false,
+  },
   noFirstNameUsers: {
     email: 'torsami@automart.com',
     lastName: 'Samuel',

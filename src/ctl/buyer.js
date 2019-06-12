@@ -13,8 +13,8 @@ app.use(bodyParser.json({ type: 'application/json' }));
 class Buyer {
   static order(req, res) {
     if (isNaN(parseFloat(req.body.amount))) {
-      res.status(401).send({
-        status: 401,
+      res.status(400).send({
+        status: 400,
         error: 'Please provide a valid price value!',
         success: 'false',
         field: 'amount',
@@ -22,8 +22,8 @@ class Buyer {
       return false;
     }
     if (isNaN(parseInt(req.body.carId, 10))) {
-      res.status(401).send({
-        status: 401,
+      res.status(400).send({
+        status: 400,
         error: 'Please provide a valid order reference!',
         success: 'false',
         field: 'carId',
@@ -75,24 +75,24 @@ class Buyer {
 
   static updateOrder(req, res) {
     if (isNaN(parseInt(req.params.orderId, 10))) {
-      return res.status(401).send({
-        status: 401,
+      return res.status(400).send({
+        status: 400,
         error: 'Please provide a valid order reference!',
         success: 'false',
         field: 'order',
       });
     }
     if (isNaN(parseFloat(req.body.amount))) {
-      return res.status(401).send({
-        status: 401,
+      return res.status(400).send({
+        status: 400,
         error: 'Please provide a valid price value!',
         success: 'false',
         field: 'car',
       });
     }
     if (isNaN(parseInt(req.body.carId, 10))) {
-      return res.status(401).send({
-        status: 401,
+      return res.status(400).send({
+        status: 400,
         error: 'Please provide a valid AD reference!',
         suceess: 'false',
         field: 'car',
@@ -118,8 +118,8 @@ class Buyer {
       return false;
     });
     if (checkAd === 4) {
-      res.status(401).send({
-        status: 401,
+      res.status(403).send({
+        status: 403,
         error: 'This Order cannot be updated anymore!',
         success: 'false',
         field: 'order',
@@ -164,24 +164,24 @@ class Buyer {
 
   static flag(req, res) {
     if (isNaN(parseInt(req.body.carId, 10))) {
-      return res.status(401).send({
-        status: 401,
+      return res.status(400).send({
+        status: 400,
         error: 'Please provide a valid Ad reference!',
         success: 'false',
         field: 'carId',
       });
     }
     if (!req.body.reason || req.body.reason === ' ') {
-      return res.status(401).send({
-        status: 401,
+      return res.status(400).send({
+        status: 400,
         error: 'Please indicate your reason for this red flag!',
         success: 'false',
         field: 'reason',
       });
     }
     if (!req.body.description || req.body.description === ' ') {
-      return res.status(401).send({
-        status: 401,
+      return res.status(400).send({
+        status: 400,
         error: 'Please enter description for your red flag!',
         success: 'false',
         field: 'description',

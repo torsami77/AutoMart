@@ -71,6 +71,13 @@ app.patch('/api/v1/order/:orderId/price', _verifyToken["default"], _buyer["defau
 app["delete"]('/api/v1/car/:carId/', _verifyToken["default"], _admin["default"]["delete"]);
 app.post('/api/v1/password/reset', _resetPassword["default"].resetRequest);
 app.post('/api/v1/password/createnew', _verifyToken["default"], _resetPassword["default"].createNewPassword);
+app.all('*', function (req, res) {
+  res.status(404).send({
+    status: 404,
+    error: 'Endpoint not found!',
+    success: false
+  });
+});
 app.listen(PORT, function () {
   console.log("server running on port ".concat(PORT));
 });

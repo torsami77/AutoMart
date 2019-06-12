@@ -29,20 +29,21 @@ describe('ADMIN Activities', () => {
         done();
       });
   });
-/*
+
   it('should NOT let NON-ADMIN user to DELETE an AD', (done) => {
     api
       .delete('/api/v1/car/1/')
       .set('authorization', token)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('status').equal(403);
         res.body.should.have.property('success').equal('false');
-        res.body.should.have.property('error').equal('You need Admin priviledges to view this set of data!');
+        res.body.should.have.property('error').equal('You need Admin priviledges to delete this Ad');
         done();
       });
   });
-  */
+  
+
   let adminToken;
   it('AUTHENTICATE ADMIN', (done) => {
     api
@@ -75,7 +76,7 @@ describe('ADMIN Activities', () => {
       .set('authorization', adminToken)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
         res.body.should.have.property('error').equal('Please provide a valid Ad reference!');
         done();
