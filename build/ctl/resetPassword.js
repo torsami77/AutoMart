@@ -46,7 +46,7 @@ function () {
   _createClass(Password, null, [{
     key: "resetRequest",
     value: function resetRequest(req, res) {
-      if (undefined === req.body.email) {
+      if (undefined === req.params.email) {
         return res.status(401).send({
           status: 400,
           error: 'Please provide a valid email!',
@@ -55,7 +55,7 @@ function () {
         }); // eslint-disable-next-line no-else-return
       }
 
-      if (req.body.email === ' ' || !req.body.email.match(mailformat)) {
+      if (req.params.email === ' ' || !req.params.email.match(mailformat)) {
         return res.status(401).send({
           status: 400,
           error: 'Please provide a valid email!',
@@ -67,14 +67,14 @@ function () {
       var token;
 
       var foundUser = _db["default"].users.find(function (user) {
-        return user.email === req.body.email;
+        return user.email === req.params.email;
       });
 
       if (foundUser) {
         var hash = foundUser.password;
         var id = foundUser.id;
         var firstName = foundUser.first_name;
-        var email = req.body.email;
+        var email = req.params.email;
         token = _jsonwebtoken["default"].sign({
           email: email,
           hash: hash,
@@ -83,7 +83,7 @@ function () {
           expiresIn: '1h'
         });
         var subject = 'AUTOMART: Pasword reset link';
-        var text = "\n      Hello ".concat(firstName, ",\n      You are receive this email because there was an action to reset your email on \n      automart. If you would like to proceed please copy the link below and paste in your browser address bar.\n\n      www.automart.com/createnewpassword/").concat(token, "\n      \n      Best regards\n      Auto Mart Team\n\n      Your favourite platform to buy and sale Cars\n      ");
+        var text = "\n      Hello ".concat(firstName, ",\n      You receive this email because there was an action to reset your password on \n      automart77.herokuapp.com. If you would like to proceed please copy the link below and paste in your browser address bar.\n\n      https://automart77.herokuapp.com/createnewpassword/").concat(token, "\n\n      The link will expire after 1hr.\n\n      Best regards\n      Auto Mart Team\n\n      Your favourite platform to buy and sale Cars\n      ");
         var mailOptions = {
           from: 'bootcamp@automart.com',
           to: email,

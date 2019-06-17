@@ -94,7 +94,6 @@ button, .button-enabled {
 
 .button-disabled {
     background-color: rgb(150, 150, 150);
-    cursor: ;
 }
 
 .button {
@@ -397,6 +396,8 @@ i.red-icon {
     margin-top: 3%;
     margin-bottom: 5%;
     padding-left: 45%;
+    display: flex;
+    justify-content: center;
 
 }
 

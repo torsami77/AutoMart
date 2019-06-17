@@ -121,7 +121,7 @@
                ]
             }
          },
-         "/api/v1/password/reset":{  
+         "/api/v1/users/:email/reset_password":{  
             "post":{  
                "tags":[  
                   "Authentication"
@@ -137,14 +137,11 @@
                ],
                "parameters":[  
                   {  
-                     "in":"body",
+                     "in":"path",
                      "name":"email",
                      "type": "string",
-                     "description":"Account email will be validated against and emailed a token ",
-                     "required":true,
-                     "schema":{  
-                        "$ref":"#/definitions/requestReset"
-                     }
+                     "description":"Account email will be validated, and emailed a token ",
+                     "required":true
                   }
                ],
                "responses":{  
@@ -162,7 +159,7 @@
                ]
             }
            },
-           "/api/v1/password/createnew":{  
+           "/api/v1/users/createnew_password":{  
             "post":{  
                "tags":[  
                   "Authentication"
@@ -176,15 +173,22 @@
                "produces":[  
                   "application/json"
                ],
-               "parameters":[  
+               "parameters":[ 
+                  {  
+                     "in":"headers",
+                     "name":"authorization",
+                     "type": "string",
+                     "description":"emailed token",
+                     "required":true
+                  }, 
                   {  
                      "in":"body",
                      "name":"password",
                      "type": "string",
-                     "description":"",
+                     "description":"Create a New password",
                      "required":true,
                      "schema":{  
-                        "$ref":"#/definitions/createnew"
+                        "$ref":"#/definitions/createNewPassword"
                      }
                   },
                   {  
@@ -194,7 +198,7 @@
                      "description":"New generated password must be confirmed",
                      "required":true,
                      "schema":{  
-                        "$ref":"#/definitions/createnew"
+                        "$ref":"#/definitions/createNewPassword"
                      }
                   }
                ],
@@ -785,6 +789,20 @@
                "name":"signIn"
            }
          },
+         "createNewPassword":{  
+            "type":"object",
+            "properties":{  
+              "password":{  
+                 "type":"string"
+              },
+              "verify":{
+                 "type":"string"
+              }
+            },
+              "xml":{
+                  "name":"createNewPassword"
+              }
+            },
        "postAd":{  
          "type":"multipart/form-data",
          "properties":{  

@@ -18,7 +18,7 @@ const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 class Password {
   static resetRequest(req, res) {
-    if (undefined === req.body.email) {
+    if (undefined === req.params.email) {
       return res.status(401).send({
         status: 400,
         error: 'Please provide a valid email!',
@@ -28,7 +28,7 @@ class Password {
     // eslint-disable-next-line no-else-return
     }
 
-    if (req.body.email === ' ' || !req.body.email.match(mailformat)) {
+    if (req.params.email === ' ' || !req.params.email.match(mailformat)) {
       return res.status(401).send({
         status: 400,
         error: 'Please provide a valid email!',
@@ -38,12 +38,12 @@ class Password {
     }
 
     let token;
-    const foundUser = db.users.find(user => user.email === req.body.email);
+    const foundUser = db.users.find(user => user.email === req.params.email);
     if (foundUser) {
       const hash = foundUser.password;
       const { id } = foundUser;
       const firstName = foundUser.first_name;
-      const { email } = req.body;
+      const { email } = req.params;
       token = jwt.sign({
         email,
         hash,
@@ -52,11 +52,13 @@ class Password {
       const subject = 'AUTOMART: Pasword reset link';
       const text = `
       Hello ${firstName},
-      You are receive this email because there was an action to reset your email on 
-      automart. If you would like to proceed please copy the link below and paste in your browser address bar.
+      You receive this email because there was an action to reset your password on 
+      automart77.herokuapp.com. If you would like to proceed please copy the link below and paste in your browser address bar.
 
-      www.automart.com/createnewpassword/${token}
-      
+      https://automart77.herokuapp.com/createnewpassword/${token}
+
+      The link will expire after 1hr.
+
       Best regards
       Auto Mart Team
 

@@ -53,31 +53,31 @@ function () {
 
       var data;
 
-      _db["default"].cars.map(function (car) {
-        if (car.id === parseInt(req.params.carId, 10)) {
-          data = car;
-        }
-
-        return false;
+      var specifiedCar = _db["default"].cars.find(function (car) {
+        return car.id === parseInt(req.params.carId, 10);
       });
 
-      if (undefined !== data) {
-        res.status(200).send({
-          status: 200,
-          data: data,
-          success: 'true',
+      if (!specifiedCar) {
+        res.status(404).send({
+          status: 404,
+          error: 'Ad not found!',
+          success: 'false',
           field: 'car'
         });
-        return false;
+        return false; // eslint-disable-next-line no-else-return
+      } else {
+        // eslint-disable-next-line no-lonely-if
+        if (specifiedCar.status === 'available') {
+          res.status(200).send({
+            status: 200,
+            data: specifiedCar,
+            success: 'true',
+            field: 'car'
+          });
+        } else {
+          _admin["default"].viewSpecific(req, res);
+        }
       }
-
-      res.status(404).send({
-        status: 404,
-        error: 'Ad not found!',
-        success: 'false',
-        field: 'car'
-      });
-      return false;
     }
   }, {
     key: "dynamicView",
@@ -128,7 +128,7 @@ function () {
           if (undefined === arrOfSearch || arrOfSearch.length === 0) {
             res.status(404).send({
               status: 404,
-              error: 'Your Search wasn\'t not found',
+              error: 'Your Search wasn\'t found',
               success: 'false',
               field: searchFields
             });
@@ -175,7 +175,7 @@ function () {
         if (undefined === arrOfSearch || arrOfSearch.length === 0) {
           res.status(404).send({
             status: 404,
-            error: 'Your Search wasn\'t not found',
+            error: 'Your Search wasn\'t found',
             success: 'false',
             field: searchFields
           });
