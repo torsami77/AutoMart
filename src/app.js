@@ -11,6 +11,7 @@ import admin from './ctl/admin';
 import password from './ctl/resetPassword';
 import verifyToken from './mid/verifyToken';
 import cloudUpload from './mid/cloudinaryAndMulter';
+import example from './mod/example';
 
 
 const PORT = process.env.PORT || 5000;
@@ -51,6 +52,7 @@ app.patch('/api/v1/order/:orderId/price', verifyToken, buyer.updateOrder);
 app.delete('/api/v1/car/:carId/', verifyToken, admin.deleteCar);
 app.post('/api/v1/users/:email/reset_password', password.resetRequest);
 app.post('/api/v1/users/createnew_password', verifyToken, password.createNewPassword);
+app.get('/api/v1/example', example);
 app.all('*', (req, res) => {
   res.status(404).send({
     status: 404,

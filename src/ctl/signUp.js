@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import db from '../db/db';
+import models from '../mod/models';
 
 const app = express();
 
@@ -12,7 +13,7 @@ app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/json' }));
 
 
-const signUp = (req, res) => {
+const signUp = async (req, res) => {
   let {
     username, firstName, lastName, address,
   } = req.body;
@@ -96,24 +97,29 @@ const signUp = (req, res) => {
     });
   }
 
-  const emailSearch = db.users.find(user => user.email === email);
-  const userNameSearch = db.users.find(user => user.username === username);
-  if (emailSearch) {
-    return res.status(400).send({
-      status: 400,
-      error: 'Email is associated with another user!',
-      success: 'false',
-      field: 'email',
-    });
+  //const emailSearch = db.users.find(user => user.email === email);
+  //const userNameSearch = db.users.find(user => user.username === username);
+  try {
+    const data = await models.retrieveClause('email, username', 'users', `email = $1 || username = $2`, [email, username]);
+    if (data.email === email) {
+      return res.status(400).send({
+        status: 400,
+        error: 'Email is associated with another user!',
+        success: 'false',
+        field: 'email',
+      });
+    }
+    if (data.username === username) {
+      return res.status(400).send({
+        status: 400,
+        error: 'Username already taken by another user!',
+        success: 'false',
+        field: 'username',
+      });
+    }
+  } catch (error) {
   }
-  if (userNameSearch) {
-    return res.status(400).send({
-      status: 400,
-      error: 'Username already taken by another user!',
-      success: 'false',
-      field: 'username',
-    });
-  }
+
   bcrypt.hash(password, 10, (error, hash) => {
     if (error) {
       return res.status(500).send({
