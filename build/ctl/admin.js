@@ -41,7 +41,7 @@ var employJwt = function employJwt(req, res) {
   } catch (error) {
     return res.status(403).send({
       status: 403,
-      error: 'Unauthorised User!',
+      error: 'You need Admin priviledges to perform this task!',
       success: 'false'
     });
   }
@@ -57,6 +57,42 @@ function () {
   }
 
   _createClass(Admin, null, [{
+    key: "viewSpecific",
+    value: function viewSpecific(req, res) {
+      employJwt(req, res);
+      var checkAdmin = 0;
+
+      _db["default"].users.map(function (user) {
+        if (user.id === req.userData.id && user.is_admin === true) {
+          checkAdmin = 1;
+        }
+
+        return false;
+      });
+
+      var specifiedCar = _db["default"].cars.find(function (car) {
+        return car.id === parseInt(req.params.carId, 10);
+      });
+
+      if (!specifiedCar) {
+        return res.status(404).send({
+          staus: 404,
+          error: 'Ad not found',
+          success: 'false'
+        });
+      }
+
+      if (checkAdmin === 1 && specifiedCar) {
+        return res.status(200).send({
+          status: 200,
+          data: specifiedCar,
+          success: 'true'
+        }); // eslint-disable-next-line no-else-return
+      }
+
+      return false;
+    }
+  }, {
     key: "viewAll",
     value: function viewAll(req, res) {
       employJwt(req, res);
@@ -71,11 +107,104 @@ function () {
       });
 
       if (checkAdmin === 1) {
-        return res.status(200).send({
-          status: 200,
-          data: _db["default"].cars,
-          success: 'true'
-        }); // eslint-disable-next-line no-else-return
+        ///administrator
+        // eslint-disable-next-line object-curly-newline
+        var _req$query = req.query,
+            status = _req$query.status,
+            state = _req$query.state,
+            minPrice = _req$query.minPrice,
+            maxPrice = _req$query.maxPrice,
+            manufacturer = _req$query.manufacturer,
+            model = _req$query.model,
+            bodyType = _req$query.bodyType; //let { minPrice } = req.query;
+        // eslint-disable-next-line object-curly-newline
+
+        var searchObjects = {
+          status: status,
+          state: state,
+          minPrice: minPrice,
+          maxPrice: maxPrice,
+          manufacturer: manufacturer,
+          model: model,
+          bodyType: bodyType
+        };
+        var searchTerm = [status, state, minPrice, maxPrice, manufacturer, model, bodyType];
+        var searchFields = [];
+        searchTerm.forEach(function (item) {
+          if (undefined !== item) {
+            searchFields.push(item);
+          }
+        });
+        var arrOfSearch = [];
+
+        if (undefined === minPrice) {
+          minPrice = 0;
+        }
+
+        if (maxPrice) {
+          _db["default"].cars.map(function (car) {
+            Object.keys(searchObjects).forEach(function (keyItem) {
+              if ((keyItem !== 'minPrice' || keyItem !== 'maxPrice') && car.price >= minPrice && car.price <= maxPrice && undefined !== car[keyItem] && car[keyItem] === searchObjects[keyItem] && !arrOfSearch.includes(car)) {
+                arrOfSearch.push(car);
+              }
+            });
+            return false;
+          });
+
+          if (undefined === arrOfSearch || arrOfSearch.length === 0) {
+            res.status(404).send({
+              status: 404,
+              error: 'Your Search wasn\'t found',
+              success: 'false',
+              field: searchFields
+            });
+            return false;
+          }
+
+          if (undefined !== arrOfSearch && arrOfSearch.length !== 0) {
+            res.status(200).send({
+              status: 200,
+              success: 'true',
+              data: arrOfSearch
+            });
+            return false;
+          }
+        }
+
+        _db["default"].cars.map(function (car) {
+          Object.keys(searchObjects).forEach(function (keyItem) {
+            if (undefined !== car[keyItem] && car[keyItem] === searchObjects[keyItem] && !arrOfSearch.includes(car)) {
+              arrOfSearch.push(car);
+            }
+          });
+          return false;
+        });
+
+        if (undefined !== arrOfSearch && arrOfSearch.length !== 0) {
+          res.status(200).send({
+            status: 200,
+            success: 'true',
+            data: arrOfSearch
+          });
+          return false;
+        } // if previous search conditions weren't thought, search returns all available Ad
+
+
+        if (_db["default"].cars) {
+          return res.status(200).send({
+            status: 200,
+            data: _db["default"].cars,
+            success: 'true'
+          }); // eslint-disable-next-line no-else-return
+        } else {
+          res.status(404).send({
+            status: 404,
+            error: 'Your Search wasn\'t found',
+            success: 'false',
+            field: searchFields
+          });
+        } // eslint-disable-next-line no-else-return
+
       } else {
         return res.status(403).send({
           status: 403,
@@ -83,10 +212,12 @@ function () {
           success: 'false'
         });
       }
+
+      return false;
     }
   }, {
-    key: "delete",
-    value: function _delete(req, res) {
+    key: "deleteCar",
+    value: function deleteCar(req, res) {
       employJwt(req, res);
 
       if (!req.params.carId || isNaN(parseInt(req.params.carId, 10))) {
@@ -129,12 +260,6 @@ function () {
           });
         } // eslint-disable-next-line no-else-return
 
-      } else {
-        return res.status(403).send({
-          status: 403,
-          error: 'You need Admin priviledges to delete this Ad',
-          success: 'false'
-        });
       }
     }
   }]);

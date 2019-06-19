@@ -49,6 +49,7 @@ function () {
           year = _req$body.year,
           mileage = _req$body.mileage,
           state = _req$body.state,
+          location = _req$body.location,
           transmission = _req$body.transmission,
           vehicleInspectionNumber = _req$body.vehicleInspectionNumber,
           licence = _req$body.licence,
@@ -131,6 +132,16 @@ function () {
           error: 'state field cannot be empty!',
           success: 'false',
           field: 'state'
+        });
+        return false;
+      }
+
+      if (!location || location === ' ') {
+        res.status(400).send({
+          status: 400,
+          error: 'location field cannot be empty!',
+          success: 'false',
+          field: 'location'
         });
         return false;
       }

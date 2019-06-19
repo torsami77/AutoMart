@@ -44,6 +44,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -69,6 +70,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -94,6 +96,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -119,6 +122,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -144,6 +148,7 @@ describe('User Seller Activities', () => {
       .field('bodyType', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -170,6 +175,7 @@ describe('User Seller Activities', () => {
       .field('year', 'year')
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -184,7 +190,7 @@ describe('User Seller Activities', () => {
         done();
       });
   });
-  
+
   it('Should NOT let Auth User (Seller) to post new Advert without STATE input', (done) => {
     api
       .post('/api/v1/car')
@@ -195,6 +201,7 @@ describe('User Seller Activities', () => {
       .field('bodyType', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -205,6 +212,32 @@ describe('User Seller Activities', () => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('state field cannot be empty!');
+        res.body.should.have.property('success').equal('false');
+        done();
+      });
+  });
+
+  it('Should NOT let Auth User (Seller) to post new Advert without LOCATION input', (done) => {
+    api
+      .post('/api/v1/car')
+      .set('authorization', token)
+      .set('Accept', 'application.json')
+      .field('manufacturer', assumedData.newAdvert.manufacturer)
+      .field('model', assumedData.newAdvert.model)
+      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('year', assumedData.newAdvert.year)
+      .field('mileage', assumedData.newAdvert.mileage)
+      .field('state', assumedData.newAdvert.state)
+      .field('transmission', assumedData.newAdvert.transmission)
+      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('licence', assumedData.newAdvert.licence)
+      .field('description', assumedData.newAdvert.description)
+      .field('price', assumedData.newAdvert.price)
+      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(400);
+        res.body.should.have.property('error').equal('location field cannot be empty!');
         res.body.should.have.property('success').equal('false');
         done();
       });
@@ -221,6 +254,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
@@ -246,6 +280,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
@@ -271,6 +306,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('description', assumedData.newAdvert.description)
@@ -295,6 +331,7 @@ describe('User Seller Activities', () => {
       .field('bodyType', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -321,6 +358,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', 'mileage')
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -347,6 +385,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -372,6 +411,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -397,6 +437,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -424,6 +465,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -448,6 +490,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)

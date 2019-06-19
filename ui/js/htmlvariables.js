@@ -338,7 +338,7 @@ const createNewAdForm = `
                         <input type="number" name="mileage" id="mileage" placeholder="Enter Mileage On Car"/>Miles
                     </p>
                     <p>
-                        <label for="condition">Condition:</label></br>
+                        <label for="condition">State:</label></br>
                         <select name="condition" id="condition">
                             <option selected disable>Select Condition</option>
                             <option value="new">New</option>
@@ -362,8 +362,8 @@ const createNewAdForm = `
                         <input type="text" name="license" id="license" placeholder="Enter License Plate Number"/>
                     </p>
                     <p>
-                        <label for="state">State:</label></br>
-                        <input type="text" name="owner" id="owner" placeholder="Enter vehicle location"/>
+                        <label for="state">Location:</label></br>
+                        <input type="text" name="location" id="location" placeholder="Enter vehicle location"/>
                     </p>
                     <p>
                         <label for="description">Car Description:</label></br>

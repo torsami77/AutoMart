@@ -19,7 +19,7 @@ describe('REQUEST PASSWORD RESET', () => {
 
   it('Should respond to user trying to request reset with an NO EMAIL', (done) => {
     api
-      .post('/api/v1/password/reset/')
+      .post('/api/v1/users/:email/reset_password')
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -29,10 +29,9 @@ describe('REQUEST PASSWORD RESET', () => {
       });
   });
 
-  it('Should respond to user trying to request reset with an INVALID EMAIL', (done) => {
+  it('Should respond to user trying to request reset with an UNREGISTERED EMAIL', (done) => {
     api
-      .post('/api/v1/password/reset/')
-      .send({ email: 'torsami77@gmail.com' })
+      .post('/api/v1/users/torsami77@gmail.com/reset_password')
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
@@ -61,7 +60,7 @@ describe('REQUEST PASSWORD RESET', () => {
 describe('CREATE NEW PASSWORD', () => {
   it('Should respond to unauthorised attempt to CHANGE PASSWORD', (done) => {
     api
-      .post('/api/v1/password/createnew/')
+      .post('/api/v1/users/createnew_password')
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(401);
@@ -73,7 +72,7 @@ describe('CREATE NEW PASSWORD', () => {
 
   it('Should respond to user with empty PASSWORD FIELD', (done) => {
     api
-      .post('/api/v1/password/createnew/')
+      .post('/api/v1/users/createnew_password')
       .set('authorization', token)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -86,7 +85,7 @@ describe('CREATE NEW PASSWORD', () => {
 
   it('Should respond to user with short PASSWORD', (done) => {
     api
-      .post('/api/v1/password/createnew')
+      .post('/api/v1/users/createnew_password')
       .set('authorization', token)
       .send({ password: 'asdf', verify: 'asdf' })
       .end((err, res) => {
@@ -100,7 +99,7 @@ describe('CREATE NEW PASSWORD', () => {
 
   it('Should respond to user with NOT MATCHING PASSWORD', (done) => {
     api
-      .post('/api/v1/password/createnew/')
+      .post('/api/v1/users/createnew_password')
       .set('authorization', token)
       .send({ password: 'asdfghjkl' })
       .end((err, res) => {

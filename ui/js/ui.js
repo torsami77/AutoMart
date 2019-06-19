@@ -73,6 +73,9 @@ const sortCategory = (check) => {
                 if(valueToUse === 'Sort by Body Type'){
                     valueToUse = 'BodyType';
                 }
+                if(valueToUse === 'Sort by Price Range'){
+                    valueToUse = 'PriceRange';
+                }
                 newOptions = newOptions + `<option value="${base.join(',')},${valueToUse}">${value[0]}</option>`;
             }
         )
@@ -86,8 +89,11 @@ const sortCategory = (check) => {
             (key) => {
                 if(key === base[base.length - 1]){
                     newOptions = `<option value="${base}" disabled selected>All ${base.join(', ')} vehicles</option>`;
-                    if(base.join(',') === 'new,BodyType'){
+                    if(base.join(',') === 'new,BodyType' || base.join(',') === 'used,BodyType') {
                         newOptions = `<option value="${base}" disabled selected>Select Body Type</option>`;
+                    }
+                    if(base.join(',') === 'new,PriceRange' || base.join(',') === 'used,PriceRange') {
+                        newOptions = `<option value="${base}" disabled selected>Select Price Range</option>`;
                     }
                     for(let i = 1; i < sortObject[key].length; i++){
                         newOptions = newOptions + `<option value="${base.join(', ')},${sortObject[key][i]}" >${sortObject[key][i]}</option>`;
@@ -109,6 +115,7 @@ const sortCategory = (check) => {
 }
 
 const sortObject = {
+    PriceRange: ['Sort by Price Range', '5, 000, 000', '4, 000, 000', '3, 000, 000', '2, 000, 000', '1, 000, 000', '500, 000'],
     BodyType: ['Sort by Body Type', 'Car', 'Truck', 'Trailer', 'Van'],
     BMX: ['BMX', 'Concept', 'M3', 'M5', 'X3', 'X5', 'Z4'],
     Ferrari: ['Ferrari', 'Daytona', '250 GTO', '275', '599 GTB Fiorano', 'F430', '250', 'F40', 'Enzo Ferrari', '456 GT', '612 Scaglietti', 'Califonia', '575M Maranello', 'Testarossa'],

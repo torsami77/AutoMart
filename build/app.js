@@ -68,9 +68,9 @@ app.get('/api/v1/car/:carId/', _viewer["default"].specificCar);
 app.post('/api/v1/flag', _verifyToken["default"], _buyer["default"].flag);
 app.post('/api/v1/order', _verifyToken["default"], _buyer["default"].order);
 app.patch('/api/v1/order/:orderId/price', _verifyToken["default"], _buyer["default"].updateOrder);
-app["delete"]('/api/v1/car/:carId/', _verifyToken["default"], _admin["default"]["delete"]);
-app.post('/api/v1/password/reset', _resetPassword["default"].resetRequest);
-app.post('/api/v1/password/createnew', _verifyToken["default"], _resetPassword["default"].createNewPassword);
+app["delete"]('/api/v1/car/:carId/', _verifyToken["default"], _admin["default"].deleteCar);
+app.post('/api/v1/users/:email/reset_password', _resetPassword["default"].resetRequest);
+app.post('/api/v1/users/createnew_password', _verifyToken["default"], _resetPassword["default"].createNewPassword);
 app.all('*', function (req, res) {
   res.status(404).send({
     status: 404,

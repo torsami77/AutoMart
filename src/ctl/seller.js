@@ -16,7 +16,7 @@ class Seller {
   static postAd(req, res) {
     let {
       // eslint-disable-next-line max-len
-      manufacturer, model, bodyType, year, mileage, state, transmission, vehicleInspectionNumber, licence, description, price,
+      manufacturer, model, bodyType, year, mileage, state, location, transmission, vehicleInspectionNumber, licence, description, price,
     } = req.body;
 
     if (!manufacturer || manufacturer === ' ') {
@@ -95,6 +95,16 @@ class Seller {
         error: 'state field cannot be empty!',
         success: 'false',
         field: 'state',
+      });
+      return false;
+    }
+
+    if (!location || location === ' ') {
+      res.status(400).send({
+        status: 400,
+        error: 'location field cannot be empty!',
+        success: 'false',
+        field: 'location',
       });
       return false;
     }
