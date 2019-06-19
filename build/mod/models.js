@@ -10,24 +10,18 @@ var _pg = _interopRequireDefault(require("../mid/pg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* eslint-disable class-methods-use-this */
-const createClause = (table, columns, valueHolders, values) => {
-  return _pg.default.query(`INSERT INTO ${table} (${columns}) VALUES(${valueHolders}) RETURNING id`, values);
-};
+const createClause = (table, columns, valueHolders, values) => _pg.default.query(`INSERT INTO ${table} (${columns}) VALUES(${valueHolders}) RETURNING id`, values);
 
-const retrieveClause = (selection, table, where) => {
-  _pg.default.query(`SELECT ${selection} FROM ${table} WHERE ${where}`).then(res => {
-    console.log(res);
+const retrieveClause = (selection, table, where, values) => _pg.default.query(`SELECT ${selection} FROM ${table} WHERE ${where}`, values);
 
-    _pg.default.end();
-  }).catch(err => {
-    console.log(err);
+const updateClause = (table, set, where, values) => _pg.default.query(`UPDATE ${table} SET ${set} WHERE ${where}', ${values}`);
 
-    _pg.default.end();
-  });
-};
+const deleteClause = (table, where, values) => _pg.default.query(`DELETE FROM ${table} WHERE ${where}, ${values}`);
 
 var _default = {
   createClause,
-  retrieveClause
+  retrieveClause,
+  updateClause,
+  deleteClause
 };
 exports.default = _default;

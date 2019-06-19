@@ -1,9 +1,11 @@
+/* eslint-disable func-names */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import fs from 'fs';
 // eslint-disable-next-line no-unused-vars
 import app from '../src/app';
 import db from '../src/db/db';
+import assumedData from './assumed/assume';
 
 chai.use(chaiHttp);
 
@@ -31,7 +33,7 @@ describe('REQUEST PASSWORD RESET', () => {
 
   it('Should respond to user trying to request reset with an UNREGISTERED EMAIL', (done) => {
     api
-      .post('/api/v1/users/torsami77@gmail.com/reset_password')
+      .post('/api/v1/users/torsajjsjmi77@gmail.com/reset_password')
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
@@ -40,11 +42,11 @@ describe('REQUEST PASSWORD RESET', () => {
         done();
       });
   });
-/*
-  it('Should ', (done) => {
+
+  it('Should send password reset link sucessfully', function () {
+    this.timeout(12000);
     api
-      .post('/api/v1/password/reset/')
-      .send(db.users[0])
+      .post(`/api/v1/users/${assumedData.newUsers.email}/reset_password`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(200);
@@ -52,10 +54,9 @@ describe('REQUEST PASSWORD RESET', () => {
         res.body.data.token.should.be.a('string');
         res.body.data.should.have.property('error').equal('password reset link sent to your email');
         token = res.body.data.token;
-        done();
       });
   });
-*/
+
 });
 describe('CREATE NEW PASSWORD', () => {
   it('Should respond to unauthorised attempt to CHANGE PASSWORD', (done) => {
@@ -110,10 +111,11 @@ describe('CREATE NEW PASSWORD', () => {
         done();
       });
   });
-  /*
-  it('Should let user CREATE NEW password', (done) => {
+
+  it('Should let user CREATE NEW password', function () {
+    this.timeout(12000);
     api
-      .post('/api/v1/password/createnew/')
+      .post('/api/v1/users/createnew_password/')
       .set('authorization', token)
       .send({ password: 'asdfghjkl', verify: 'asdfghjkl' })
       .end((err, res) => {
@@ -122,8 +124,6 @@ describe('CREATE NEW PASSWORD', () => {
         res.body.data.should.have.property('success').equal('true');
         res.body.data.token.should.be.a('string');
         res.body.data.should.have.property('message').equal('Your password has been reset Successfully!');
-        done();
       });
   });
-  */
 });

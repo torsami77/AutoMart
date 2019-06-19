@@ -5,8 +5,23 @@ language: node_js
 node_js:
   - node
 
+services:
+  - postgresql
+
 env:
 - SECRET_KEY=abcd1234
+
+- CLOUD_NAME=torsami77
+- API_ID=242258518247965
+- API_SECRET=2_AhysG0FjXvucPpytUs7lyHG-M
+- CLOUDINARY_URL=cloudinary://242258518247965:2_AhysG0FjXvucPpytUs7lyHG-M@torsami77
+- AUTOMAILER_PASS=GmailGmail101!
+
+- PG_USER = 'postgres'
+- PG_PASSWORD = ''
+- PG_DATABASE = 'testing_db'
+- PG_HOST = '127.0.0.1'
+- PG_PORT = '5432'
 
 cache:
   directories:
@@ -15,6 +30,11 @@ cache:
 before_install:
   - npm config set spin false
   - npm install -g standard
+
+before_script:
+  - psql -c 'CREATE DATABASE testing_db;' -U postgres
+  - psql -c 'CREATE TABLE users (id serial NOT NULL, email character varying NOT NULL, username character varying NOT NULL, first_name character varying NOT NULL, last_name character varying NOT NULL, password character varying NOT NULL, created_on date NOT NULL, address character varying NOT NULL, is_admin boolean);' -U postgres
+
 
 after_success:
 - nyc npm test

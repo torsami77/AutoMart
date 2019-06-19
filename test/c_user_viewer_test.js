@@ -1,3 +1,4 @@
+/*
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 // eslint-disable-next-line no-unused-vars
@@ -283,3 +284,5 @@ describe('User Viewer Activities', () => {
       });
   });
 });
+*/
+

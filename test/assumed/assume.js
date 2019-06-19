@@ -1,4 +1,5 @@
 const carId = 1;
+const randusername = Math.random().toString(36).substring(8);
 
 const assumedData = {
   sellerUser: {
@@ -11,11 +12,12 @@ const assumedData = {
     address: 'Jos',
     is_admin: false,
   },
+
   newUsers: {
-    email: 'torsami@automart.com',
+    email: `${randusername}@gmail.com`,
     firstName: 'Samson',
     lastName: 'Samuel',
-    username: 'sami77',
+    username: `${randusername}`,
     password: 'password101',
     verify: 'password101',
     address: 'Jos',

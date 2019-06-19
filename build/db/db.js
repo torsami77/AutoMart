@@ -3,8 +3,8 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
-var users = [{
+exports.default = void 0;
+const users = [{
   id: 1,
   email: 'string@gmail.com',
   first_name: 'Samson',
@@ -25,7 +25,7 @@ var users = [{
   is_admin: true,
   created_on: '2019-06-01T11:05:17.601Z'
 }];
-var cars = [{
+const cars = [{
   id: 1,
   owner: 1,
   created_on: '2019-06-08T19:36:58.679Z',
@@ -69,7 +69,7 @@ var cars = [{
   year: 2019,
   mileage: 2000,
   transmission: 'auto',
-  vehicleIinspectionNumber: '123456js',
+  vehicleInspectionNumber: '123456js',
   licence: 'PLA-BASSA-624',
   description: 'well well well story story story',
   imageGallery: [],
@@ -100,8 +100,39 @@ var cars = [{
   year: 2019,
   mileage: 2000,
   transmission: 'auto',
-  vehicleIinspectionNumber: '123456js',
+  vehicleInspectionNumber: '123456js',
   licence: 'PLA-BASSA-624',
+  description: 'well well well story story story',
+  imageGallery: [],
+  orders: [{
+    id: 1,
+    buyer: 1,
+    car_id: 1,
+    amount: [1500.00],
+    status: 'pending'
+  }],
+  flags: [{
+    id: 1,
+    car_id: 1,
+    created_on: '2019-06-08T19:36:58.679Z',
+    reason: 'pricing',
+    description: 'Give reasonable discount'
+  }]
+}, {
+  id: 4,
+  owner: 2,
+  created_on: '2019-06-08T19:36:58.679Z',
+  state: 'used',
+  status: 'sold',
+  price: 1000.00,
+  manufacturer: 'nissan',
+  model: 'murano',
+  bodyType: 'SUV',
+  year: 2019,
+  mileage: 2000,
+  transmission: 'auto',
+  vehicleInspectionNumber: '123456js',
+  licence: 'PLA-BASSA-625',
   description: 'well well well story story story',
   imageGallery: [],
   orders: [{
@@ -120,7 +151,7 @@ var cars = [{
   }]
 }];
 var _default = {
-  users: users,
-  cars: cars
+  users,
+  cars
 };
-exports["default"] = _default;
+exports.default = _default;
