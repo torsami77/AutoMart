@@ -11,6 +11,7 @@ chai.use(chaiHttp);
 chai.should();
 const { expect } = chai;
 
+/*
 const api = chai.request('http://localhost:5000');
 
 const data = fs.readFileSync(`${__dirname}/assumed/token.txt`);
@@ -95,3 +96,4 @@ describe('ADMIN Activities', () => {
       });
   });
 });
+*/

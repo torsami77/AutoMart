@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.default = void 0;
 
 var _express = _interopRequireDefault(require("express"));
 
@@ -13,26 +13,28 @@ var _bodyParser = _interopRequireDefault(require("body-parser"));
 
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var app = (0, _express["default"])();
+const app = (0, _express.default)();
 
-_dotenv["default"].config();
+_dotenv.default.config();
 
-app.use(_bodyParser["default"].json());
-app.use(_bodyParser["default"].urlencoded({
+app.use(_bodyParser.default.json());
+app.use(_bodyParser.default.urlencoded({
   extended: false
 }));
-app.use(_bodyParser["default"].text());
-app.use(_bodyParser["default"].json({
+app.use(_bodyParser.default.text());
+app.use(_bodyParser.default.json({
   type: 'application/json'
 }));
 
-var verifyToken = function verifyToken(req, res, next) {
-  var authorization = req.headers.authorization;
+const verifyToken = (req, res, next) => {
+  const {
+    authorization
+  } = req.headers;
 
   try {
-    var decoded = _jsonwebtoken["default"].verify(authorization, process.env.SECRET_KEY);
+    const decoded = _jsonwebtoken.default.verify(authorization, process.env.SECRET_KEY);
 
     req.userData = decoded;
     next();
@@ -50,4 +52,4 @@ var verifyToken = function verifyToken(req, res, next) {
 };
 
 var _default = verifyToken;
-exports["default"] = _default;
+exports.default = _default;

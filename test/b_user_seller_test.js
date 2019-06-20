@@ -1,3 +1,4 @@
+/*
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import fs from 'fs';
@@ -545,7 +546,8 @@ describe('User Seller Activities', () => {
         done();
       });
   });
-*/
+*\/
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
   it('Should NOT let Auth User (Seller) change price of sold or not owned AD', (done) => {
     api
@@ -588,4 +590,4 @@ describe('User Seller Activities', () => {
 });
 
 export default carId;
-
+*/
