@@ -12,13 +12,11 @@ env:
  global:
     - export NODE_ENV=test
     - export SECRET_KEY=abcd1234
-
     - export CLOUD_NAME=torsami77
     - export API_ID=242258518247965
     - export API_SECRET=2_AhysG0FjXvucPpytUs7lyHG-M
     - export CLOUDINARY_URL=cloudinary://242258518247965:2_AhysG0FjXvucPpytUs7lyHG-M@torsami77
     - export AUTOMAILER_PASS=GmailGmail101!
-
     - export PG_USER = 'postgres'
     - export PG_PASSWORD = ''
     - export PG_DATABASE = 'testing_db'
