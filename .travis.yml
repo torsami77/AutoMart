@@ -9,19 +9,21 @@ services:
   - postgresql
 
 env:
-- SECRET_KEY=abcd1234
+ global:
+    - export NODE_ENV=test
+    - export SECRET_KEY=abcd1234
 
-- CLOUD_NAME=torsami77
-- API_ID=242258518247965
-- API_SECRET=2_AhysG0FjXvucPpytUs7lyHG-M
-- CLOUDINARY_URL=cloudinary://242258518247965:2_AhysG0FjXvucPpytUs7lyHG-M@torsami77
-- AUTOMAILER_PASS=GmailGmail101!
+    - export CLOUD_NAME=torsami77
+    - export API_ID=242258518247965
+    - export API_SECRET=2_AhysG0FjXvucPpytUs7lyHG-M
+    - export CLOUDINARY_URL=cloudinary://242258518247965:2_AhysG0FjXvucPpytUs7lyHG-M@torsami77
+    - export AUTOMAILER_PASS=GmailGmail101!
 
-- PG_USER = 'postgres'
-- PG_PASSWORD = ''
-- PG_DATABASE = 'testing_db'
-- PG_HOST = '127.0.0.1'
-- PG_PORT = '5432'
+    - export PG_USER = 'postgres'
+    - export PG_PASSWORD = ''
+    - export PG_DATABASE = 'testing_db'
+    - export PG_HOST = '127.0.0.1'
+    - export PG_PORT = '5432'
 
 cache:
   directories:
