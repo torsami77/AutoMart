@@ -150,7 +150,6 @@ describe('Users Sign Up Tests', () => {
       .post('/api/v1/signup')
       .send(assumedData.newUsers)
       .end((err, res) => {
-        console.log(err);
         res.should.have.status(201);
         res.body.should.be.a('object');
         res.body.data.should.be.a('object');

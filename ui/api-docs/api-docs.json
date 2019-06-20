@@ -928,6 +928,10 @@
                "type":"string",
                "example":"salon"
             },
+	   "location":{  
+               "type":"string",
+               "example":"Jos"
+            },
             "transmission":{  
                "type":"string",
                "example":"auto"

@@ -36,7 +36,7 @@ const signIn = (req, res) => {
   }
   // const searchedUser = db.users.find(user => user.email === email);
 
-  pool.query('SELECT email,password FROM users WHERE email = $1', [email],
+  pool.query('SELECT id,email,password FROM users WHERE email = $1', [email],
     (_err, data) => {
       const searchedUser = data.rows[0];
       if (undefined === searchedUser) {

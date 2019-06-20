@@ -1,7 +1,10 @@
+/* eslint-disable prefer-const */
+/* eslint-disable no-restricted-globals */
 import express from 'express';
 import bodyParser from 'body-parser';
 import db from '../db/db';
 import cloudUpload from '../mid/cloudinaryAndMulter';
+import pool from '../mid/pg';
 
 const app = express();
 const { cloudinary } = cloudUpload;
@@ -187,14 +190,13 @@ class Seller {
       });
       return false;
     }
-
+    const imageGallery = [];
     // eslint-disable-next-line no-unused-vars
-    cloudinary.uploader.upload(req.file.path, (result, _error) => {
+    cloudinary.uploader.upload(req.file.path, (result) => {
       if (result.secure_url) {
-        const imageGallery = [result.secure_url];
+        imageGallery.push(result.secure_url);
         const orders = [];
         const flags = [];
-        const id = db.cars.length + 1;
         const createdOn = new Date();
         const status = 'available';
         price = parseFloat(price);
@@ -202,7 +204,6 @@ class Seller {
         year = parseFloat(year);
 
         const newCar = {
-          id,
           owner: req.userData.id,
           created_on: createdOn,
           // eslint-disable-next-line object-property-newline
@@ -210,31 +211,49 @@ class Seller {
           // eslint-disable-next-line object-property-newline
           transmission, vehicleInspectionNumber, licence, description, imageGallery, orders, flags,
         };
-        db.cars.push(newCar);
-        res.status(201).send({
-          status: 201,
-          data: {
-            id,
-            email: req.userData.email,
-            created_on: createdOn,
-            manufacturer,
-            model,
-            price,
-            state,
-            status,
-            imageGallery,
-            message: 'Your Ad has been added successfully!',
-            success: 'true',
-          },
+        // db.cars.push(newCar);
+        pool.query(`INSERT INTO cars (owner, created_on, manufacturer, model, "bodyType", price, state, status,
+        year, mileage, transmission, "vehicleInspectionNumber", licence, description, "imageGallery", orders, flags) 
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING id`,
+        // eslint-disable-next-line max-len
+        [req.userData.id, newCar.created_on, newCar.manufacturer, newCar.model, newCar.bodyType, newCar.price, newCar.state, newCar.status,
+          // eslint-disable-next-line max-len
+          newCar.year, newCar.mileage, newCar.transmission, newCar.vehicleInspectionNumber, newCar.licence, newCar.description, newCar.imageGallery, newCar.orders, newCar.flags],
+        (_err, data) => {
+          if (data.rows[0]) {
+            const { id } = data.rows[0];
+            return res.status(201).send({
+              status: 201,
+              data: {
+                id,
+                email: req.userData.email,
+                created_on: createdOn,
+                manufacturer,
+                model,
+                price,
+                state,
+                status,
+                imageGallery,
+                message: 'Your Ad has been added successfully!',
+                success: 'true',
+              },
+            });
+          // eslint-disable-next-line no-else-return
+          } else {
+            return res.status(500).send({
+              status: 500,
+              error: 'Internal server error, please contact your admin',
+            });
+          }
         });
-        return false;
+      } else {
+        return res.status(500).send({
+          status: 500,
+          error: 'No response from Cloudinary!, Please try again ',
+          success: 'false',
+          field: 'Cloudinary',
+        });
       }
-      res.status(500).send({
-        status: 500,
-        error: 'No response from Cloudinary!, Please try again ',
-        success: 'false',
-        field: 'Cloudinary',
-      });
       return false;
     });
     return false;
@@ -254,7 +273,7 @@ class Seller {
     if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
-        error: 'Invalid Param Request!',
+        error: 'Invalid Car ID!',
         success: 'false',
         field: 'Price',
       });
@@ -263,57 +282,53 @@ class Seller {
     const carId = parseInt(req.params.carId, 10);
     const newPrice = parseFloat(req.body.price);
 
-    let checker = 0;
-    let theCar;
-    db.cars.map((car) => {
-      if (car.id === carId) {
-        checker = 1;
-        if (car.status !== 'sold' && car.owner === req.userData.id) {
-          car.price = newPrice;
-          checker = 2;
-          theCar = car;
+    pool.query('SELECT status FROM cars WHERE id = $1 AND owner = $2', [carId, req.userData.id],
+    // eslint-disable-next-line no-unused-vars
+      (err, _resp) => {
+        if (err) {
+          return res.status(404).send({
+            status: 404,
+            error: 'Ad not found in database!',
+            success: 'false',
+            field: 'Price',
+          });
+        // eslint-disable-next-line no-else-return
+        } else {
+          pool.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3 AND status != $4) RETURNING created_on, manufacturer, model, price, state, status',
+            [newPrice, carId, req.userData.id, 'sold'],
+            (_err, data) => {
+              if (data.rows[0]) {
+                const theCar = data.rows[0];
+                return res.status(201).send({
+                  status: 201,
+                  data: {
+                    id: carId,
+                    owner: req.userData.id,
+                    email: req.userData.email,
+                    created_on: theCar.created_on,
+                    manufacturer: theCar.manufacturer,
+                    model: theCar.model,
+                    price: parseFloat(theCar.price),
+                    state: theCar.state,
+                    status: theCar.status,
+                    message: 'New price Updated!',
+                    success: 'true',
+                    field: 'price',
+                  },
+                });
+              // eslint-disable-next-line no-else-return
+              } else {
+                return res.status(403).send({
+                  status: 403,
+                  error: 'You cannot change the price of this Ad!',
+                  success: 'false',
+                  field: 'Price',
+                });
+              }
+            });
         }
-      }
-      return false;
-    });
-    if (checker === 2) {
-      res.status(201).send({
-        status: 201,
-        data: {
-          id: req.userData.id,
-          email: req.userData.email,
-          created_on: theCar.created_on,
-          manufacturer: theCar.manufacturer,
-          model: theCar.model,
-          price: theCar.price,
-          state: theCar.state,
-          status: theCar.status,
-          message: 'New price Updated!',
-          success: 'True',
-          field: 'Price',
-        },
+        return false;
       });
-      return false;
-    }
-    if (checker === 1) {
-      res.status(403).send({
-        status: 403,
-        error: 'You cannot change the price of this Ad!',
-        success: 'false',
-        field: 'Price',
-      });
-      return false;
-    }
-
-    if (checker === 0) {
-      res.status(404).send({
-        status: 404,
-        error: 'Ad not found in database!',
-        success: 'false',
-        field: 'Price',
-      });
-      return false;
-    }
     return false;
   }
 
@@ -321,54 +336,48 @@ class Seller {
     if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
-        error: 'Invalid Param Request!',
+        error: 'Invalid Car ID!',
         success: 'false',
-        field: 'sold',
+        field: 'carId',
       });
       return false;
     }
     const carId = parseInt(req.params.carId, 10);
 
-    let newStatus;
-    let theCar;
-    db.cars.map((car) => {
-      if (car.id === carId && car.owner === req.userData.id) {
-        car.status = 'sold';
-        newStatus = 'sold';
-        theCar = car;
-      }
-      return false;
-    });
-    if (newStatus) {
-      res.status(201).send({
-        status: 201,
-        data: {
-          id: req.userData.id,
-          email: req.userData.email,
-          created_on: theCar.created_on,
-          manufacturer: theCar.manufacturer,
-          model: theCar.model,
-          price: theCar.price,
-          state: theCar.state,
-          status: theCar.status,
-          message: 'Car marked as sold!',
-          success: 'True',
-          field: 'sold',
-        },
+    pool.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
+      ['sold', carId, req.userData.id], (_err, data) => {
+        if (data.rows[0]) {
+          const theCar = data.rows[0];
+          return res.status(201).send({
+            status: 201,
+            data: {
+              id: carId,
+              owner: req.userData.id,
+              email: req.userData.email,
+              created_on: theCar.created_on,
+              manufacturer: theCar.manufacturer,
+              model: theCar.model,
+              price: parseFloat(theCar.price),
+              state: theCar.state,
+              status: theCar.status,
+              message: 'AD marked as sold!',
+              success: 'true',
+              field: 'sold',
+            },
+          });
+
+        // eslint-disable-next-line no-else-return
+        } else {
+          return res.status(403).send({
+            status: 403,
+            error: 'You are not allowed to mark this Ad as sold!',
+            success: 'false',
+            field: 'status',
+          });
+        }
       });
-      return false;
-    // eslint-disable-next-line no-else-return
-    } else {
-      res.status(403).send({
-        status: 403,
-        error: 'You are not allowed to mark this Ad as sold!',
-        success: 'false',
-        field: 'Price',
-      });
-      return false;
-    }
+    return false;
   }
 }
-
 
 export default Seller;
