@@ -561,7 +561,8 @@ describe('User Seller Activities', () => {
       });
   });
 
-  it('Should NOT let Auth User (Seller) change price of sold or not owned AD', (done) => {
+  it('Should NOT let Auth User (Seller) change price of sold or not owned AD', function (done) {
+    this.timeout(5000);
     api
       .patch('/api/v1/car/5/price')
       .set('authorization', token)
