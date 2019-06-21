@@ -507,7 +507,7 @@ describe('User Seller Activities', () => {
   });
 
   it('should let Auth User (Seller) to post new Advert with CAR IMAGE input', function (done) {
-    this.timeout(15000);
+    this.timeout(20000);
     api
       .post('/api/v1/car')
       .set('authorization', token)
@@ -600,7 +600,8 @@ describe('User Seller Activities', () => {
       });
   });
 
-  it('should let Auth User (Seller) change Ad price sucessfully', (done) => {
+  it('should let Auth User (Seller) change Ad price sucessfully', function (done) {
+    this.timeout(20000);
     api
       .patch(`/api/v1/car/${carId}/price`)
       .set('authorization', token)
@@ -670,7 +671,8 @@ describe('User Seller Activities', () => {
       });
   });
 
-  it('should let Auth User (Seller) Mark AD as sold sucessfully', (done) => {
+  it('should let Auth User (Seller) Mark AD as sold sucessfully', function (done) {
+    this.timeout(20000);
     api
       .patch(`/api/v1/car/${carId}/status`)
       .set('authorization', token)

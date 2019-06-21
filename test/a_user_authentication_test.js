@@ -145,7 +145,8 @@ describe('Users Sign Up Tests', () => {
       });
   });
 
-  it('should let users sign up successfully', (done) => {
+  it('should let users sign up successfully', function (done) {
+    this.timeout(20000);
     api
       .post('/api/v1/signup')
       .send(assumedData.newUsers)
@@ -226,7 +227,8 @@ describe('Users Sign In Tests', () => {
       });
   });
 
-  it('should let users sign in successfully', (done) => {
+  it('should let users sign in successfully', function (done) {
+    this.timeout(20000);
     api
       .post('/api/v1/signin')
       .send(assumedData.newUsers)
