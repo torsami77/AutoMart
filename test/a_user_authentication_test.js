@@ -200,7 +200,8 @@ describe('Users Sign In Tests', () => {
       });
   });
 
-  it('should NOT let users sign in with Unregistered Account', (done) => {
+  it('should NOT let users sign in with Unregistered Account', function(done) {
+    this.timeout(20000);
     api
       .post('/api/v1/signin')
       .send(assumedData.falseUsers)

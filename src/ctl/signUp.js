@@ -100,7 +100,7 @@ const signUp = (req, res) => {
   // const userNameSearch = db.users.find(user => user.username === username);
   pool.query('SELECT email, username FROM users WHERE email = $1 OR username = $2', [email, username],
     (_err, data) => {
-      if (data.rows[0]) {
+      if (typeof (data.rows[0]) !== 'undefined') {
         if (data.rows[0].email === email) {
           return res.status(400).send({
             status: 400,

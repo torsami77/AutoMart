@@ -13,7 +13,12 @@ if (process.env.NODE_ENV === 'development') {
   };
 } else if (process.env.NODE_ENV === 'stage') {
   pgCredentials = {
-    connectionString: process.env.STAGE_CONNECTION_STRING,
+    user: process.env.PG_STAGE_USER,
+    password: process.env.PG_STAGE_PASSWORD,
+    database: process.env.PG_STAGE_DATABASE,
+    host: process.env.PG_STAGE_HOST,
+    port: process.env.PG_STAGE_PORT,
+    ssl: true,
   };
 }
 

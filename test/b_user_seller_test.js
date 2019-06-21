@@ -563,13 +563,15 @@ describe('User Seller Activities', () => {
 
   it('Should NOT let Auth User (Seller) change price of sold or not owned AD', (done) => {
     api
-      .patch('/api/v1/car/200/price')
+      .patch('/api/v1/car/5/price')
       .set('authorization', token)
       .send(assumedData.newPrice)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(403);
-        res.body.should.have.property('error').equal('You cannot change the price of this Ad!');
+        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('price');
+        res.body.should.have.property('error').equal('Ad not found or not owned by you!');
         done();
       });
   });
@@ -645,7 +647,7 @@ describe('User Seller Activities', () => {
 
   it('Should NOT let Auth User (Seller) change status to sold of NOT OWNED AD', (done) => {
     api
-      .patch('/api/v1/car/200/status')
+      .patch('/api/v1/car/1/status')
       .set('authorization', token)
       .end((err, res) => {
         res.body.should.be.a('object');

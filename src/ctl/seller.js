@@ -201,7 +201,6 @@ class Seller {
         const status = 'available';
         price = parseFloat(price);
         mileage = parseFloat(mileage);
-        year = parseFloat(year);
 
         const newCar = {
           owner: req.userData.id,
@@ -284,21 +283,23 @@ class Seller {
 
     pool.query('SELECT status FROM cars WHERE id = $1 AND owner = $2', [carId, req.userData.id],
     // eslint-disable-next-line no-unused-vars
-      (err, _resp) => {
-        if (err) {
+      (err, resp) => {
+        let theCar = resp.rows[0];
+        if (!theCar) {
           return res.status(404).send({
             status: 404,
-            error: 'Ad not found in database!',
+            error: 'Ad not found or not owned by you!',
             success: 'false',
-            field: 'Price',
+            field: 'price',
           });
         // eslint-disable-next-line no-else-return
         } else {
           pool.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3 AND status != $4) RETURNING created_on, manufacturer, model, price, state, status',
             [newPrice, carId, req.userData.id, 'sold'],
             (_err, data) => {
-              if (data.rows[0]) {
-                const theCar = data.rows[0];
+              // eslint-disable-next-line prefer-destructuring
+              theCar = data.rows[0];
+              if (theCar) {
                 return res.status(201).send({
                   status: 201,
                   data: {
@@ -346,8 +347,8 @@ class Seller {
 
     pool.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
       ['sold', carId, req.userData.id], (_err, data) => {
-        if (data.rows[0]) {
-          const theCar = data.rows[0];
+        const theCar = data.rows[0];
+        if (theCar) {
           return res.status(201).send({
             status: 201,
             data: {

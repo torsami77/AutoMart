@@ -351,8 +351,8 @@ class Seller {
                 state: theCar.state,
                 status: theCar.status,
                 message: 'New price Updated!',
-                success: 'True',
-                field: 'Price'
+                success: 'true',
+                field: 'price'
               }
             }); // eslint-disable-next-line no-else-return
           } else {
@@ -400,8 +400,8 @@ class Seller {
             price: parseFloat(theCar.price),
             state: theCar.state,
             status: theCar.status,
-            message: 'Car marked as sold!',
-            success: 'True',
+            message: 'AD marked as sold!',
+            success: 'true',
             field: 'sold'
           }
         }); // eslint-disable-next-line no-else-return
