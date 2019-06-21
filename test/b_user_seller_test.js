@@ -1,4 +1,4 @@
-/*
+/* eslint-disable func-names */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import fs from 'fs';
@@ -506,8 +506,8 @@ describe('User Seller Activities', () => {
       });
   });
 
-  /*
-  it('should let Auth User (Seller) to post new Advert with CAR IMAGE input', (done) => {
+  it('should let Auth User (Seller) to post new Advert with CAR IMAGE input', function (done) {
+    this.timeout(20000);
     api
       .post('/api/v1/car')
       .set('authorization', token)
@@ -518,6 +518,7 @@ describe('User Seller Activities', () => {
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
+      .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
       .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
@@ -546,18 +547,32 @@ describe('User Seller Activities', () => {
         done();
       });
   });
-*\/
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  it('Should NOT let Auth User (Seller) change price of sold or not owned AD', (done) => {
+  it('Should NOT let UnAuth User (Seller) change Ad price', (done) => {
     api
-      .patch('/api/v1/car/1/price')
+      .patch(`/api/v1/car/${carId}/price`)
+      .send(assumedData.newPrice)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('error').equal('Unauthorised User!');
+        done();
+      });
+  });
+
+  it('Should NOT let Auth User (Seller) change price of sold or not owned AD', function (done) {
+    this.timeout(5000);
+    api
+      .patch('/api/v1/car/5/price')
       .set('authorization', token)
       .send(assumedData.newPrice)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(403);
-        res.body.should.have.property('error').equal('You cannot change the price of this Ad!');
+        res.body.should.have.property('status').equal(404);
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('price');
+        res.body.should.have.property('error').equal('Ad not found or not owned by you!');
         done();
       });
   });
@@ -583,11 +598,111 @@ describe('User Seller Activities', () => {
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
-        res.body.should.have.property('error').equal('Invalid Param Request!');
+        res.body.should.have.property('error').equal('Invalid Car ID!');
+        done();
+      });
+  });
+
+  it('should let Auth User (Seller) change Ad price sucessfully', function (done) {
+    this.timeout(20000);
+    api
+      .patch(`/api/v1/car/${carId}/price`)
+      .set('authorization', token)
+      .send(assumedData.newPrice)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(201);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        expect(res)
+          .to.have.nested.property('body.data')
+          .that.includes.all.keys(['id', 'owner', 'email', 'created_on', 'manufacturer', 'model',
+            'price', 'state', 'status', 'message', 'success', 'field']);
+        res.body.data.id.should.be.a('number');
+        res.body.data.owner.should.be.a('number');
+        res.body.data.email.should.be.a('string');
+        res.body.data.created_on.should.be.a('string');
+        res.body.data.manufacturer.should.be.a('string');
+        res.body.data.model.should.be.a('string');
+        res.body.data.price.should.be.a('number');
+        res.body.data.state.should.be.a('string');
+        res.body.data.status.should.be.a('string');
+        res.body.data.should.have.property('message').equal('New price Updated!');
+        res.body.data.should.have.property('success').equal('true');
+        res.body.data.should.have.property('field').equal('price');
+        done();
+      });
+  });
+
+  it('Should NOT let UnAuth User (Seller) Mark Ad as sold', (done) => {
+    api
+      .patch(`/api/v1/car/${carId}/status`)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(401);
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('error').equal('Unauthorised User!');
+        done();
+      });
+  });
+
+  it('Should NOT let Auth User (Seller) change status to sold of NOT OWNED AD', (done) => {
+    api
+      .patch('/api/v1/car/1/status')
+      .set('authorization', token)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(403);
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('status');
+        res.body.should.have.property('error').equal('You are not allowed to mark this Ad as sold!');
+        done();
+      });
+  });
+
+  it('should NOT let Auth User (Seller) Mark Ad as sold with invalid reference', (done) => {
+    api
+      .patch('/api/v1/car/:carId/status')
+      .set('authorization', token)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(400);
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('carId');
+        res.body.should.have.property('error').equal('Invalid Car ID!');
+        done();
+      });
+  });
+
+  it('should let Auth User (Seller) Mark AD as sold sucessfully', function (done) {
+    this.timeout(20000);
+    api
+      .patch(`/api/v1/car/${carId}/status`)
+      .set('authorization', token)
+      .end((err, res) => {
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').equal(201);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        expect(res)
+          .to.have.nested.property('body.data')
+          .that.includes.all.keys(['id', 'owner', 'email', 'created_on', 'manufacturer', 'model',
+            'price', 'state', 'status', 'message', 'success', 'field']);
+        res.body.data.id.should.be.a('number');
+        res.body.data.owner.should.be.a('number');
+        res.body.data.email.should.be.a('string');
+        res.body.data.created_on.should.be.a('string');
+        res.body.data.manufacturer.should.be.a('string');
+        res.body.data.model.should.be.a('string');
+        res.body.data.price.should.be.a('number');
+        res.body.data.state.should.be.a('string');
+        res.body.data.status.should.be.a('string');
+        res.body.data.should.have.property('message').equal('AD marked as sold!');
+        res.body.data.should.have.property('success').equal('true');
+        res.body.data.should.have.property('field').equal('sold');
         done();
       });
   });
 });
 
 export default carId;
-*/

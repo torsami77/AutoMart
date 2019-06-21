@@ -13,7 +13,12 @@ if (process.env.NODE_ENV === 'development') {
   };
 } else if (process.env.NODE_ENV === 'stage') {
   pgCredentials = {
-    connectionString: 'postgres://pnrenggg:Vem3XKFRoaq49sWFs4Uno6tdKPg8WNGV@raja.db.elephantsql.com:5432/pnrenggg',
+    user: process.env.PG_STAGE_USER,
+    password: process.env.PG_STAGE_PASSWORD,
+    database: process.env.PG_STAGE_DATABASE,
+    host: process.env.PG_STAGE_HOST,
+    port: process.env.PG_STAGE_PORT,
+    ssl: true,
   };
 }
 

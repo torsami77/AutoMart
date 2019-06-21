@@ -145,12 +145,12 @@ describe('Users Sign Up Tests', () => {
       });
   });
 
-  it('should let users sign up successfully', (done) => {
+  it('should let users sign up successfully', function (done) {
+    this.timeout(20000);
     api
       .post('/api/v1/signup')
       .send(assumedData.newUsers)
       .end((err, res) => {
-        console.log(err);
         res.should.have.status(201);
         res.body.should.be.a('object');
         res.body.data.should.be.a('object');
@@ -200,7 +200,8 @@ describe('Users Sign In Tests', () => {
       });
   });
 
-  it('should NOT let users sign in with Unregistered Account', (done) => {
+  it('should NOT let users sign in with Unregistered Account', function(done) {
+    this.timeout(20000);
     api
       .post('/api/v1/signin')
       .send(assumedData.falseUsers)
@@ -227,7 +228,8 @@ describe('Users Sign In Tests', () => {
       });
   });
 
-  it('should let users sign in successfully', (done) => {
+  it('should let users sign in successfully', function (done) {
+    this.timeout(20000);
     api
       .post('/api/v1/signin')
       .send(assumedData.newUsers)

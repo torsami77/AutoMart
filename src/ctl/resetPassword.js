@@ -20,7 +20,7 @@ const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 class Password {
   static resetRequest(req, res) {
     if (undefined === req.params.email) {
-      return res.status(401).send({
+      return res.status(400).send({
         status: 400,
         error: 'Please provide a valid email!',
         success: 'false',
@@ -30,7 +30,7 @@ class Password {
     }
 
     if (req.params.email === ' ' || !req.params.email.match(mailformat)) {
-      return res.status(401).send({
+      return res.status(400).send({
         status: 400,
         error: 'Please provide a valid email!',
         success: 'false',
@@ -83,7 +83,7 @@ Your favourite platform to buy and sale Cars
               data: {
                 message: 'password reset link sent to your email',
                 success: 'true',
-                field: 'passordReset',
+                field: 'passwordReset',
                 token,
               },
             }))
