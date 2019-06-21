@@ -43,7 +43,7 @@ describe('REQUEST PASSWORD RESET', () => {
         done();
       });
   });
-
+/*
   it('Should send password reset link sucessfully', function (done) {
     this.timeout(20000);
     api
@@ -58,6 +58,7 @@ describe('REQUEST PASSWORD RESET', () => {
         done();
       });
   });
+  */
 });
 
 describe('CREATE NEW PASSWORD', () => {
