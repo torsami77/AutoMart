@@ -100,7 +100,7 @@ Your favourite platform to buy and sale Cars
           data: {
             message: 'password reset link sent to your email',
             success: 'true',
-            field: 'passordReset',
+            field: 'passwordReset',
             token
           }
         })).catch(() => res.status(500).send({

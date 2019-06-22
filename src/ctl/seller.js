@@ -206,7 +206,7 @@ class Seller {
           owner: req.userData.id,
           created_on: createdOn,
           // eslint-disable-next-line object-property-newline
-          state, status, price, manufacturer, model, bodyType, year, mileage,
+          state: state.toLowerCase(), status: status.toLowerCase(), price: parseFloat(price), manufacturer: manufacturer.toLowerCase(), model: model.toLowerCase(), bodyType: bodyType.toLowerCase(), year, mileage: parseFloat(mileage),
           // eslint-disable-next-line object-property-newline
           transmission, vehicleInspectionNumber, licence, description, imageGallery, orders, flags,
         };

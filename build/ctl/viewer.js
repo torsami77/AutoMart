@@ -13,8 +13,13 @@ var _db = _interopRequireDefault(require("../db/db"));
 
 var _admin = _interopRequireDefault(require("./admin"));
 
+var _pg = _interopRequireDefault(require("../mid/pg"));
+
+var _handyFuncs = _interopRequireDefault(require("../hlp/handyFuncs"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable no-else-return */
 const app = (0, _express.default)();
 app.use(_bodyParser.default.json());
 app.use(_bodyParser.default.urlencoded({
@@ -35,33 +40,37 @@ class Viewer {
         field: 'car'
       });
       return false;
-    }
+    } // const specifiedCar = db.cars.find(car => car.id === parseInt(req.params.carId, 10));
 
-    let data;
 
-    const specifiedCar = _db.default.cars.find(car => car.id === parseInt(req.params.carId, 10));
+    _pg.default.query('SELECT * FROM cars WHERE id = $1', [req.params.carId], (_err, data) => {
+      const specifiedCar = data.rows[0];
 
-    if (!specifiedCar) {
-      res.status(404).send({
-        status: 404,
-        error: 'Ad not found!',
-        success: 'false',
-        field: 'car'
-      });
-      return false; // eslint-disable-next-line no-else-return
-    } else {
-      // eslint-disable-next-line no-lonely-if
-      if (specifiedCar.status === 'available') {
-        res.status(200).send({
-          status: 200,
-          data: specifiedCar,
-          success: 'true',
+      if (!specifiedCar) {
+        return res.status(404).send({
+          status: 404,
+          error: 'Ad not found!',
+          success: 'false',
           field: 'car'
-        });
+        }); // eslint-disable-next-line no-else-return
       } else {
-        _admin.default.viewSpecific(req, res);
+        // eslint-disable-next-line no-lonely-if
+        if (specifiedCar.status === 'available') {
+          return res.status(200).send({
+            status: 200,
+            data: specifiedCar,
+            success: 'true',
+            field: 'car'
+          }); // eslint-disable-next-line no-else-return
+        } else {
+          _admin.default.viewSpecific(req, res);
+        }
       }
-    }
+
+      return false;
+    });
+
+    return false;
   }
 
   static dynamicView(req, res) {
@@ -74,8 +83,7 @@ class Viewer {
       manufacturer,
       model,
       bodyType
-    } = req.query; //let { minPrice } = req.query;
-    // eslint-disable-next-line object-curly-newline
+    } = req.query; // eslint-disable-next-line object-curly-newline
 
     const searchObjects = {
       state,
@@ -92,7 +100,6 @@ class Viewer {
         searchFields.push(item);
       }
     });
-    const arrOfSearch = [];
 
     if (status === 'available') {
       if (undefined === minPrice) {
@@ -100,83 +107,63 @@ class Viewer {
       }
 
       if (maxPrice) {
-        _db.default.cars.map(car => {
-          Object.keys(searchObjects).forEach(keyItem => {
-            if ((keyItem !== 'minPrice' || keyItem !== 'maxPrice') && car.price >= minPrice && car.price <= maxPrice && undefined !== car[keyItem] && car.status === 'available' && car[keyItem] === searchObjects[keyItem] && !arrOfSearch.includes(car)) {
+        /*
+        db.cars.map((car) => {
+          Object.keys(searchObjects).forEach((keyItem) => {
+            if ((keyItem !== 'minPrice' || keyItem !== 'maxPrice') && car.price >= minPrice && car.price <= maxPrice && undefined !== car[keyItem] && car.status === 'available' && car[keyItem] === searchObjects[keyItem] && (!arrOfSearch.includes(car))) {
               arrOfSearch.push(car);
             }
           });
           return false;
         });
+        */
+        const searchString = (0, _handyFuncs.default)(searchObjects);
 
-        if (undefined === arrOfSearch || arrOfSearch.length === 0) {
-          res.status(404).send({
-            status: 404,
-            error: 'Your Search wasn\'t found',
-            success: 'false',
-            field: searchFields
-          });
-          return false;
-        }
-
-        if (undefined !== arrOfSearch && arrOfSearch.length !== 0) {
-          res.status(200).send({
-            status: 200,
-            success: 'true',
-            data: arrOfSearch
-          });
-          return false;
-        }
-      }
-
-      _db.default.cars.map(car => {
-        Object.keys(searchObjects).forEach(keyItem => {
-          if (undefined !== car[keyItem] && car.status === 'available' && car[keyItem] === searchObjects[keyItem] && !arrOfSearch.includes(car)) {
-            arrOfSearch.push(car);
+        _pg.default.query(`SELECT * FROM cars WHERE round(price::numeric, 2) >= $1 AND round(price::numeric, 2) < $2 AND status = $3 ${searchString}`, [minPrice, maxPrice, 'available'], (err, data) => {
+          if (err) {
+            return res.status(404).send({
+              status: 404,
+              error: 'Your Search wasn\'t found',
+              success: 'false',
+              field: searchFields
+            }); // eslint-disable-next-line no-else-return
+          } else {
+            console.log(data.rows[0].price, maxPrice);
+            res.status(200).send({
+              status: 200,
+              success: 'true',
+              data: data.rows
+            });
+            return false;
           }
         });
-        return false;
-      });
+      } else {
+        const searchString = (0, _handyFuncs.default)(searchObjects);
 
-      if (undefined !== arrOfSearch && arrOfSearch.length !== 0) {
-        res.status(200).send({
-          status: 200,
-          success: 'true',
-          data: arrOfSearch
+        _pg.default.query(`SELECT * FROM cars WHERE status = $1 ${searchString}`, ['available'], (err, data) => {
+          if (data.rows[0]) {
+            return res.status(200).send({
+              status: 200,
+              success: 'true',
+              data: data.rows
+            });
+          } else {
+            return res.status(404).send({
+              status: 404,
+              error: 'Your Search wasn\'t found',
+              success: 'false',
+              field: searchFields
+            });
+          }
         });
-        return false;
-      } // if previous search conditions weren't thought, search returns all available Ad
-
-
-      _db.default.cars.map(car => {
-        if (car.status === 'available') {
-          arrOfSearch.push(car);
-        }
-
-        return false;
-      });
-
-      if (undefined === arrOfSearch || arrOfSearch.length === 0) {
-        res.status(404).send({
-          status: 404,
-          error: 'Your Search wasn\'t found',
-          success: 'false',
-          field: searchFields
-        });
-        return false;
       }
+    } else {
+      // If status=available not specified, search falls back to admin's view (sold and available)
+      // admin.viewAll(req, res);
+      _admin.default.viewAll(req, res);
+    }
 
-      res.status(200).send({
-        status: 200,
-        success: 'true',
-        data: arrOfSearch
-      });
-      return false;
-    } // If status=available not specified, search falls back to admin's view all (sold and available)
-    // admin.viewAll(req, res);
-
-
-    _admin.default.viewAll(req, res);
+    return false;
   }
 
 }
