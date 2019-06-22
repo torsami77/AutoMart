@@ -1,8 +1,9 @@
-/*
+/* eslint-disable func-names */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 // eslint-disable-next-line no-unused-vars
 import app from '../src/app';
+import carId from './b_user_seller_test';
 
 chai.use(chaiHttp);
 
@@ -27,7 +28,7 @@ describe('User Viewer Activities', () => {
 
   it('Should respond to viewer on an AD that doesnt exist ', (done) => {
     api
-      .get('/api/v1/car/12/')
+      .get('/api/v1/car/1000000/')
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
@@ -37,10 +38,12 @@ describe('User Viewer Activities', () => {
       });
   });
 
-  it('Should let viewer view a specific AD successfully', (done) => {
+  it('Should let viewer view a SPECIFIC AVAILABLE AD successfully', function (done) {
+    this.timeout(10000);
     api
       .get('/api/v1/car/1/')
       .end((err, res) => {
+        console.log(res.body);
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(200);
         res.body.should.have.property('success').equal('true');
@@ -54,12 +57,12 @@ describe('User Viewer Activities', () => {
         res.body.data.created_on.should.be.a('string');
         res.body.data.state.should.be.a('string');
         res.body.data.status.should.be.a('string');
-        res.body.data.price.should.be.a('number');
+        res.body.data.price.should.be.a('string');
         res.body.data.manufacturer.should.be.a('string');
         res.body.data.model.should.be.a('string');
         res.body.data.bodyType.should.be.a('string');
-        res.body.data.year.should.be.a('number');
-        res.body.data.mileage.should.be.a('number');
+        res.body.data.year.should.be.a('string');
+        res.body.data.mileage.should.be.a('string');
         res.body.data.transmission.should.be.a('string');
         res.body.data.vehicleInspectionNumber.should.be.a('string');
         res.body.data.licence.should.be.a('string');
@@ -91,12 +94,12 @@ describe('User Viewer Activities', () => {
         firstItem.created_on.should.be.a('string');
         firstItem.state.should.be.a('string');
         firstItem.status.should.be.a('string');
-        firstItem.price.should.be.a('number');
+        firstItem.price.should.be.a('string');
         firstItem.manufacturer.should.be.a('string');
         firstItem.model.should.be.a('string');
         firstItem.bodyType.should.be.a('string');
-        firstItem.year.should.be.a('number');
-        firstItem.mileage.should.be.a('number');
+        firstItem.year.should.be.a('string');
+        firstItem.mileage.should.be.a('string');
         firstItem.transmission.should.be.a('string');
         firstItem.vehicleInspectionNumber.should.be.a('string');
         firstItem.licence.should.be.a('string');
@@ -112,20 +115,20 @@ describe('User Viewer Activities', () => {
     const maxPrice = 2000.00;
 
     const leastValue = (base) => {
-      if (minPrice <= base) {
+      if (minPrice <= parseFloat(base)) {
         return true;
       }
       return false;
     };
 
     const mostValue = (base) => {
-      if (maxPrice >= base) {
+      if (maxPrice >= parseFloat(base)) {
         return true;
       }
       return false;
     };
     api
-      .get(`/api/v1/car?status=available&minPrice=${minPrice}$maxPrice=${maxPrice}`)
+      .get(`/api/v1/car?status=available&minPrice=${minPrice}&maxPrice=${maxPrice}`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(200);
@@ -158,7 +161,7 @@ describe('User Viewer Activities', () => {
         firstItem.created_on.should.be.a('string');
         firstItem.should.have.property('state').equal('new');
         firstItem.should.have.property('status').equal('available');
-        firstItem.price.should.be.a('number');
+        firstItem.price.should.be.a('string');
         firstItem.manufacturer.should.be.a('string');
         firstItem.model.should.be.a('string');
         firstItem.bodyType.should.be.a('string');
@@ -186,7 +189,7 @@ describe('User Viewer Activities', () => {
         firstItem.created_on.should.be.a('string');
         firstItem.should.have.property('state').equal('used');
         firstItem.should.have.property('status').equal('available');
-        firstItem.price.should.be.a('number');
+        firstItem.price.should.be.a('string');
         firstItem.manufacturer.should.be.a('string');
         firstItem.model.should.be.a('string');
         firstItem.bodyType.should.be.a('string');
@@ -214,7 +217,7 @@ describe('User Viewer Activities', () => {
         firstItem.created_on.should.be.a('string');
         firstItem.state.should.be.a('string');
         firstItem.should.have.property('status').equal('available');
-        firstItem.price.should.be.a('number');
+        firstItem.price.should.be.a('string');
         firstItem.manufacturer.should.be.a('string');
         firstItem.model.should.be.a('string');
         firstItem.should.have.property('bodyType').equal('salon');
@@ -241,7 +244,7 @@ describe('User Viewer Activities', () => {
         firstItem.created_on.should.be.a('string');
         firstItem.state.should.be.a('string');
         firstItem.should.have.property('status').equal('available');
-        firstItem.price.should.be.a('number');
+        firstItem.price.should.be.a('string');
         firstItem.should.have.property('manufacturer').equal('toyota');
         firstItem.model.should.be.a('string');
         firstItem.bodyType.should.be.a('string');
@@ -275,7 +278,7 @@ describe('User Viewer Activities', () => {
         firstItem.created_on.should.be.a('string');
         firstItem.state.should.be.a('string');
         firstItem.should.have.property('status').equal('available');
-        firstItem.price.should.be.a('number');
+        firstItem.price.should.be.a('string');
         firstItem.should.have.property('manufacturer').equal('toyota');
         firstItem.should.have.property('model').equal('venza');
         firstItem.bodyType.should.be.a('string');
@@ -284,5 +287,3 @@ describe('User Viewer Activities', () => {
       });
   });
 });
-*/
-

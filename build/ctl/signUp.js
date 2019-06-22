@@ -117,7 +117,7 @@ const signUp = (req, res) => {
 
 
   _pg.default.query('SELECT email, username FROM users WHERE email = $1 OR username = $2', [email, username], (_err, data) => {
-    if (data.rows[0]) {
+    if (typeof data.rows[0] !== 'undefined') {
       if (data.rows[0].email === email) {
         return res.status(400).send({
           status: 400,

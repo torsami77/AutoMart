@@ -1,7 +1,10 @@
+/* eslint-disable no-else-return */
 import express from 'express';
 import bodyParser from 'body-parser';
 import db from '../db/db';
 import admin from './admin';
+import pool from '../mid/pg';
+import generateSearchString from '../hlp/handyFuncs';
 
 const app = express();
 
@@ -22,37 +25,42 @@ class Viewer {
       });
       return false;
     }
-    let data;
-    const specifiedCar = db.cars.find(car => car.id === parseInt(req.params.carId, 10));
 
-    if (!specifiedCar) {
-      res.status(404).send({
-        status: 404,
-        error: 'Ad not found!',
-        success: 'false',
-        field: 'car',
+    // const specifiedCar = db.cars.find(car => car.id === parseInt(req.params.carId, 10));
+
+    pool.query('SELECT * FROM cars WHERE id = $1', [req.params.carId],
+      (_err, data) => {
+        const specifiedCar = data.rows[0];
+        if (!specifiedCar) {
+          return res.status(404).send({
+            status: 404,
+            error: 'Ad not found!',
+            success: 'false',
+            field: 'car',
+          });
+        // eslint-disable-next-line no-else-return
+        } else {
+          // eslint-disable-next-line no-lonely-if
+          if (specifiedCar.status === 'available') {
+            return res.status(200).send({
+              status: 200,
+              data: specifiedCar,
+              success: 'true',
+              field: 'car',
+            });
+          // eslint-disable-next-line no-else-return
+          } else {
+            admin.viewSpecific(req, res);
+          }
+        }
+        return false;
       });
-      return false;
-    // eslint-disable-next-line no-else-return
-    } else {
-      // eslint-disable-next-line no-lonely-if
-      if (specifiedCar.status === 'available') {
-        res.status(200).send({
-          status: 200,
-          data: specifiedCar,
-          success: 'true',
-          field: 'car',
-        });
-      } else {
-        admin.viewSpecific(req, res);
-      }
-    }
+    return false;
   }
 
   static dynamicView(req, res) {
     // eslint-disable-next-line object-curly-newline
     let { status, state, minPrice, maxPrice, manufacturer, model, bodyType } = req.query;
-    //let { minPrice } = req.query;
     // eslint-disable-next-line object-curly-newline
     const searchObjects = { state, minPrice, maxPrice, manufacturer, model, bodyType };
     const searchTerm = [state, minPrice, maxPrice, manufacturer, model, bodyType];
@@ -62,13 +70,13 @@ class Viewer {
         searchFields.push(item);
       }
     });
-    const arrOfSearch = [];
 
     if (status === 'available') {
       if (undefined === minPrice) {
         minPrice = 0;
       }
       if (maxPrice) {
+        /*
         db.cars.map((car) => {
           Object.keys(searchObjects).forEach((keyItem) => {
             if ((keyItem !== 'minPrice' || keyItem !== 'maxPrice') && car.price >= minPrice && car.price <= maxPrice && undefined !== car[keyItem] && car.status === 'available' && car[keyItem] === searchObjects[keyItem] && (!arrOfSearch.includes(car))) {
@@ -77,68 +85,53 @@ class Viewer {
           });
           return false;
         });
-        if (undefined === arrOfSearch || arrOfSearch.length === 0) {
-          res.status(404).send({
-            status: 404,
-            error: 'Your Search wasn\'t found',
-            success: 'false',
-            field: searchFields,
+        */
+        const searchString = generateSearchString(searchObjects);
+        pool.query(`SELECT * FROM cars WHERE round(price::numeric, 2) >= $1 AND round(price::numeric, 2) <= $2 AND status = $3 ${searchString}`, [minPrice, maxPrice, 'available'],
+          (err, data) => {
+            if (err) {
+              return res.status(404).send({
+                status: 404,
+                error: 'Your Search wasn\'t found',
+                success: 'false',
+                field: searchFields,
+              });
+            // eslint-disable-next-line no-else-return
+            } else {
+              res.status(200).send({
+                status: 200,
+                success: 'true',
+                data: data.rows,
+              });
+              return false;
+            }
           });
-          return false;
-        }
-
-        if (undefined !== arrOfSearch && arrOfSearch.length !== 0) {
-          res.status(200).send({
-            status: 200,
-            success: 'true',
-            data: arrOfSearch,
+      } else {
+        const searchString = generateSearchString(searchObjects);
+        pool.query(`SELECT * FROM cars WHERE status = $1 ${searchString}`, ['available'],
+          (err, data) => {
+            if (data.rows[0]) {
+              return res.status(200).send({
+                status: 200,
+                success: 'true',
+                data: data.rows,
+              });
+            } else {
+              return res.status(404).send({
+                status: 404,
+                error: 'Your Search wasn\'t found',
+                success: 'false',
+                field: searchFields,
+              });
+            }
           });
-          return false;
-        }
       }
-      db.cars.map((car) => {
-        Object.keys(searchObjects).forEach((keyItem) => {
-          if (undefined !== car[keyItem] && car.status === 'available' && car[keyItem] === searchObjects[keyItem] && (!arrOfSearch.includes(car))) {
-            arrOfSearch.push(car);
-          }
-        });
-        return false;
-      });
-      if (undefined !== arrOfSearch && arrOfSearch.length !== 0) {
-        res.status(200).send({
-          status: 200,
-          success: 'true',
-          data: arrOfSearch,
-        });
-        return false;
-      }
-
-      // if previous search conditions weren't thought, search returns all available Ad
-      db.cars.map((car) => {
-        if (car.status === 'available') {
-          arrOfSearch.push(car);
-        }
-        return false;
-      });
-      if (undefined === arrOfSearch || arrOfSearch.length === 0) {
-        res.status(404).send({
-          status: 404,
-          error: 'Your Search wasn\'t found',
-          success: 'false',
-          field: searchFields,
-        });
-        return false;
-      }
-      res.status(200).send({
-        status: 200,
-        success: 'true',
-        data: arrOfSearch,
-      });
-      return false;
+    } else {
+      // If status=available not specified, search falls back to admin's view (sold and available)
+      // admin.viewAll(req, res);
+      admin.viewAll(req, res);
     }
-    // If status=available not specified, search falls back to admin's view all (sold and available)
-    // admin.viewAll(req, res);
-    admin.viewAll(req, res);
+    return false;
   }
 }
 
