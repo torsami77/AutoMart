@@ -38,11 +38,12 @@ describe('User Viewer Activities', () => {
       });
   });
 
-  it('Should let viewer view a specific AD successfully', function (done) {
+  it('Should let viewer view a SPECIFIC AVAILABLE AD successfully', function (done) {
     this.timeout(10000);
     api
       .get('/api/v1/car/5/')
       .end((err, res) => {
+        console.log(err)
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(200);
         res.body.should.have.property('success').equal('true');
