@@ -41,7 +41,7 @@ describe('User Viewer Activities', () => {
   it('Should let viewer view a SPECIFIC AVAILABLE AD successfully', function (done) {
     this.timeout(10000);
     api
-      .get('/api/v1/car/5/')
+      .get('/api/v1/car/1/')
       .end((err, res) => {
         console.log(res.body);
         res.body.should.be.a('object');
