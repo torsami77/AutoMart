@@ -43,7 +43,7 @@ describe('User Viewer Activities', () => {
     api
       .get('/api/v1/car/5/')
       .end((err, res) => {
-        console.log(err);
+        console.log(res.body);
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(200);
         res.body.should.have.property('success').equal('true');
