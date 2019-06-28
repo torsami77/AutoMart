@@ -9,7 +9,7 @@ var _express = _interopRequireDefault(require("express"));
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 
-var _db = _interopRequireDefault(require("../db/db"));
+var _pg = _interopRequireDefault(require("../mid/pg"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -46,48 +46,49 @@ class Buyer {
     }
 
     const newOrder = {};
-    let price;
+    let price; // db.cars.map((car) => {
 
-    _db.default.cars.map(car => {
-      if (car.id === parseInt(req.body.carId, 10)) {
-        newOrder.id = car.orders.length + 1;
+    _pg.default.query('SELECT price, orders FROM cars WHERE id = $1', [req.body.carId], (_err, data) => {
+      let ordersArray;
+
+      if (data.rows[0]) {
+        ordersArray = data.rows[0].orders;
+        newOrder.id = ordersArray.length + 1;
         newOrder.buyer = req.userData.id;
         newOrder.carId = req.body.carId;
         newOrder.amount = [parseFloat(req.body.amount)];
         newOrder.status = 'pending';
         newOrder.created_on = new Date();
-        price = car.price;
-        car.orders.push(newOrder);
+        price = data.rows[0].price;
+        ordersArray.push(newOrder);
       }
 
-      return false;
-    });
-
-    if (newOrder.hasOwnProperty('id')) {
-      res.status(201).send({
-        status: 201,
-        data: {
-          id: newOrder.id,
-          carId: newOrder.carId,
-          created_on: newOrder.created_on,
-          status: newOrder.status,
-          price,
-          price_offered: newOrder.amount[newOrder.amount.length - 1],
-          success: 'true',
-          message: 'Your Order has been placed successfully!',
-          field: 'order'
+      _pg.default.query('UPDATE cars SET orders = $1 WHERE id = $2', [ordersArray, req.body.carId], (error, resulted) => {
+        if (resulted) {
+          return res.status(201).send({
+            status: 201,
+            data: {
+              id: newOrder.id,
+              carId: newOrder.carId,
+              created_on: newOrder.created_on,
+              status: newOrder.status,
+              price,
+              price_offered: newOrder.amount[newOrder.amount.length - 1],
+              success: 'true',
+              message: 'Your Order has been placed successfully!',
+              field: 'order'
+            }
+          }); // eslint-disable-next-line no-else-return
+        } else {
+          return res.status(404).send({
+            status: 404,
+            error: 'Ad not found, Please provide actual car Id!',
+            success: 'false',
+            field: 'carId'
+          });
         }
       });
-      return false; // eslint-disable-next-line no-else-return
-    } else {
-      res.status(404).send({
-        status: 404,
-        error: 'Ad not found, Please provide actual car Id!',
-        success: 'false',
-        field: 'carId'
-      });
-      return false;
-    }
+    });
   }
 
   static updateOrder(req, res) {
@@ -120,8 +121,7 @@ class Buyer {
 
     let checkOrder;
     let checkAd = 0;
-
-    _db.default.cars.map(car => {
+    db.cars.map(car => {
       if (car.id === parseInt(req.body.carId, 10)) {
         checkAd = 1;
         car.orders.map(order => {
@@ -219,8 +219,7 @@ class Buyer {
     }
 
     const newFlag = {};
-
-    _db.default.cars.map(car => {
+    db.cars.map(car => {
       if (car.id === parseInt(req.body.carId, 10)) {
         newFlag.id = car.flags.length + 1;
         newFlag.car_Id = req.body.carId;

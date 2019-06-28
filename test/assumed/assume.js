@@ -1,4 +1,4 @@
-const carId = 1;
+const carId = 5;
 const randusername = Math.random().toString(36).substring(8);
 
 const assumedData = {
@@ -288,7 +288,7 @@ const assumedData = {
     amount: 200,
   },
   updateOrder: {
-    order: carId,
+    carId,
     amount: 300,
   },
   orderNotFound: {

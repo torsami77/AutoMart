@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -138,7 +139,8 @@ const signUp = (req, res) => {
             is_admin: false,
             created_on: new Date(),
           };
-
+          // eslint-disable-next-line camelcase
+          const { is_admin } = newUser;
           // db.users.push(newUser);
           pool.query(`INSERT INTO users (email, username, first_name, last_name, password, address, is_admin, created_on) 
             VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
@@ -151,6 +153,7 @@ const signUp = (req, res) => {
                 email,
                 hash,
                 id,
+                is_admin,
               }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
               res.cookie('username', username);

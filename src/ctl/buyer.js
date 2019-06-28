@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-restricted-globals */
 import express from 'express';
 import bodyParser from 'body-parser';
-import db from '../db/db';
+import pool from '../mid/pg';
 
 const app = express();
 
@@ -32,45 +34,55 @@ class Buyer {
     }
     const newOrder = {};
     let price;
-    db.cars.map((car) => {
-      if (car.id === parseInt(req.body.carId, 10)) {
-        newOrder.id = car.orders.length + 1;
-        newOrder.buyer = req.userData.id;
-        newOrder.carId = req.body.carId;
-        newOrder.amount = [parseFloat(req.body.amount)];
-        newOrder.status = 'pending';
-        newOrder.created_on = new Date();
-        price = car.price;
-        car.orders.push(newOrder);
-      }
-      return false;
-    });
-    if (newOrder.hasOwnProperty('id')) {
-      res.status(201).send({
-        status: 201,
-        data: {
-          id: newOrder.id,
-          carId: newOrder.carId,
-          created_on: newOrder.created_on,
-          status: newOrder.status,
-          price,
-          price_offered: newOrder.amount[newOrder.amount.length - 1],
-          success: 'true',
-          message: 'Your Order has been placed successfully!',
-          field: 'order',
-        },
+    // db.cars.map((car) => {
+
+    pool.query('SELECT price, orders FROM cars WHERE id = $1', [req.body.carId],
+      (err, data) => {
+        let ordersArray;
+        if (typeof (data.rows[0]) !== 'undefined') {
+          ordersArray = data.rows[0].orders;
+          newOrder.id = ordersArray.length + 1;
+          newOrder.buyer = req.userData.id;
+          newOrder.carId = req.body.carId;
+          newOrder.amount = [parseFloat(req.body.amount)];
+          newOrder.status = 'pending';
+          newOrder.created_on = new Date();
+          // eslint-disable-next-line prefer-destructuring
+          price = data.rows[0].price;
+          ordersArray.push(newOrder);
+
+          pool.query('UPDATE cars SET orders = $1 WHERE id = $2', [ordersArray, req.body.carId],
+            (_error, resulted) => {
+              if (resulted) {
+                return res.status(201).send({
+                  status: 201,
+                  data: {
+                    id: newOrder.id,
+                    carId: newOrder.carId,
+                    created_on: newOrder.created_on,
+                    status: newOrder.status,
+                    price,
+                    price_offered: newOrder.amount[newOrder.amount.length - 1],
+                    success: 'true',
+                    message: 'Your Order has been placed successfully!',
+                    field: 'order',
+                  },
+                });
+              // eslint-disable-next-line no-else-return
+              }
+              return false;
+            });
+        } else {
+          return res.status(404).send({
+            status: 404,
+            error: 'Ad not found, Please provide actual car Id!',
+            success: 'false',
+            field: 'carId',
+          });
+        }
+        return false;
       });
-      return false;
-    // eslint-disable-next-line no-else-return
-    } else {
-      res.status(404).send({
-        status: 404,
-        error: 'Ad not found, Please provide actual car Id!',
-        success: 'false',
-        field: 'carId',
-      });
-      return false;
-    }
+    return false;
   }
 
   static updateOrder(req, res) {
@@ -98,67 +110,77 @@ class Buyer {
         field: 'car',
       });
     }
-    let checkOrder;
-    let checkAd = 0;
-    db.cars.map((car) => {
-      if (car.id === parseInt(req.body.carId, 10)) {
-        checkAd = 1;
-        car.orders.map((order) => {
-          checkAd = 2;
-          if (order.id === parseInt(req.params.orderId, 10) && order.status === 'pending' && order.buyer === req.userData.id) {
-            order.amount.push(parseFloat(req.body.amount));
-            checkOrder = order;
-          // eslint-disable-next-line no-else-return
+
+    pool.query('SELECT price, orders FROM cars WHERE id = $1', [req.body.carId],
+      (_err, data) => {
+        if (data.rows[0]) {
+          const ordersArray = data.rows[0].orders;
+          // eslint-disable-next-line max-len
+          let theOrder;
+          // eslint-disable-next-line camelcase
+          let old_price_offered;
+          // eslint-disable-next-line camelcase
+          let new_price_offered;
+          ordersArray.map((order) => {
+            const checkOrder = JSON.parse(order);
+            if (checkOrder.buyer === req.userData.id && checkOrder.id === parseInt(req.params.orderId, 10)) {
+              theOrder = checkOrder;
+              theOrder.amount.push(parseFloat(req.body.amount));
+              old_price_offered = theOrder.amount[theOrder.amount.length - 1];
+              new_price_offered = theOrder.amount[theOrder.amount.length - 2];
+            }
+            return false;
+          });
+
+          if (theOrder) {
+            if (theOrder.status !== 'pending') {
+              return res.status(403).send({
+                status: 403,
+                error: 'This Order cannot be updated anymore!',
+                success: 'false',
+                field: 'order',
+              });
+            // eslint-disable-next-line no-else-return
+            } else {
+              pool.query('UPDATE cars SET orders = $1 WHERE id = $2', [ordersArray, parseInt(req.body.carId, 10)],
+                // eslint-disable-next-line no-unused-vars
+                (error, _resulted) => {
+                  if (!error) {
+                    return res.status(201).send({
+                      status: 201,
+                      data: {
+                        id: theOrder.id,
+                        carId: theOrder.carId,
+                        status: theOrder.status,
+                        old_price_offered,
+                        new_price_offered,
+                        success: 'true',
+                        message: 'Your Order has been updated successfully!',
+                        field: 'order',
+                      },
+                    });
+                  }
+                  return false;
+                });
+            }
           } else {
-            checkAd = 4;
+            return res.status(404).send({
+              status: 404,
+              error: 'Order not found!',
+              success: 'false',
+              field: 'order',
+            });
           }
-          return false;
-        });
-      }
-      return false;
-    });
-    if (checkAd === 4) {
-      res.status(403).send({
-        status: 403,
-        error: 'This Order cannot be updated anymore!',
-        success: 'false',
-        field: 'order',
+        } else {
+          return res.status(404).send({
+            status: 404,
+            error: 'Ad not found!',
+            success: 'false',
+            field: 'order',
+          });
+        }
+        return false;
       });
-      return false;
-    }
-    if (undefined !== checkOrder) {
-      return res.status(201).send({
-        status: 201,
-        data: {
-          id: checkOrder.id,
-          carId: checkOrder.carId,
-          status: checkOrder.status,
-          old_price_offered: checkOrder.amount[checkOrder.amount.length - 1],
-          new_price_offered: checkOrder.amount[checkOrder.amount.length - 2],
-          success: 'true',
-          message: 'Your Order has been updated successfully!',
-          field: 'order',
-        },
-      });
-    }
-    if (checkAd === 0) {
-      res.status(404).send({
-        status: 404,
-        error: 'Ad not found!',
-        success: 'false',
-        field: 'order',
-      });
-      return false;
-    }
-    if (checkAd === 1) {
-      res.status(404).send({
-        status: 404,
-        error: 'Order not found!',
-        success: 'false',
-        field: 'order',
-      });
-      return false;
-    }
     return false;
   }
 
@@ -188,39 +210,55 @@ class Buyer {
       });
     }
     const newFlag = {};
-    db.cars.map((car) => {
-      if (car.id === parseInt(req.body.carId, 10)) {
-        newFlag.id = car.flags.length + 1;
-        newFlag.car_Id = req.body.carId;
-        newFlag.reason = req.body.reason;
-        newFlag.description = req.body.description;
-        newFlag.created_on = new Date();
-        car.flags.push(newFlag);
-      }
-      return false;
-    });
-    if (newFlag.hasOwnProperty('id')) {
-      return res.status(201).send({
-        status: 201,
-        data: {
-          id: newFlag.id,
-          car_Id: newFlag.car_Id,
-          reason: newFlag.reason,
-          description: newFlag.description,
-          success: 'true',
-          message: 'Red flag raised successfully!',
-          field: 'flag',
-        },
+    pool.query('SELECT flags FROM cars WHERE id = $1', [parseInt(req.body.carId, 10)],
+    // eslint-disable-next-line no-unused-vars
+      (error, resulted) => {
+        if (resulted.rows[0]) {
+          const flagsArray = resulted.rows[0].flags;
+          newFlag.id = flagsArray.length + 1;
+          newFlag.car_Id = req.body.carId;
+          newFlag.reason = req.body.reason;
+          newFlag.description = req.body.description;
+          newFlag.created_on = new Date();
+          flagsArray.push(newFlag);
+
+          pool.query('UPDATE cars SET flags = $1 WHERE id = $2', [flagsArray, parseInt(req.body.carId, 10)],
+          // eslint-disable-next-line no-unused-vars
+            (err, result) => {
+              if (!err) {
+                return res.status(201).send({
+                  status: 201,
+                  data: {
+                    id: newFlag.id,
+                    car_Id: newFlag.car_Id,
+                    reason: newFlag.reason,
+                    description: newFlag.description,
+                    success: 'true',
+                    message: 'Red flag raised successfully!',
+                    field: 'flag',
+                  },
+                });
+              // eslint-disable-next-line no-else-return
+              } else {
+                return res.status(500).send({
+                  status: 500,
+                  error: 'your request was not completed please try again!',
+                  success: 'false',
+                  field: 'flag',
+                });
+              }
+            });
+        } else {
+          return res.status(404).send({
+            status: 404,
+            error: 'Ad not found!',
+            success: 'false',
+            field: 'flag',
+          });
+        }
+        return false;
       });
-    // eslint-disable-next-line no-else-return
-    } else {
-      return res.status(404).send({
-        status: 404,
-        error: 'Ad not found!',
-        success: 'false',
-        field: 'flag',
-      });
-    }
+    return false;
   }
 }
 

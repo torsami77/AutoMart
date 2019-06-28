@@ -1,8 +1,8 @@
+/* eslint-disable max-len */
 /* eslint-disable prefer-const */
 /* eslint-disable no-restricted-globals */
 import express from 'express';
 import bodyParser from 'body-parser';
-import db from '../db/db';
 import cloudUpload from '../mid/cloudinaryAndMulter';
 import pool from '../mid/pg';
 
