@@ -36,7 +36,7 @@ const signIn = (req, res) => {
   }
   // const searchedUser = db.users.find(user => user.email === email);
 
-  pool.query('SELECT id,email,password FROM users WHERE email = $1', [email],
+  pool.query('SELECT id,email,password,is_admin FROM users WHERE email = $1', [email],
     (_err, data) => {
       const searchedUser = data.rows[0];
       if (undefined === searchedUser) {
@@ -55,14 +55,16 @@ const signIn = (req, res) => {
               success: 'false',
             });
           // eslint-disable-next-line no-else-return
-          } 
+          }
           if (isMatched) {
-            const { id } = searchedUser;
+            // eslint-disable-next-line camelcase
+            const { id, is_admin } = searchedUser;
             bcrypt.hash(password, 10, (error, hash) => {
               const token = jwt.sign({
                 email,
                 hash,
                 id,
+                is_admin,
               }, process.env.SECRET_KEY, { expiresIn: '1h' });
               res.cookie('username', searchedUser.username);
               res.cookie('token', token);

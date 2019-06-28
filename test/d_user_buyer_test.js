@@ -1,8 +1,6 @@
-/*
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import fs from 'fs';
-import util from 'util';
 // eslint-disable-next-line no-unused-vars
 import app from '../src/app';
 import assumedData from './assumed/assume';
@@ -62,7 +60,7 @@ describe('User Buyer Activities', () => {
       });
   });
 
-  it('should respond to auth user (buyer) attempting a purchase with NON-EXISTENT refference', (done) => {
+  it('should respond to auth user (buyer) attempting a purchase with NON-EXISTENT reference', (done) => {
     api
       .post('/api/v1/order/')
       .set('authorization', token)
@@ -94,7 +92,7 @@ describe('User Buyer Activities', () => {
         res.body.data.carId.should.be.a('number');
         res.body.data.created_on.should.be.a('string');
         res.body.data.status.should.be.a('string');
-        res.body.data.price.should.be.a('number');
+        res.body.data.price.should.be.a('string');
         res.body.data.price_offered.should.be.a('number');
         orderId = res.body.data.id;
         done();
@@ -175,7 +173,7 @@ describe('User Buyer Activities', () => {
     api
       .patch(`/api/v1/order/${orderId}/price`)
       .set('authorization', token)
-      .send(assumedData.newOrderUpdate)
+      .send(assumedData.updateOrder)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(201);
@@ -267,4 +265,3 @@ describe('User Buyer Activities', () => {
       });
   });
 });
-*/

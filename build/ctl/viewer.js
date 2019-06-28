@@ -119,7 +119,7 @@ class Viewer {
         */
         const searchString = (0, _handyFuncs.default)(searchObjects);
 
-        _pg.default.query(`SELECT * FROM cars WHERE round(price::numeric, 2) >= $1 AND round(price::numeric, 2) < $2 AND status = $3 ${searchString}`, [minPrice, maxPrice, 'available'], (err, data) => {
+        _pg.default.query(`SELECT * FROM cars WHERE round(price::numeric, 2) >= $1 AND round(price::numeric, 2) <= $2 AND status = $3 ${searchString}`, [minPrice, maxPrice, 'available'], (err, data) => {
           if (err) {
             return res.status(404).send({
               status: 404,
@@ -128,7 +128,6 @@ class Viewer {
               field: searchFields
             }); // eslint-disable-next-line no-else-return
           } else {
-            console.log(data.rows[0].price, maxPrice);
             res.status(200).send({
               status: 200,
               success: 'true',
