@@ -9,13 +9,13 @@ var _express = _interopRequireDefault(require("express"));
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 
-var _db = _interopRequireDefault(require("../db/db"));
-
 var _cloudinaryAndMulter = _interopRequireDefault(require("../mid/cloudinaryAndMulter"));
 
 var _pg = _interopRequireDefault(require("../mid/pg"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* eslint-disable max-len */
 
 /* eslint-disable prefer-const */
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable no-else-return */
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -5,6 +6,7 @@ import db from '../db/db';
 import admin from './admin';
 import pool from '../mid/pg';
 import generateSearchString from '../hlp/handyFuncs';
+import verifyToken from '../mid/verifyToken';
 
 const app = express();
 
@@ -75,21 +77,14 @@ class Viewer {
       if (undefined === minPrice) {
         minPrice = 0;
       }
-      if (maxPrice) {
-        /*
-        db.cars.map((car) => {
-          Object.keys(searchObjects).forEach((keyItem) => {
-            if ((keyItem !== 'minPrice' || keyItem !== 'maxPrice') && car.price >= minPrice && car.price <= maxPrice && undefined !== car[keyItem] && car.status === 'available' && car[keyItem] === searchObjects[keyItem] && (!arrOfSearch.includes(car))) {
-              arrOfSearch.push(car);
-            }
-          });
-          return false;
-        });
-        */
+      if (maxPrice || minPrice) {
+        if (undefined === maxPrice) {
+          maxPrice = 1000000000;
+        }
         const searchString = generateSearchString(searchObjects);
         pool.query(`SELECT * FROM cars WHERE round(price::numeric, 2) >= $1 AND round(price::numeric, 2) <= $2 AND status = $3 ${searchString}`, [minPrice, maxPrice, 'available'],
           (err, data) => {
-            if (err) {
+            if (err || data.rows.length < 1) {
               return res.status(404).send({
                 status: 404,
                 error: 'Your Search wasn\'t found',
@@ -110,7 +105,7 @@ class Viewer {
         const searchString = generateSearchString(searchObjects);
         pool.query(`SELECT * FROM cars WHERE status = $1 ${searchString}`, ['available'],
           (err, data) => {
-            if (data.rows[0]) {
+            if (data.rows.length > 0) {
               return res.status(200).send({
                 status: 200,
                 success: 'true',
@@ -129,7 +124,7 @@ class Viewer {
     } else {
       // If status=available not specified, search falls back to admin's view (sold and available)
       // admin.viewAll(req, res);
-      admin.viewAll(req, res);
+      admin.dynamicView(req, res);
     }
     return false;
   }

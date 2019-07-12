@@ -18,6 +18,7 @@ const api = chai.request('http://localhost:5000');
 const data = fs.readFileSync(`${__dirname}/assumed/token.txt`);
 let token = data.toString();
 
+
 describe('REQUEST PASSWORD RESET', () => {
   it('Should respond to user trying to request reset with an NO EMAIL', (done) => {
     api

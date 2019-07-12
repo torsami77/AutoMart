@@ -17,6 +17,7 @@ var _pg = _interopRequireDefault(require("../mid/pg"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable prefer-const */
 const app = (0, _express.default)();
 app.use(_bodyParser.default.json());
 app.use(_bodyParser.default.urlencoded({
@@ -156,7 +157,11 @@ const signUp = (req, res) => {
           address,
           is_admin: false,
           created_on: new Date()
-        }; // db.users.push(newUser);
+        }; // eslint-disable-next-line camelcase
+
+        const {
+          is_admin
+        } = newUser; // db.users.push(newUser);
 
         _pg.default.query(`INSERT INTO users (email, username, first_name, last_name, password, address, is_admin, created_on) 
             VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`, // eslint-disable-next-line max-len
@@ -169,7 +174,8 @@ const signUp = (req, res) => {
             const token = _jsonwebtoken.default.sign({
               email,
               hash,
-              id
+              id,
+              is_admin
             }, process.env.SECRET_KEY, {
               expiresIn: '1h'
             });

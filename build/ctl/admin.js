@@ -11,10 +11,17 @@ var _bodyParser = _interopRequireDefault(require("body-parser"));
 
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
-var _db = _interopRequireDefault(require("../db/db"));
+var _handyFuncs = _interopRequireDefault(require("../hlp/handyFuncs"));
+
+var _pg = _interopRequireDefault(require("../mid/pg"));
+
+var _verifyToken = _interopRequireDefault(require("../mid/verifyToken"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable no-lonely-if */
+
+/* eslint-disable no-else-return */
 const app = (0, _express.default)();
 app.use(_bodyParser.default.json());
 app.use(_bodyParser.default.urlencoded({
@@ -35,6 +42,14 @@ const employJwt = (req, res) => {
 
     req.userData = decoded;
   } catch (error) {
+    return res.status(401).send({
+      status: 401,
+      error: 'Unauthorised User!',
+      success: 'false'
+    });
+  }
+
+  if (req.userData && req.userData.is_admin === false) {
     return res.status(403).send({
       status: 403,
       error: 'You need Admin priviledges to perform this task!',
@@ -48,155 +63,115 @@ const employJwt = (req, res) => {
 class Admin {
   static viewSpecific(req, res) {
     employJwt(req, res);
-    let checkAdmin = 0;
 
-    _db.default.users.map(user => {
-      if (user.id === req.userData.id && user.is_admin === true) {
-        checkAdmin = 1;
+    if (req.userData && req.userData.is_admin) {
+      if (!req.params.carId || isNaN(parseInt(req.params.carId, 10))) {
+        return res.status(400).send({
+          status: 400,
+          error: 'Please provide a valid Ad reference!',
+          success: 'false',
+          field: 'car'
+        });
       }
 
-      return false;
-    });
-
-    const specifiedCar = _db.default.cars.find(car => car.id === parseInt(req.params.carId, 10));
-
-    if (!specifiedCar) {
-      return res.status(404).send({
-        staus: 404,
-        error: 'Ad not found',
-        success: 'false'
+      _pg.default.query('SELECT * FROM cars WHERE id = $1', [parseInt(req.params.carId, 10)], (_err, result) => {
+        if (result.rows[0]) {
+          return res.status(200).send({
+            status: 200,
+            data: result.rows[0],
+            success: 'true'
+          });
+        } else {
+          return res.status(404).send({
+            staus: 404,
+            error: 'Ad not found',
+            success: 'false'
+          });
+        }
       });
-    }
-
-    if (checkAdmin === 1 && specifiedCar) {
-      return res.status(200).send({
-        status: 200,
-        data: specifiedCar,
-        success: 'true'
-      }); // eslint-disable-next-line no-else-return
     }
 
     return false;
   }
 
-  static viewAll(req, res) {
-    employJwt(req, res);
-    let checkAdmin = 0;
+  static dynamicView(req, res) {
+    // eslint-disable-next-line object-curly-newline
+    let {
+      status,
+      state,
+      minPrice,
+      maxPrice,
+      manufacturer,
+      model,
+      bodyType
+    } = req.query; // eslint-disable-next-line object-curly-newline
 
-    _db.default.users.map(user => {
-      if (user.id === req.userData.id && user.is_admin === true) {
-        checkAdmin = 1;
+    const searchObjects = {
+      state,
+      minPrice,
+      maxPrice,
+      manufacturer,
+      model,
+      bodyType
+    };
+    const searchTerm = [state, minPrice, maxPrice, manufacturer, model, bodyType];
+    const searchFields = [];
+    searchTerm.forEach(item => {
+      if (undefined !== item) {
+        searchFields.push(item);
       }
-
-      return false;
     });
+    employJwt(req, res);
 
-    if (checkAdmin === 1) {
-      ///administrator
-      // eslint-disable-next-line object-curly-newline
-      let {
-        status,
-        state,
-        minPrice,
-        maxPrice,
-        manufacturer,
-        model,
-        bodyType
-      } = req.query; //let { minPrice } = req.query;
-      // eslint-disable-next-line object-curly-newline
-
-      const searchObjects = {
-        status,
-        state,
-        minPrice,
-        maxPrice,
-        manufacturer,
-        model,
-        bodyType
-      };
-      const searchTerm = [status, state, minPrice, maxPrice, manufacturer, model, bodyType];
-      const searchFields = [];
-      searchTerm.forEach(item => {
-        if (undefined !== item) {
-          searchFields.push(item);
-        }
-      });
-      const arrOfSearch = [];
-
-      if (undefined === minPrice) {
+    if (req.userData.is_admin) {
+      if (!minPrice) {
         minPrice = 0;
       }
 
-      if (maxPrice) {
-        _db.default.cars.map(car => {
-          Object.keys(searchObjects).forEach(keyItem => {
-            if ((keyItem !== 'minPrice' || keyItem !== 'maxPrice') && car.price >= minPrice && car.price <= maxPrice && undefined !== car[keyItem] && car[keyItem] === searchObjects[keyItem] && !arrOfSearch.includes(car)) {
-              arrOfSearch.push(car);
-            }
-          });
-          return false;
-        });
-
-        if (undefined === arrOfSearch || arrOfSearch.length === 0) {
-          res.status(404).send({
-            status: 404,
-            error: 'Your Search wasn\'t found',
-            success: 'false',
-            field: searchFields
-          });
-          return false;
+      if (maxPrice || minPrice) {
+        if (undefined === maxPrice) {
+          maxPrice = 1000000000;
         }
 
-        if (undefined !== arrOfSearch && arrOfSearch.length !== 0) {
-          res.status(200).send({
-            status: 200,
-            success: 'true',
-            data: arrOfSearch
-          });
-          return false;
-        }
-      }
+        const searchString = (0, _handyFuncs.default)(searchObjects);
 
-      _db.default.cars.map(car => {
-        Object.keys(searchObjects).forEach(keyItem => {
-          if (undefined !== car[keyItem] && car[keyItem] === searchObjects[keyItem] && !arrOfSearch.includes(car)) {
-            arrOfSearch.push(car);
+        _pg.default.query(`SELECT * FROM cars WHERE round(price::numeric, 2) >= $1 AND round(price::numeric, 2) <= $2 ${searchString}`, [parseFloat(minPrice), parseFloat(maxPrice)], (err, data) => {
+          if (err || data.rows.length < 1) {
+            return res.status(404).send({
+              status: 404,
+              error: 'Your Search wasn\'t found',
+              success: 'false',
+              field: searchFields
+            }); // eslint-disable-next-line no-else-return
+          } else {
+            res.status(200).send({
+              status: 200,
+              success: 'true',
+              data: data.rows
+            });
+            return false;
           }
         });
-        return false;
-      });
-
-      if (undefined !== arrOfSearch && arrOfSearch.length !== 0) {
-        res.status(200).send({
-          status: 200,
-          success: 'true',
-          data: arrOfSearch
-        });
-        return false;
-      } // if previous search conditions weren't thought, search returns all available Ad
-
-
-      if (_db.default.cars) {
-        return res.status(200).send({
-          status: 200,
-          data: _db.default.cars,
-          success: 'true'
-        }); // eslint-disable-next-line no-else-return
       } else {
-        res.status(404).send({
-          status: 404,
-          error: 'Your Search wasn\'t found',
-          success: 'false',
-          field: searchFields
-        });
-      } // eslint-disable-next-line no-else-return
+        const searchString = (0, _handyFuncs.default)(searchObjects);
 
-    } else {
-      return res.status(403).send({
-        status: 403,
-        error: 'You need Admin priviledges to view this set of data!',
-        success: 'false'
-      });
+        _pg.default.query(`SELECT * FROM cars WHERE status = $1 OR status = $2 ${searchString}`, ['available', 'sold'], (err, data) => {
+          if (data.rows.length > 0) {
+            return res.status(200).send({
+              status: 200,
+              success: 'true',
+              data: data.rows
+            });
+          } else {
+            return res.status(404).send({
+              status: 404,
+              error: 'Your Search wasn\'t found',
+              success: 'false',
+              field: searchFields
+            });
+          }
+        });
+      }
     }
 
     return false;
@@ -205,40 +180,33 @@ class Admin {
   static deleteCar(req, res) {
     employJwt(req, res);
 
-    if (!req.params.carId || isNaN(parseInt(req.params.carId, 10))) {
-      return res.status(400).send({
-        status: 400,
-        error: 'Please provide a valid Ad reference!',
-        success: 'false',
-        field: 'order'
-      });
-    }
-
-    const isAdmin = _db.default.users.find(user => user.id === req.userData.id && user.is_admin === true);
-
-    if (isAdmin) {
-      const counter = _db.default.cars.findIndex(car => car.id === parseInt(req.params.carId, 10));
-
-      const searchedAd = _db.default.cars.find(car => car.id === parseInt(req.params.carId, 10));
-
-      if (searchedAd) {
-        _db.default.cars.splice(counter, 1);
-
-        return res.status(200).send({
-          status: 200,
-          data: {
-            message: 'Car Ad successfully deleted!',
-            success: 'true'
-          }
-        }); // eslint-disable-next-line no-else-return
-      } else {
-        return res.status(404).send({
-          status: 404,
-          error: 'Ad not found!',
-          success: 'false'
+    if (req.userData.is_admin) {
+      if (!req.params.carId || isNaN(parseInt(req.params.carId, 10))) {
+        return res.status(400).send({
+          status: 400,
+          error: 'Please provide a valid Ad reference!',
+          success: 'false',
+          field: 'order'
         });
-      } // eslint-disable-next-line no-else-return
-
+      } else {
+        _pg.default.query('DELETE FROM cars WHERE id = $1', [parseInt(req.params.carId, 10)], (err, data) => {
+          if (data.rowCount) {
+            return res.status(200).send({
+              status: 200,
+              data: {
+                message: 'Car Ad successfully deleted!',
+                success: 'true'
+              }
+            }); // eslint-disable-next-line no-else-return
+          } else {
+            return res.status(404).send({
+              status: 404,
+              error: 'Ad not found!',
+              success: 'false'
+            });
+          }
+        });
+      }
     }
   }
 

@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 chai.should();
 const { expect } = chai;
 
-/*
+
 const api = chai.request('http://localhost:5000');
 
 const data = fs.readFileSync(`${__dirname}/assumed/token.txt`);
@@ -26,7 +26,7 @@ describe('ADMIN Activities', () => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(403);
         res.body.should.have.property('success').equal('false');
-        res.body.should.have.property('error').equal('You need Admin priviledges to view this set of data!');
+        res.body.should.have.property('error').equal('You need Admin priviledges to perform this task!');
         done();
       });
   });
@@ -82,10 +82,10 @@ describe('ADMIN Activities', () => {
         done();
       });
   });
-
+/*
   it('should let ADMIN to DELETE AD successfuly', (done) => {
     api
-      .delete('/api/v1/car/3/')
+      .delete(`/api/v1/car/${assumedData.newOrder.carId}/`)
       .set('authorization', adminToken)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -95,5 +95,5 @@ describe('ADMIN Activities', () => {
         done();
       });
   });
+  */
 });
-*/

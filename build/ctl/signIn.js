@@ -53,7 +53,7 @@ const signIn = (req, res) => {
   } // const searchedUser = db.users.find(user => user.email === email);
 
 
-  _pg.default.query('SELECT id,email,password FROM users WHERE email = $1', [email], (_err, data) => {
+  _pg.default.query('SELECT id,email,password,is_admin FROM users WHERE email = $1', [email], (_err, data) => {
     const searchedUser = data.rows[0];
 
     if (undefined === searchedUser) {
@@ -64,7 +64,7 @@ const signIn = (req, res) => {
       }); // eslint-disable-next-line no-else-return
     } else {
       _bcryptjs.default.compare(password, searchedUser.password, (err, isMatched) => {
-        if (err) {
+        if (!isMatched) {
           return res.status(401).json({
             status: 401,
             error: 'Invalid Signin Credentials!',
@@ -73,15 +73,18 @@ const signIn = (req, res) => {
         }
 
         if (isMatched) {
+          // eslint-disable-next-line camelcase
           const {
-            id
+            id,
+            is_admin
           } = searchedUser;
 
           _bcryptjs.default.hash(password, 10, (error, hash) => {
             const token = _jsonwebtoken.default.sign({
               email,
               hash,
-              id
+              id,
+              is_admin
             }, process.env.SECRET_KEY, {
               expiresIn: '1h'
             });

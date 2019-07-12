@@ -48,7 +48,7 @@ const signIn = (req, res) => {
       // eslint-disable-next-line no-else-return
       } else {
         bcrypt.compare(password, searchedUser.password, (err, isMatched) => {
-          if (err) {
+          if (!isMatched) {
             return res.status(401).json({
               status: 401,
               error: 'Invalid Signin Credentials!',
