@@ -98,7 +98,8 @@ describe('User Buyer Activities', () => {
         done();
       });
   });
-
+///////////
+/*
   it('should NOT let unauthenticated user (buyer) to UPDATE purchase order', (done) => {
     api
       .patch(`/api/v1/order/${orderId}/price`)
@@ -190,7 +191,7 @@ describe('User Buyer Activities', () => {
         done();
       });
   });
-
+*/
   it('should NOT let auth user (buyer) to attempt FLAG with INVALID refference', (done) => {
     api
       .post('/api/v1/flag')

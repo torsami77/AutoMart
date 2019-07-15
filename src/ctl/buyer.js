@@ -86,7 +86,7 @@ class Buyer {
       });
     return false;
   }
-
+/*
   static updateOrder(req, res) {
     const carId = req.body.car_id;
     if (isNaN(parseInt(req.params.orderId, 10))) {
@@ -184,6 +184,7 @@ class Buyer {
       });
     return false;
   }
+*/
 
   static flag(req, res) {
     const carId = req.body.car_id;
