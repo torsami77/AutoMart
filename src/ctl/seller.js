@@ -257,7 +257,7 @@ class Seller {
               // eslint-disable-next-line prefer-destructuring
               theCar = data.rows[0];
               if (theCar) {
-                return res.status(201).send({
+                return res.status(200).send({
                   status: 200,
                   data: {
                     id: carId,
@@ -306,7 +306,7 @@ class Seller {
       ['sold', carId, req.userData.id], (_err, data) => {
         const theCar = data.rows[0];
         if (theCar) {
-          return res.status(201).send({
+          return res.status(200).send({
             status: 200,
             data: {
               id: carId,
