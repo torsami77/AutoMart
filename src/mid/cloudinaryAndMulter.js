@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
@@ -14,8 +15,8 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 
 const storage = multer.diskStorage({
-  filename: (req, carImage, callback) => {
-    callback(null, new Date().toISOString() + carImage.originalname);
+  filename: (req, image_url, callback) => {
+    callback(null, new Date().toISOString() + image_url.originalname);
   },
 });
 

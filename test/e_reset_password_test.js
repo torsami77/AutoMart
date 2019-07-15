@@ -1,9 +1,12 @@
+/* eslint-disable no-const-assign */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable func-names */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import fs from 'fs';
 // eslint-disable-next-line no-unused-vars
 import app from '../src/app';
-import db from '../src/db/db';
+import assumedData from './assumed/assume';
 
 chai.use(chaiHttp);
 
@@ -13,10 +16,10 @@ const { expect } = chai;
 const api = chai.request('http://localhost:5000');
 
 const data = fs.readFileSync(`${__dirname}/assumed/token.txt`);
-const token = data.toString();
+let token = data.toString();
+
 
 describe('REQUEST PASSWORD RESET', () => {
-
   it('Should respond to user trying to request reset with an NO EMAIL', (done) => {
     api
       .post('/api/v1/users/:email/reset_password')
@@ -24,6 +27,7 @@ describe('REQUEST PASSWORD RESET', () => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('email');
         res.body.should.have.property('error').equal('Please provide a valid email!');
         done();
       });
@@ -31,7 +35,7 @@ describe('REQUEST PASSWORD RESET', () => {
 
   it('Should respond to user trying to request reset with an UNREGISTERED EMAIL', (done) => {
     api
-      .post('/api/v1/users/torsami77@gmail.com/reset_password')
+      .post('/api/v1/users/torsajjsjmi77@gmail.com/reset_password')
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
@@ -41,22 +45,24 @@ describe('REQUEST PASSWORD RESET', () => {
       });
   });
 /*
-  it('Should ', (done) => {
+  it('Should send password reset link sucessfully', function (done) {
+    this.timeout(20000);
     api
-      .post('/api/v1/password/reset/')
-      .send(db.users[0])
+      .post(`/api/v1/users/${assumedData.newUsers.email}/reset_password`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(200);
         res.body.data.should.have.property('success').equal('true');
         res.body.data.token.should.be.a('string');
-        res.body.data.should.have.property('error').equal('password reset link sent to your email');
+        res.body.data.should.have.property('message').equal('password reset link sent to your email');
         token = res.body.data.token;
         done();
       });
   });
-*/
+  */
+ ///////////////////////////////////////////////////////////////////////////////////////////////////
 });
+
 describe('CREATE NEW PASSWORD', () => {
   it('Should respond to unauthorised attempt to CHANGE PASSWORD', (done) => {
     api
@@ -73,7 +79,7 @@ describe('CREATE NEW PASSWORD', () => {
   it('Should respond to user with empty PASSWORD FIELD', (done) => {
     api
       .post('/api/v1/users/createnew_password')
-      .set('authorization', token)
+      .set('token', token)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -86,7 +92,7 @@ describe('CREATE NEW PASSWORD', () => {
   it('Should respond to user with short PASSWORD', (done) => {
     api
       .post('/api/v1/users/createnew_password')
-      .set('authorization', token)
+      .set('token', token)
       .send({ password: 'asdf', verify: 'asdf' })
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -100,7 +106,7 @@ describe('CREATE NEW PASSWORD', () => {
   it('Should respond to user with NOT MATCHING PASSWORD', (done) => {
     api
       .post('/api/v1/users/createnew_password')
-      .set('authorization', token)
+      .set('token', token)
       .send({ password: 'asdfghjkl' })
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -110,11 +116,12 @@ describe('CREATE NEW PASSWORD', () => {
         done();
       });
   });
-  /*
-  it('Should let user CREATE NEW password', (done) => {
+
+  it('Should let user CREATE NEW password', function (done) {
+    this.timeout(20000);
     api
-      .post('/api/v1/password/createnew/')
-      .set('authorization', token)
+      .post('/api/v1/users/createnew_password/')
+      .set('token', token)
       .send({ password: 'asdfghjkl', verify: 'asdfghjkl' })
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -125,5 +132,4 @@ describe('CREATE NEW PASSWORD', () => {
         done();
       });
   });
-  */
 });

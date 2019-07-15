@@ -20,7 +20,7 @@ const { upload } = cloudUpload;
 
 const allowCrossDomain = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
 };
@@ -38,13 +38,13 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve('./ui/index.html'));
 });
 
-app.post('/api/v1/signup', signUp);
-app.post('/api/v1/signin', signIn);
-app.post('/api/v1/car', verifyToken, upload.single('carImage'), seller.postAd);
+app.post('/api/v1/auth/signup', signUp);
+app.post('/api/v1/auth/signin', signIn);
+app.post('/api/v1/car', verifyToken, upload.single('image_url'), seller.postAd);
 app.patch('/api/v1/car/:carId/price', verifyToken, seller.updatePrice);
 app.patch('/api/v1/car/:carId/status', verifyToken, seller.markAsSold);
-app.get('/api/v1/car', viewer.dynamicView);
-app.get('/api/v1/car/:carId/', viewer.specificCar);
+app.get('/api/v1/car', verifyToken, viewer.dynamicView);
+app.get('/api/v1/car/:carId/', verifyToken, viewer.specificCar);
 app.post('/api/v1/flag', verifyToken, buyer.flag);
 app.post('/api/v1/order', verifyToken, buyer.order);
 app.patch('/api/v1/order/:orderId/price', verifyToken, buyer.updateOrder);

@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import fs from 'fs';
@@ -22,6 +23,7 @@ describe('Auto Mart', () => {
         res.body.should.have.status(404);
         res.body.should.have.property('status').eql(404);
         res.body.should.have.property('error').equal('Endpoint not found!');
+        res.body.should.have.property('success').equal(false);
         done();
       });
   });
@@ -30,106 +32,123 @@ describe('Auto Mart', () => {
 describe('Users Sign Up Tests', () => {
   it('should NOT let user sign up without email', (done) => {
     api
-      .post('/api/v1/signup')
+      .post('/api/v1/auth/signup')
       .send(assumedData.noEmailUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Enter a Valid Email');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('email');
         done();
       });
   });
 
   it('should NOT let user sign up without username', (done) => {
     api
-      .post('/api/v1/signup')
+      .post('/api/v1/auth/signup')
       .send(assumedData.noUsernameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Provide a Username');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('username');
         done();
       });
   });
 
   it('should NOT let user sign up without firstname', (done) => {
     api
-      .post('/api/v1/signup')
+      .post('/api/v1/auth/signup')
       .send(assumedData.noFirstNameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Enter your First Name');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('first_name');
         done();
       });
   });
 
   it('should NOT let user sign up without lastname', (done) => {
     api
-      .post('/api/v1/signup')
+      .post('/api/v1/auth/signup')
       .send(assumedData.noLastNameUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Enter your Last Name');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('last_name');
         done();
       });
   });
 
   it('should NOT let user sign up without address', (done) => {
     api
-      .post('/api/v1/signup')
+      .post('/api/v1/auth/signup')
       .send(assumedData.noAddressUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Enter your Address');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('address');
         done();
       });
   });
 
   it('should NOT let user sign up without password', (done) => {
     api
-      .post('/api/v1/signup')
+      .post('/api/v1/auth/signup')
       .send(assumedData.noPasswordUsers)
       .end((err, res) => {
         res.should.have.status(400);
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Provide a Password');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('password');
         done();
       });
   });
 
   it('should NOT let user sign up with a less than 8 character password', (done) => {
     api
-      .post('/api/v1/signup')
+      .post('/api/v1/auth/signup')
       .send(assumedData.lessPass)
       .end((err, res) => {
         res.should.have.status(400);
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Password is Too Short!');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('password');
         done();
       });
   });
 
   it('should not let user sign up with mismatch password', (done) => {
     api
-      .post('/api/v1/signup')
+      .post('/api/v1/auth/signup')
       .send(assumedData.passMismatchUsers)
       .end((err, res) => {
         res.should.have.status(400);
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Verifiable Password Does not Match!');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('verify');
         done();
       });
   });
 
-  it('should let users sign up successfully', (done) => {
+  it('should let users sign up successfully', function (done) {
+    this.timeout(20000);
     api
-      .post('/api/v1/signup')
+      .post('/api/v1/auth/signup')
       .send(assumedData.newUsers)
       .end((err, res) => {
         res.should.have.status(201);
@@ -154,57 +173,65 @@ describe('Users Sign Up Tests', () => {
 describe('Users Sign In Tests', () => {
   it('should NOT let users sign in with no Email', (done) => {
     api
-      .post('/api/v1/signin')
+      .post('/api/v1/auth/signin')
       .send(assumedData.noEmailUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please Enter a Valid Email!');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('email');
         done();
       });
   });
 
   it('should NOT let users sign in with no Password', (done) => {
     api
-      .post('/api/v1/signin')
+      .post('/api/v1/auth/signin')
       .send(assumedData.noPasswordUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
         res.body.should.have.property('error').equal('Please enter your password!');
+        res.body.should.have.property('success').equal('false');
+        res.body.should.have.property('field').equal('password');
         done();
       });
   });
 
-  it('should NOT let users sign in with Unregistered Account', (done) => {
+  it('should NOT let users sign in with Unregistered Account', function (done) {
+    this.timeout(20000);
     api
-      .post('/api/v1/signin')
+      .post('/api/v1/auth/signin')
       .send(assumedData.falseUsers)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Invalid Signin Credentials!');
+        res.body.should.have.property('success').equal('false');
         done();
       });
   });
 
-  it('should NOT let users signin with wrong password', (done) => {
+  it('should NOT let users signin with wrong password', function () {
+    this.timeout(5000);
     api
-      .post('/api/v1/signin')
+      .post('/api/v1/auth/signin')
       .send(assumedData.passMismatchUsers)
-      .end((err, res) => {
+      .end((_err, res) => {
         res.should.have.status(401);
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(401);
         res.body.should.have.property('error').equal('Invalid Signin Credentials!');
-        done();
+        res.body.should.have.property('success').equal('false');
       });
   });
 
-  it('should let users sign in successfully', (done) => {
+  it('should let users sign in successfully', function (done) {
+    this.timeout(20000);
     api
-      .post('/api/v1/signin')
+      .post('/api/v1/auth/signin')
       .send(assumedData.newUsers)
       .end((err, res) => {
         res.should.have.status(202);

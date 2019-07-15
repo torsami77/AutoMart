@@ -31,6 +31,7 @@ ___
 + Front End: HTML, CSS, Vanilla JavaScript,
 + Back End: Node.JS, NPM, Express
 + Libraries: jsonwebtoken, ES6, Babel, eslint, Mocha/Chai
++ Database: PostgreSQL
 ___
 ### INTEGRATION
 - Clone or download this repository.
@@ -41,7 +42,10 @@ ___
 ###### **https://automart77.herokuapp.com/api-docs**
 &nbsp;
 ___
-
+ ### INTERACTIVE UI
+###### **https://torsami77.github.io/AutoMart/**
+&nbsp;
+___
 ### Links to UI templates
 
 https://automart77.herokuapp.com/

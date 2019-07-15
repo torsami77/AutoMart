@@ -1,21 +1,23 @@
-const carId = 1;
+const carId = 5;
+const randusername = Math.random().toString(36).substring(8);
 
 const assumedData = {
   sellerUser: {
     email: 'seller@automart.com',
-    firstName: 'Samson',
-    lastName: 'Samuel',
+    first_name: 'Samson',
+    last_name: 'Samuel',
     username: 'samsam',
     password: 'password101',
     verify: 'password101',
     address: 'Jos',
     is_admin: false,
   },
+
   newUsers: {
-    email: 'torsami@automart.com',
-    firstName: 'Samson',
-    lastName: 'Samuel',
-    username: 'sami77',
+    email: `${randusername}@gmail.com`,
+    first_name: `${randusername}son`,
+    last_name: `${randusername}uel`,
+    username: `${randusername}`,
     password: 'password101',
     verify: 'password101',
     address: 'Jos',
@@ -23,8 +25,8 @@ const assumedData = {
   },
   noAddressUsers: {
     email: 'torsami@automart.com',
-    firstName: 'Samson',
-    lastName: 'Samuel',
+    first_name: 'Samson',
+    last_name: 'Samuel',
     username: 'sami77',
     password: 'password101',
     verify: 'password101',
@@ -32,7 +34,7 @@ const assumedData = {
   },
   noFirstNameUsers: {
     email: 'torsami@automart.com',
-    lastName: 'Samuel',
+    last_name: 'Samuel',
     username: 'sami77',
     password: 'password101',
     verify: 'password101',
@@ -41,7 +43,7 @@ const assumedData = {
   },
   noLastNameUsers: {
     email: 'torsami@automart.com',
-    firstName: 'Samson',
+    first_name: 'Samson',
     username: 'sami77',
     password: 'password101',
     verify: 'password101',
@@ -49,8 +51,8 @@ const assumedData = {
     is_admin: false,
   },
   noEmailUsers: {
-    firstName: 'Samson',
-    lastName: 'Samuel',
+    first_name: 'Samson',
+    last_name: 'Samuel',
     username: 'sami77',
     password: 'password101',
     verify: 'password101',
@@ -59,8 +61,8 @@ const assumedData = {
   },
   noPasswordUsers: {
     email: 'torsami@automart.com',
-    firstName: 'Samson',
-    lastName: 'Samuel',
+    first_name: 'Samson',
+    last_name: 'Samuel',
     username: 'sami77',
     verify: 'password101',
     address: 'Jos',
@@ -68,8 +70,8 @@ const assumedData = {
   },
   passMismatchUsers: {
     email: 'torsami@automart.com',
-    firstName: 'Samson',
-    lastName: 'Samuel',
+    first_name: 'Samson',
+    last_name: 'Samuel',
     username: 'sami77',
     password: 'password101x',
     verify: 'password101',
@@ -78,8 +80,8 @@ const assumedData = {
   },
   lessPass: {
     email: 'torsami@automart.com',
-    firstName: 'Samson',
-    lastName: 'Samuel',
+    first_name: 'Samson',
+    last_name: 'Samuel',
     username: 'sami77',
     password: 'pass',
     verify: 'pass',
@@ -88,8 +90,8 @@ const assumedData = {
   },
   noUsernameUsers: {
     email: 'torsami@automart.com',
-    firstName: 'Samson',
-    lastName: 'Samuel',
+    first_name: 'Samson',
+    last_name: 'Samuel',
     password: 'password101',
     verify: 'password101',
     address: 'Jos',
@@ -97,8 +99,8 @@ const assumedData = {
   },
   falseUsers: {
     email: 'shembell@automart.com',
-    firstName: 'Shembell',
-    lastName: 'Samuel',
+    first_name: 'Shembell',
+    last_name: 'Samuel',
     username: 'Piero',
     password: 'password101',
     verify: 'password101',
@@ -107,22 +109,22 @@ const assumedData = {
   },
 
   newAdvert: {
-    manufacturer: 'Toyota',
-    model: 'Venza',
-    bodyType: 'Saloon',
-    year: 1999,
+    manufacturer: 'Honda',
+    model: 'accord',
+    bodyType: 'Salon',
+    year: 2013,
     mileage: 2000,
-    state: 'new',
+    state: 'used',
     location: 'jos',
     transmission: 'auto',
     vehicleInspectionNumber: '123jkl',
     licence: 'PLA-BSA-123',
     description: 'Well well well story story story',
-    price: 12000,
+    price: 1700,
   },
   noManufacturerAdvert: {
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: 2019,
     mileage: 2000,
     state: 'new',
@@ -135,7 +137,7 @@ const assumedData = {
   },
   noModelAdvert: {
     manufacturer: 'Toyota',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: 2019,
     mileage: 2000,
     state: 'new',
@@ -162,7 +164,7 @@ const assumedData = {
   noYearAdvert: {
     manufacturer: 'Toyota',
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     mileage: 2000,
     state: 'new',
     location: 'jos',
@@ -175,7 +177,7 @@ const assumedData = {
   noMileageAdvert: {
     manufacturer: 'Toyota',
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: 2019,
     state: 'new',
     location: 'jos',
@@ -188,7 +190,7 @@ const assumedData = {
   noStateAdvert: {
     manufacturer: 'Toyota',
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: '2019',
     mileage: 2000,
     location: 'jos',
@@ -201,7 +203,7 @@ const assumedData = {
   noLocationAdvert: {
     manufacturer: 'Toyota',
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: '2019',
     mileage: 2000,
     transmission: 'auto',
@@ -213,7 +215,7 @@ const assumedData = {
   noTransmisionAdvert: {
     manufacturer: 'Toyota',
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: 2019,
     mileage: 2000,
     state: 'new',
@@ -226,7 +228,7 @@ const assumedData = {
   noVINAdvert: {
     manufacturer: 'Toyota',
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: 2019,
     mileage: 2000,
     state: 'new',
@@ -239,7 +241,7 @@ const assumedData = {
   noLicenceAdvert: {
     manufacturer: 'Toyota',
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: 2019,
     mileage: 2000,
     state: 'new',
@@ -252,7 +254,7 @@ const assumedData = {
   noDescriptionAdvert: {
     manufacturer: 'Toyota',
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: 2019,
     mileage: 2000,
     state: 'new',
@@ -265,7 +267,7 @@ const assumedData = {
   noPriceAdvert: {
     manufacturer: 'Toyota',
     model: 'Venza',
-    bodytype: 'Saloon',
+    bodyType: 'Saloon',
     year: 2019,
     mileage: 2000,
     state: 'new',
@@ -282,52 +284,51 @@ const assumedData = {
     price: 'price',
   },
   newOrder: {
-    carId,
+    car_id: carId,
     amount: 200,
   },
   updateOrder: {
-    order: carId,
-    amount: 300,
+    car_id: carId,
+    price: 300,
   },
   orderNotFound: {
-    carId: 0,
+    car_id: 0,
     amount: 200,
   },
   invalidOrderReff: {
-    carId: ',jkk',
+    car_id: ',jkk',
     amount: 200,
   },
   invalidOrderAmount: {
-    carId,
+    car_id: carId,
     amount: 'jkjk',
   },
   newOrderUpdate: {
-    carId,
+    car_id: carId,
     amount: 200,
   },
   updateOrderUpdate: {
-    carId,
+    car_id: carId,
     amount: 300,
   },
   orderNotFoundUpdate: {
-    carId: 0,
+    car_id: 0,
     amount: 200,
   },
   invalidOrderReffUpdate: {
-    carId: ',jkk',
+    car_id: ',jkk',
     amount: 200,
   },
   AdFoundorderNotFound: {
-    carId: 0,
-    amount: 200,
-
+    car_id: 0,
+    price: 200,
   },
   invalidOrderAmountUpdate: {
-    carId,
+    car_id: carId,
     amount: 'jkjk',
   },
   newFlag: {
-    carId,
+    car_id: carId,
     reason: 'Price too low',
     description: 'Seller might be trying to defraud',
   },
@@ -336,15 +337,15 @@ const assumedData = {
     description: 'Seller might be trying to defraud',
   },
   flagNoReason: {
-    carId,
+    car_id: carId,
     description: 'Seller might be trying to defraud',
   },
   flagNoDescription: {
-    carId,
+    car_id: carId,
     reason: 'Price too low',
   },
   newFlagNotFound: {
-    carId: 0,
+    car_id: 0,
     reason: 'Price too low',
     description: 'Seller might be trying to defraud',
   },

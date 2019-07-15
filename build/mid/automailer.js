@@ -3,13 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.default = void 0;
 
 var _nodemailer = _interopRequireDefault(require("nodemailer"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var transporter = _nodemailer["default"].createTransport({
+const transporter = _nodemailer.default.createTransport({
   service: 'gmail',
   auth: {
     user: 'automailer77@gmail.com',
@@ -19,4 +19,4 @@ var transporter = _nodemailer["default"].createTransport({
 
 
 var _default = transporter;
-exports["default"] = _default;
+exports.default = _default;

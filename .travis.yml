@@ -6,7 +6,8 @@ node_js:
   - node
 
 env:
-- SECRET_KEY=abcd1234
+ global:
+    - export NODE_ENV=stage
 
 cache:
   directories:

@@ -1,7 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import fs from 'fs';
-import util from 'util';
 // eslint-disable-next-line no-unused-vars
 import app from '../src/app';
 import assumedData from './assumed/assume';
@@ -36,7 +35,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt a purchase order with invalid order id', (done) => {
     api
       .post('/api/v1/order/')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.invalidOrderReff)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -50,7 +49,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt a purchase order with invalid price value', (done) => {
     api
       .post('/api/v1/order/')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.invalidOrderAmount)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -61,10 +60,10 @@ describe('User Buyer Activities', () => {
       });
   });
 
-  it('should respond to auth user (buyer) attempting a purchase with NON-EXISTENT refference', (done) => {
+  it('should respond to auth user (buyer) attempting a purchase with NON-EXISTENT reference', (done) => {
     api
       .post('/api/v1/order/')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.orderNotFound)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -78,7 +77,7 @@ describe('User Buyer Activities', () => {
   it('should let authenticated user (buyer) to make a purchase order', (done) => {
     api
       .post('/api/v1/order/')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.newOrder)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -87,13 +86,13 @@ describe('User Buyer Activities', () => {
         res.body.data.should.have.property('success').equal('true');
         expect(res)
           .to.have.nested.property('body.data')
-          .that.includes.all.keys(['id', 'carId', 'created_on',
+          .that.includes.all.keys(['id', 'car_id', 'created_on',
             'status', 'price', 'price_offered']);
         res.body.data.id.should.be.a('number');
-        res.body.data.carId.should.be.a('number');
+        res.body.data.car_id.should.be.a('number');
         res.body.data.created_on.should.be.a('string');
         res.body.data.status.should.be.a('string');
-        res.body.data.price.should.be.a('number');
+        res.body.data.price.should.be.a('string');
         res.body.data.price_offered.should.be.a('number');
         orderId = res.body.data.id;
         done();
@@ -116,7 +115,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt a purchase UPDATE with invalid order id', (done) => {
     api
       .patch('/api/v1/order/kkkk/price')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.invalidOrderReffUpdate)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -130,7 +129,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt a purchase UPDATE with invalid price value', (done) => {
     api
       .patch(`/api/v1/order/${orderId}/price`)
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.invalidOrderAmountUpdate)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -145,7 +144,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt a UPDATE purchase with NOT Found Ad', (done) => {
     api
       .patch(`/api/v1/order/${orderId}/price`)
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.AdFoundorderNotFound)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -159,7 +158,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt a UPDATE purchase with NOT Found order', (done) => {
     api
       .patch(`/api/v1/order/${orderId}/price`)
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.AdFoundorderNotFound)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -173,18 +172,18 @@ describe('User Buyer Activities', () => {
   it('should let authenticated user (buyer) to UPDATE the price of their purchase order', (done) => {
     api
       .patch(`/api/v1/order/${orderId}/price`)
-      .set('authorization', token)
-      .send(assumedData.newOrderUpdate)
+      .set('token', token)
+      .send(assumedData.updateOrder)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(201);
         res.body.data.should.have.property('message').equal('Your Order has been updated successfully!');
         expect(res)
           .to.have.nested.property('body.data')
-          .that.includes.all.keys(['id', 'carId', 'status', 'old_price_offered',
+          .that.includes.all.keys(['id', 'car_id', 'status', 'old_price_offered',
             'new_price_offered']);
         res.body.data.id.should.be.a('number');
-        res.body.data.carId.should.be.a('number');
+        res.body.data.car_id.should.be.a('number');
         res.body.data.status.should.be.a('string');
         res.body.data.old_price_offered.should.be.a('number');
         res.body.data.new_price_offered.should.be.a('number');
@@ -195,7 +194,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt FLAG with INVALID refference', (done) => {
     api
       .post('/api/v1/flag')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.flagNoRef)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -209,7 +208,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt FLAG withOUT REASON', (done) => {
     api
       .post('/api/v1/flag')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.flagNoReason)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -223,7 +222,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt FLAG withOUT DESCRIPTION', (done) => {
     api
       .post('/api/v1/flag')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.flagNoDescription)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -237,7 +236,7 @@ describe('User Buyer Activities', () => {
   it('should NOT let auth user (buyer) to attempt FLAG with NOT Found refference', (done) => {
     api
       .post('/api/v1/flag')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.newFlagNotFound)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -251,7 +250,7 @@ describe('User Buyer Activities', () => {
   it('should let auth user (buyer) to FLAG an AD successfully', (done) => {
     api
       .post('/api/v1/flag')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.newFlag)
       .end((err, res) => {
         res.body.should.be.a('object');
