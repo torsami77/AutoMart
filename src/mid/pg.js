@@ -20,6 +20,11 @@ if (process.env.NODE_ENV === 'development') {
     port: process.env.PG_STAGE_PORT,
     ssl: true,
   };
+} else if (process.env.NODE_ENV === 'heroku') {
+  pgCredentials = {
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
+  };
 }
 
 const pool = new pg.Pool(pgCredentials);
