@@ -15,7 +15,6 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 
 const signUp = (req, res) => {
-  console.log('sign_payload:', req.body);
   let {
     username, first_name, last_name, address,
   } = req.body;
@@ -28,13 +27,8 @@ const signUp = (req, res) => {
   } = req.body;
   const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-  if (undefined === username || username === '') {
-    return res.status(400).send({
-      status: 400,
-      error: 'Please Provide a Username',
-      success: 'false',
-      field: 'username',
-    });
+  if (!username) {
+    username = 'No username';
   }
 
   if (undefined === email || !email.match(mailformat)) {

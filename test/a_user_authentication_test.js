@@ -43,7 +43,7 @@ describe('Users Sign Up Tests', () => {
         done();
       });
   });
-
+/*
   it('should NOT let user sign up without username', (done) => {
     api
       .post('/api/v1/auth/signup')
@@ -57,8 +57,8 @@ describe('Users Sign Up Tests', () => {
         done();
       });
   });
-
-  it('should NOT let user sign up without firstname', (done) => {
+*/
+  it('should NOT let user sign up without first_name', (done) => {
     api
       .post('/api/v1/auth/signup')
       .send(assumedData.noFirstNameUsers)
@@ -72,7 +72,7 @@ describe('Users Sign Up Tests', () => {
       });
   });
 
-  it('should NOT let user sign up without lastname', (done) => {
+  it('should NOT let user sign up without last_name', (done) => {
     api
       .post('/api/v1/auth/signup')
       .send(assumedData.noLastNameUsers)
