@@ -68,8 +68,8 @@ app.patch('/api/v1/car/:carId/status', _verifyToken.default, _seller.default.mar
 app.get('/api/v1/car', _verifyToken.default, _viewer.default.dynamicView);
 app.get('/api/v1/car/:carId/', _verifyToken.default, _viewer.default.specificCar);
 app.post('/api/v1/flag', _verifyToken.default, _buyer.default.flag);
-app.post('/api/v1/order', _verifyToken.default, _buyer.default.order);
-app.patch('/api/v1/order/:orderId/price', _verifyToken.default, _buyer.default.updateOrder);
+app.post('/api/v1/order', _verifyToken.default, _buyer.default.order); // app.patch('/api/v1/order/:orderId/price', verifyToken, buyer.updateOrder);
+
 app.delete('/api/v1/car/:carId/', _verifyToken.default, _admin.default.deleteCar);
 app.post('/api/v1/users/:email/reset_password', _resetPassword.default.resetRequest);
 app.post('/api/v1/users/createnew_password', _verifyToken.default, _resetPassword.default.createNewPassword);

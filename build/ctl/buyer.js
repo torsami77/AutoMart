@@ -102,109 +102,106 @@ class Buyer {
 
     return false;
   }
-
-  static updateOrder(req, res) {
-    const carId = req.body.car_id;
-
-    if (isNaN(parseInt(req.params.orderId, 10))) {
-      return res.status(400).send({
-        status: 400,
-        error: 'Please provide a valid order reference!',
-        success: 'false',
-        field: 'order'
-      });
-    }
-
-    if (isNaN(parseFloat(req.body.price))) {
-      return res.status(400).send({
-        status: 400,
-        error: 'Please provide a valid price value!',
-        success: 'false',
-        field: 'amount'
-      });
-    }
-
-    if (isNaN(parseInt(carId, 10))) {
-      return res.status(400).send({
-        status: 400,
-        error: 'Please provide a valid AD reference!',
-        suceess: 'false',
-        field: 'car_id'
-      });
-    }
-
-    _pg.default.query('SELECT price, orders FROM cars WHERE id = $1', [carId], (_err, data) => {
-      if (data.rows[0]) {
-        const ordersArray = data.rows[0].orders; // eslint-disable-next-line max-len
-
-        let theOrder;
-        let old_price_offered;
-        let new_price_offered;
-        ordersArray.map(order => {
-          const checkOrder = JSON.parse(order);
-
-          if (checkOrder.buyer === req.userData.id && checkOrder.id === parseInt(req.params.orderId, 10)) {
-            theOrder = checkOrder;
-            theOrder.amount.push(parseFloat(req.body.price));
-            old_price_offered = theOrder.amount[theOrder.amount.length - 1];
-            new_price_offered = theOrder.amount[theOrder.amount.length - 2];
-          }
-
-          return false;
-        });
-
-        if (theOrder) {
-          if (theOrder.status !== 'pending') {
-            return res.status(403).send({
-              status: 403,
-              error: 'This Order cannot be updated anymore!',
-              success: 'false',
-              field: 'order'
-            }); // eslint-disable-next-line no-else-return
-          } else {
-            _pg.default.query('UPDATE cars SET orders = $1 WHERE id = $2', [ordersArray, parseInt(carId, 10)], // eslint-disable-next-line no-unused-vars
-            (error, _resulted) => {
-              if (!error) {
-                return res.status(201).send({
-                  status: 201,
-                  data: {
-                    id: theOrder.id,
-                    car_id: theOrder.car_id,
-                    status: theOrder.status,
-                    old_price_offered,
-                    new_price_offered,
-                    success: 'true',
-                    message: 'Your Order has been updated successfully!',
-                    field: 'order'
-                  }
-                });
-              }
-
-              return false;
-            });
-          }
-        } else {
-          return res.status(404).send({
-            status: 404,
-            error: 'Order not found!',
-            success: 'false',
-            field: 'order'
-          });
-        }
-      } else {
-        return res.status(404).send({
-          status: 404,
-          error: 'Ad not found!',
+  /*
+    static updateOrder(req, res) {
+      const carId = req.body.car_id;
+      if (isNaN(parseInt(req.params.orderId, 10))) {
+        return res.status(400).send({
+          status: 400,
+          error: 'Please provide a valid order reference!',
           success: 'false',
-          field: 'order'
+          field: 'order',
         });
       }
-
+      if (isNaN(parseFloat(req.body.price))) {
+        return res.status(400).send({
+          status: 400,
+          error: 'Please provide a valid price value!',
+          success: 'false',
+          field: 'amount',
+        });
+      }
+      if (isNaN(parseInt(carId, 10))) {
+        return res.status(400).send({
+          status: 400,
+          error: 'Please provide a valid AD reference!',
+          suceess: 'false',
+          field: 'car_id',
+        });
+      }
+  
+      pool.query('SELECT price, orders FROM cars WHERE id = $1', [carId],
+        (_err, data) => {
+          if (data.rows[0]) {
+            const ordersArray = data.rows[0].orders;
+            // eslint-disable-next-line max-len
+            let theOrder;
+            let old_price_offered;
+            let new_price_offered;
+            ordersArray.map((order) => {
+              const checkOrder = JSON.parse(order);
+              if (checkOrder.buyer === req.userData.id && checkOrder.id === parseInt(req.params.orderId, 10)) {
+                theOrder = checkOrder;
+                theOrder.amount.push(parseFloat(req.body.price));
+                old_price_offered = theOrder.amount[theOrder.amount.length - 1];
+                new_price_offered = theOrder.amount[theOrder.amount.length - 2];
+              }
+              return false;
+            });
+  
+            if (theOrder) {
+              if (theOrder.status !== 'pending') {
+                return res.status(403).send({
+                  status: 403,
+                  error: 'This Order cannot be updated anymore!',
+                  success: 'false',
+                  field: 'order',
+                });
+              // eslint-disable-next-line no-else-return
+              } else {
+                pool.query('UPDATE cars SET orders = $1 WHERE id = $2', [ordersArray, parseInt(carId, 10)],
+                  // eslint-disable-next-line no-unused-vars
+                  (error, _resulted) => {
+                    if (!error) {
+                      return res.status(201).send({
+                        status: 201,
+                        data: {
+                          id: theOrder.id,
+                          car_id: theOrder.car_id,
+                          status: theOrder.status,
+                          old_price_offered,
+                          new_price_offered,
+                          success: 'true',
+                          message: 'Your Order has been updated successfully!',
+                          field: 'order',
+                        },
+                      });
+                    }
+                    return false;
+                  });
+              }
+            } else {
+              return res.status(404).send({
+                status: 404,
+                error: 'Order not found!',
+                success: 'false',
+                field: 'order',
+              });
+            }
+          } else {
+            return res.status(404).send({
+              status: 404,
+              error: 'Ad not found!',
+              success: 'false',
+              field: 'order',
+            });
+          }
+          return false;
+        });
       return false;
-    });
+    }
+  */
 
-    return false;
-  }
 
   static flag(req, res) {
     const carId = req.body.car_id;
