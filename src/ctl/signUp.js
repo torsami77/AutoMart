@@ -120,6 +120,7 @@ const signUp = (req, res) => {
       // eslint-disable-next-line no-else-return
       } else {
         bcrypt.hash(password, 10, (error, hash) => {
+          /*
           if (error) {
             return res.status(500).send({
               status: 500,
@@ -127,6 +128,7 @@ const signUp = (req, res) => {
               field: 'password',
             });
           }
+          */
           const newUser = {
             email,
             username,
@@ -145,6 +147,7 @@ const signUp = (req, res) => {
           // eslint-disable-next-line max-len
           [newUser.email, newUser.username, newUser.first_name, newUser.last_name, newUser.password, newUser.address, newUser.is_admin, newUser.created_on],
           (err, resp) => {
+            console.log('err and resp', err, resp);
             if (resp) {
               const { id } = resp.rows[0];
               const token = jwt.sign({
@@ -169,12 +172,14 @@ const signUp = (req, res) => {
                 },
               });
             }
+            /*
             if (err) {
               return res.status(500).send({
                 status: 500,
                 error: 'Internal Server Error, Please consult your Admin',
               });
             }
+            */
             return false;
           });
           return false;
