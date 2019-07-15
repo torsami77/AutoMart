@@ -38,14 +38,7 @@ const signIn = (req, res) => {
 
   pool.query('SELECT id,email,password,is_admin FROM users WHERE email = $1', [email],
     (_err, data) => {
-      if (!data.rows[0]) {
-        return res.status(401).json({
-          status: 401,
-          error: 'Invalid Signin Credentials!',
-          success: 'false',
-        });
-      // eslint-disable-next-line no-else-return
-      } else {
+      if (data && data.rows[0]) {
         const searchedUser = data.rows[0];
         bcrypt.compare(password, searchedUser.password, (err, isMatched) => {
           if (!isMatched) {
@@ -80,6 +73,13 @@ const signIn = (req, res) => {
           }
           return false;
         });
+      } else {
+        return res.status(401).json({
+          status: 401,
+          error: 'Invalid Signin Credentials!',
+          success: 'false',
+        });
+      // eslint-disable-next-line no-else-return
       }
       return false;
     });
