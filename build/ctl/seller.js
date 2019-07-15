@@ -15,6 +15,8 @@ var _pg = _interopRequireDefault(require("../mid/pg"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable camelcase */
+
 /* eslint-disable max-len */
 
 /* eslint-disable prefer-const */
@@ -39,17 +41,19 @@ class Seller {
       // eslint-disable-next-line max-len
       manufacturer,
       model,
-      bodyType,
+      body_type,
       year,
       mileage,
       state,
       location,
       transmission,
-      vehicleInspectionNumber,
+      vehicle_inspection_number,
       licence,
       description,
       price
     } = req.body;
+    const bodyType = body_type;
+    let vehicleInspectionNumber = vehicle_inspection_number;
 
     if (!manufacturer || manufacturer === ' ') {
       res.status(400).send({
@@ -76,49 +80,37 @@ class Seller {
         status: 400,
         error: 'body type field cannot be empty!',
         success: 'false',
-        field: 'bodyType'
+        field: 'body_type'
       });
       return false;
     }
 
-    if (!year) {
-      res.status(400).send({
-        status: 400,
-        error: 'year field cannot be empty!',
-        success: 'false',
-        field: 'year'
-      });
-      return false;
+    if (year) {
+      if (isNaN(parseInt(year, 10))) {
+        res.status(422).send({
+          status: 422,
+          error: 'invalid year input!',
+          success: 'false',
+          field: 'year'
+        });
+        return false;
+      }
+    } else {
+      year = 0;
     }
 
-    if (isNaN(parseInt(year, 10))) {
-      res.status(422).send({
-        status: 422,
-        error: 'invalid year input!',
-        success: 'false',
-        field: 'year'
-      });
-      return false;
-    }
-
-    if (!mileage) {
-      res.status(400).send({
-        status: 400,
-        error: 'mileage field cannot be empty!',
-        success: 'false',
-        field: 'mileage'
-      });
-      return false;
-    }
-
-    if (isNaN(parseFloat(mileage))) {
-      res.status(422).send({
-        status: 422,
-        error: 'invalid mileage input!',
-        success: 'false',
-        field: 'mileage'
-      });
-      return false;
+    if (mileage) {
+      if (isNaN(parseFloat(mileage))) {
+        res.status(422).send({
+          status: 422,
+          error: 'invalid mileage input!',
+          success: 'false',
+          field: 'mileage'
+        });
+        return false;
+      }
+    } else {
+      mileage = 0;
     }
 
     if (!state || state === ' ') {
@@ -132,53 +124,23 @@ class Seller {
     }
 
     if (!location || location === ' ') {
-      res.status(400).send({
-        status: 400,
-        error: 'location field cannot be empty!',
-        success: 'false',
-        field: 'location'
-      });
-      return false;
+      location = 'Not provided';
     }
 
     if (!transmission || transmission === ' ') {
-      res.status(400).send({
-        status: 400,
-        error: 'transmission field cannot be empty!',
-        success: 'false',
-        field: 'transmission'
-      });
-      return false;
+      transmission = 'Not provided';
     }
 
     if (!vehicleInspectionNumber || vehicleInspectionNumber === ' ') {
-      res.status(400).send({
-        status: 400,
-        error: 'vehicle inspection number field cannot be empty!',
-        success: 'false',
-        field: 'vehicleInspectionNumber'
-      });
-      return false;
+      vehicleInspectionNumber = 'Not provided';
     }
 
     if (!licence || licence === ' ') {
-      res.status(400).send({
-        status: 400,
-        error: 'licence field cannot be empty!',
-        success: 'false',
-        field: 'licence'
-      });
-      return false;
+      licence = 'Not provided';
     }
 
     if (!description || description === ' ') {
-      res.status(400).send({
-        status: 400,
-        error: 'description field cannot be empty!',
-        success: 'false',
-        field: 'description'
-      });
-      return false;
+      description = 'Not provided';
     }
 
     if (!price) {
@@ -201,102 +163,97 @@ class Seller {
       return false;
     }
 
-    if (!req.file) {
-      res.status(400).send({
-        status: 400,
-        error: 'Upload at least one image!',
-        success: 'false',
-        field: 'carImage'
-      });
-      return false;
-    }
+    const imageGallery = [];
 
-    if (!req.file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
-      res.status(422).send({
-        status: 422,
-        error: 'Please provide a valid image file!',
-        success: 'false',
-        field: 'carImage'
-      });
-      return false;
-    }
-
-    const imageGallery = []; // eslint-disable-next-line no-unused-vars
-
-    cloudinary.uploader.upload(req.file.path, result => {
-      if (result.secure_url) {
-        imageGallery.push(result.secure_url);
-        const orders = [];
-        const flags = [];
-        const createdOn = new Date();
-        const status = 'available';
-        price = parseFloat(price);
-        mileage = parseFloat(mileage);
-        const newCar = {
-          owner: req.userData.id,
-          created_on: createdOn,
-          // eslint-disable-next-line object-property-newline
-          state: state.toLowerCase(),
-          status: status.toLowerCase(),
-          price: parseFloat(price),
-          manufacturer: manufacturer.toLowerCase(),
-          model: model.toLowerCase(),
-          bodyType: bodyType.toLowerCase(),
-          year,
-          mileage: parseFloat(mileage),
-          // eslint-disable-next-line object-property-newline
-          transmission,
-          vehicleInspectionNumber,
-          licence,
-          description,
-          imageGallery,
-          orders,
-          flags
-        }; // db.cars.push(newCar);
-
-        _pg.default.query(`INSERT INTO cars (owner, created_on, manufacturer, model, "bodyType", price, state, status,
-        year, mileage, transmission, "vehicleInspectionNumber", licence, description, "imageGallery", orders, flags) 
-            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING id`, // eslint-disable-next-line max-len
-        [req.userData.id, newCar.created_on, newCar.manufacturer, newCar.model, newCar.bodyType, newCar.price, newCar.state, newCar.status, // eslint-disable-next-line max-len
-        newCar.year, newCar.mileage, newCar.transmission, newCar.vehicleInspectionNumber, newCar.licence, newCar.description, newCar.imageGallery, newCar.orders, newCar.flags], (_err, data) => {
-          if (data.rows[0]) {
-            const {
-              id
-            } = data.rows[0];
-            return res.status(201).send({
-              status: 201,
-              data: {
-                id,
-                email: req.userData.email,
-                created_on: createdOn,
-                manufacturer,
-                model,
-                price,
-                state,
-                status,
-                imageGallery,
-                message: 'Your Ad has been added successfully!',
-                success: 'true'
-              }
-            }); // eslint-disable-next-line no-else-return
-          } else {
-            return res.status(500).send({
-              status: 500,
-              error: 'Internal server error, please contact your admin'
-            });
-          }
+    if (req.file) {
+      if (!req.file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        res.status(422).send({
+          status: 422,
+          error: 'Please provide a valid image file!',
+          success: 'false',
+          field: 'image_url'
         });
+        return false;
+      } // eslint-disable-next-line no-unused-vars
+
+
+      cloudinary.uploader.upload(req.file.path, result => {
+        if (result.secure_url) {
+          imageGallery.push(result.secure_url);
+        } else {
+          return res.status(500).send({
+            status: 500,
+            error: 'No response from Cloudinary!, Please try again ',
+            success: 'false',
+            field: 'Cloudinary'
+          });
+        }
+      });
+    } else {
+      imageGallery.push('https://res.cloudinary.com/torsami77/image/upload/v1563101827/no-photo-car_vw8vgi.jpg');
+    }
+
+    const orders = [];
+    const flags = [];
+    const createdOn = new Date();
+    const status = 'available';
+    price = parseFloat(price);
+    mileage = parseFloat(mileage);
+    const newCar = {
+      owner: req.userData.id,
+      created_on: createdOn,
+      // eslint-disable-next-line object-property-newline
+      state: state.toLowerCase(),
+      status: status.toLowerCase(),
+      price: parseFloat(price),
+      manufacturer: manufacturer.toLowerCase(),
+      model: model.toLowerCase(),
+      bodyType: bodyType.toLowerCase(),
+      year,
+      mileage: parseFloat(mileage),
+      // eslint-disable-next-line object-property-newline
+      transmission,
+      vehicleInspectionNumber,
+      licence,
+      description,
+      imageGallery,
+      orders,
+      flags
+    }; // db.cars.push(newCar);
+
+    _pg.default.query(`INSERT INTO cars (owner, created_on, manufacturer, model, "body_type", price, state, status,
+    year, mileage, transmission, "vehicle_inspection_number", licence, description, "image_gallery", orders, flags) 
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING id`, // eslint-disable-next-line max-len
+    [req.userData.id, newCar.created_on, newCar.manufacturer, newCar.model, newCar.bodyType, newCar.price, newCar.state, newCar.status, // eslint-disable-next-line max-len
+    newCar.year, newCar.mileage, newCar.transmission, newCar.vehicleInspectionNumber, newCar.licence, newCar.description, newCar.imageGallery, newCar.orders, newCar.flags], (_err, data) => {
+      if (data.rows[0]) {
+        const {
+          id
+        } = data.rows[0];
+        return res.status(201).send({
+          status: 201,
+          data: {
+            id,
+            email: req.userData.email,
+            created_on: createdOn,
+            manufacturer,
+            model,
+            price,
+            state,
+            status,
+            image_gallery: imageGallery,
+            message: 'Your Ad has been added successfully!',
+            success: 'true'
+          }
+        }); // eslint-disable-next-line no-else-return
       } else {
         return res.status(500).send({
           status: 500,
-          error: 'No response from Cloudinary!, Please try again ',
-          success: 'false',
-          field: 'Cloudinary'
+          error: 'Internal server error, please contact your admin'
         });
       }
-
-      return false;
     });
+
     return false;
   }
 
@@ -316,7 +273,7 @@ class Seller {
         status: 400,
         error: 'Invalid Car ID!',
         success: 'false',
-        field: 'Price'
+        field: 'car_id'
       });
       return false;
     }

@@ -21,6 +21,10 @@ var _verifyToken = _interopRequireDefault(require("../mid/verifyToken"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable prefer-const */
+
+/* eslint-disable camelcase */
+
 /* eslint-disable no-lonely-if */
 
 /* eslint-disable no-else-return */
@@ -82,12 +86,15 @@ class Viewer {
     let {
       status,
       state,
-      minPrice,
-      maxPrice,
+      min_price,
+      max_price,
       manufacturer,
       model,
-      bodyType
-    } = req.query; // eslint-disable-next-line object-curly-newline
+      body_type
+    } = req.query;
+    let minPrice = min_price;
+    let maxPrice = max_price;
+    let bodyType = body_type; // eslint-disable-next-line object-curly-newline
 
     const searchObjects = {
       state,
@@ -112,7 +119,7 @@ class Viewer {
 
       if (maxPrice || minPrice) {
         if (undefined === maxPrice) {
-          maxPrice = 1000000000;
+          maxPrice = 100000000;
         }
 
         const searchString = (0, _handyFuncs.default)(searchObjects);

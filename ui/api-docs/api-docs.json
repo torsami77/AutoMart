@@ -46,7 +46,7 @@
        "https"
     ],
     "paths":{  
-       "/api/v1/signup":{  
+       "/api/v1/auth/signup":{  
           "post":{  
              "tags":[  
                 "Authentication"
@@ -63,7 +63,6 @@
              "parameters":[  
                 {  
                    "in":"body",
-                   "name":"body",
                    "description":"New user data that needs to be collected",
                    "required":true,
                    "schema":{  
@@ -81,7 +80,7 @@
              }
           }
          },
-      "/api/v1/signin":{
+      "/api/v1/auth/signin":{
             "post":{  
                "tags":[  
                   "Authentication"
@@ -98,7 +97,6 @@
                "parameters":[  
                   {  
                      "in":"body",
-                     "name":"body",
                      "description":"Validates user sign in credentials",
                      "required":true,
                      "schema":{  
@@ -176,7 +174,7 @@
                "parameters":[ 
                   {  
                      "in":"headers",
-                     "name":"authorization",
+                     "name":"token",
                      "type": "string",
                      "description":"emailed token",
                      "required":true
@@ -239,16 +237,22 @@
             ],
             "parameters":[  
                {  
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
+               },
+               {  
                   "in":"body",
-                  "name":"multipart/form-data",
-                  "description":"New Vehicle AD detail",
+                  "description":"New Vehicle AD details",
                   "required":true,
                   "schema":{  
                      "$ref":"#/definitions/postAd"
                   }
                },
                {  
-                  "name":"carImage",
+                  "name":"image_url",
                   "in":"formData",
                   "description":"image file to upload",
                   "required":false,
@@ -290,15 +294,13 @@
             "produces":[  
                "application/json"
             ],
-            "parameters":[  
+            "parameters":[
                {  
-                  "in":"body",
-                  "name":"body",
-                  "description":"new price update",
-                  "required":true,
-                  "schema":{  
-                     "$ref":"#/definitions/updatePrice"
-                  }
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
                },
                {  
                   "name":"carId",
@@ -307,6 +309,15 @@
                   "required":true,
                   "type":"integer",
                   "format":"int64"
+               },
+               {  
+                  "in":"body",
+                  "name":"price",
+                  "description":"new price update",
+                  "required":true,
+                  "schema":{  
+                     "$ref":"#/definitions/updatePrice"
+                  }
                }
             ],
             "responses":{ 
@@ -348,6 +359,13 @@
                "application/json"
             ],
             "parameters":[  
+               {  
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
+               },
                {  
                   "name":"carId",
                   "in":"path",
@@ -392,23 +410,29 @@
             "produces":[  
                "application/json"
             ],
-            "parameters":[  
+            "parameters":[ 
+               {  
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
+               }, 
                {  
                   "name":"status",
                   "in":"query",
-                  "description":"'available' most be the value of this variable, Only Users with Admin priviledges are allowed to view sold ADs",
-                  "required":true,
+                  "description":"(available or sold) 'available' most be the value of this variable, Only Users with Admin priviledges are allowed to view 'sold' ADs",
                   "type":"string"
                },
                {  
-                  "name":"minPrice",
+                  "name":"min_price",
                   "in":"query",
                   "description":"If this is not indicated, the default value is 0",
                   "type":"string",
                   "format":"int64"
                },
                {  
-                  "name":"maxPrice",
+                  "name":"max_price",
                   "in":"query",
                   "description":"This parameter narrows HIGHEST PRICE range of viewer preference",
                   "type":"string",
@@ -421,7 +445,7 @@
                   "type":"string"
                },
                {  
-                  "name":"bodyType",
+                  "name":"body_type",
                   "in":"query",
                   "description":"This parameter narrows ADs by BODY TYPE of viewer preference",
                   "type":"string"
@@ -472,6 +496,13 @@
                 "application/json"
              ],
              "parameters":[  
+               {  
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
+               },
                 {  
                    "name":"carId",
                    "in":"path",
@@ -513,10 +544,17 @@
             "produces":[  
                "application/json"
             ],
-            "parameters":[  
+            "parameters":[
+               {  
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
+               },
                {  
                   "in":"body",
-                  "name":"body",
+                  "name":"amount",
                   "description":"Bidding Amount",
                   "required":true,
                   "schema":{  
@@ -562,15 +600,13 @@
             "produces":[  
                "application/json"
             ],
-            "parameters":[  
+            "parameters":[
                {  
-                  "in":"body",
-                  "name":"body",
-                  "description":"new amount update, and AD id",
-                  "required":true,
-                  "schema":{  
-                     "$ref":"#/definitions/order"
-                  }
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
                },
                {  
                   "name":"orderId",
@@ -579,6 +615,21 @@
                   "required":true,
                   "type":"integer",
                   "format":"int64"
+               },
+               {  
+                  "in":"body",
+                  "name":"car_id",
+                  "description":"ID of AD that owns the order",
+                  "required":true
+               },
+               {  
+                  "in":"body",
+                  "name":"price",
+                  "description":"new amount update, and AD id",
+                  "required":true,
+                  "schema":{  
+                     "$ref":"#/definitions/updatePriceOrder"
+                  }
                }
             ],
             "responses":{ 
@@ -623,9 +674,15 @@
             "produces":[  
                "application/json"
             ],
-            "parameters":[  
+            "parameters":[
                {  
-                  "name":"body",
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
+               },
+               { 
                   "in":"body",
                   "description":"Reference, Reason and Description of Red Flag",
                   "required":true,
@@ -669,8 +726,14 @@
             "produces":[  
                "application/json"
             ],
-            "parameters":[  
-               
+            "parameters":[
+               {  
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
+               }               
             ],
             "responses":{  
                "200":{  
@@ -706,7 +769,14 @@
             "produces":[  
                "application/json"
             ],
-            "parameters":[  
+            "parameters":[
+               {  
+                  "in":"headers",
+                  "name":"token",
+                  "type": "string",
+                  "description":"JWT Token",
+                  "required":true
+               },
                {  
                   "name":"carId",
                   "in":"path",
@@ -755,10 +825,10 @@
              "username":{  
                 "type":"string"
              },
-             "firstName":{  
+             "first_name":{  
                 "type":"string"
              },
-             "lastName":{  
+             "last_name":{  
                 "type":"string"
              },
              "password":{  
@@ -812,7 +882,7 @@
             "model":{  
                "type":"string"
             },
-            "bodyType":{  
+            "body_type":{  
                "type":"string"
             },
             "year":{  
@@ -827,7 +897,7 @@
             "transmission":{  
                "type":"string"
             },
-            "vehicleInspectionNumber":{  
+            "vehicle_inspection_number":{  
                "type":"string"
             },
             "licence":{  
@@ -839,7 +909,7 @@
             "price":{  
                "type":"integer"
             },
-            "carImage":{  
+            "image_url":{  
                "type":"file"
             }
          },
@@ -849,9 +919,26 @@
       },
       "updatePrice":{  
          "type":"object",
-         "properties":{  
+         "properties":{
            "price":{  
-              "type":"integer"
+              "type":"integer",
+              "example": "3000"
+           }
+         },
+           "xml":{
+               "name":"updatePrice"
+           }
+      },
+      "updatePriceOrder":{  
+         "type":"object",
+         "properties":{
+            "car_id":{  
+               "type":"integer",
+               "example": "3000"
+            }, 
+           "price":{  
+              "type":"integer",
+              "example": "3000"
            }
          },
            "xml":{
@@ -864,14 +951,14 @@
          "properties":{  
            "amount":{  
               "type":"integer",
-              "example": "30,500"
+              "example": "3000"
            }
          }
       },
       "flag":{  
          "type":"object",
          "properties":{  
-            "carId":{  
+            "car_id":{  
                "type":"integer",
                "example": "2"
             },
@@ -924,11 +1011,11 @@
                "type":"integer",
                "example":"2019"
             },
-            "bodyType":{  
+            "body_type":{  
                "type":"string",
                "example":"salon"
             },
-	   "location":{  
+	         "location":{  
                "type":"string",
                "example":"Jos"
             },
@@ -940,7 +1027,7 @@
                "type":"integer",
                "example":"500.06"
             },
-            "vehicleInspectionNumber":{  
+            "vehicle_inspection_number":{  
                "type":"string",
                "example":"ASDFG12345"
             },
@@ -956,7 +1043,7 @@
                "type":"integer",
                "example":"3,500"
             },
-            "imageGallerry":{  
+            "image_gallerry":{  
                "type":"array",
                "example":"['https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg', 'https://res.cloudinary.com/torsami77/image/upload/v1560036448/wdh0nscln5q0mviep0jw.jpg']"
             },

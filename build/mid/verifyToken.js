@@ -30,11 +30,11 @@ app.use(_bodyParser.default.json({
 
 const verifyToken = (req, res, next) => {
   const {
-    authorization
+    token
   } = req.headers;
 
   try {
-    const decoded = _jsonwebtoken.default.verify(authorization, process.env.SECRET_KEY);
+    const decoded = _jsonwebtoken.default.verify(token, process.env.SECRET_KEY);
 
     req.userData = decoded;
     next();

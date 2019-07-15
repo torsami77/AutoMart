@@ -21,7 +21,7 @@ describe('ADMIN Activities', () => {
   it('should NOT let NON-ADMIN user to view sold AD', (done) => {
     api
       .get('/api/v1/car/')
-      .set('authorization', token)
+      .set('token', token)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(403);
@@ -34,7 +34,7 @@ describe('ADMIN Activities', () => {
   let adminToken;
   it('AUTHENTICATE ADMIN', (done) => {
     api
-      .post('/api/v1/signin')
+      .post('/api/v1/auth/signin')
       .send(assumedData.admin)
       .end((err, res) => {
         res.body.data.should.have.property('token');
@@ -47,7 +47,7 @@ describe('ADMIN Activities', () => {
   it('should let ADMIN user to view all AD including sold AD', (done) => {
     api
       .get('/api/v1/car/')
-      .set('authorization', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(200);
@@ -60,7 +60,7 @@ describe('ADMIN Activities', () => {
   it('should respond to ADMIN"s attempt to DELETE AD without reference', (done) => {
     api
       .delete('/api/v1/car/:carId/')
-      .set('authorization', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -73,7 +73,7 @@ describe('ADMIN Activities', () => {
   it('should respond to ADMIN"s attempt to DELETE non-exitent AD', (done) => {
     api
       .delete('/api/v1/car/0/')
-      .set('authorization', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
@@ -86,7 +86,7 @@ describe('ADMIN Activities', () => {
   it('should let ADMIN to DELETE AD successfuly', (done) => {
     api
       .delete(`/api/v1/car/${assumedData.newOrder.carId}/`)
-      .set('authorization', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(200);

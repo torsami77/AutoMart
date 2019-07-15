@@ -37,21 +37,21 @@ describe('User Seller Activities', () => {
   it('Should NOT let invalid Token user to post new Advert/affect posted Advert', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', 'invalidtoken')
+      .set('token', 'invalidtoken')
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
       .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('body_type', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
       .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(401);
@@ -64,20 +64,20 @@ describe('User Seller Activities', () => {
   it('Should NOT let Authenticated User (Seller) to post new Advert without MANUFACTURER input', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('body_type', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
       .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -90,20 +90,20 @@ describe('User Seller Activities', () => {
   it('Should NOT let Auth User (Seller) to post new Advert without MODEL input', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
-      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('body_type', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
       .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -116,7 +116,7 @@ describe('User Seller Activities', () => {
   it('Should NOT let Auth User (Seller) to post new Advert without BODY TYPE input', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
       .field('model', assumedData.newAdvert.model)
@@ -125,11 +125,11 @@ describe('User Seller Activities', () => {
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
       .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -139,50 +139,25 @@ describe('User Seller Activities', () => {
       });
   });
 
-  it('Should NOT let Auth User (Seller) to post new Advert without YEAR input', (done) => {
-    api
-      .post('/api/v1/car')
-      .set('authorization', token)
-      .set('Accept', 'application.json')
-      .field('manufacturer', assumedData.newAdvert.manufacturer)
-      .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.year)
-      .field('mileage', assumedData.newAdvert.mileage)
-      .field('state', assumedData.newAdvert.state)
-      .field('location', assumedData.newAdvert.location)
-      .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
-      .field('licence', assumedData.newAdvert.licence)
-      .field('description', assumedData.newAdvert.description)
-      .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
-      .end((err, res) => {
-        res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(400);
-        res.body.should.have.property('error').equal('year field cannot be empty!');
-        res.body.should.have.property('success').equal('false');
-        done();
-      });
-  });
 
   it('Should NOT let Auth User (Seller) to post new Advert with INVALID YEAR input', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
       .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.year)
+      .field('body_type', assumedData.newAdvert.year)
       .field('year', 'year')
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
       .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(422);
@@ -195,20 +170,20 @@ describe('User Seller Activities', () => {
   it('Should NOT let Auth User (Seller) to post new Advert without STATE input', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
       .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('body_type', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
       .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -218,154 +193,24 @@ describe('User Seller Activities', () => {
       });
   });
 
-  it('Should NOT let Auth User (Seller) to post new Advert without LOCATION input', (done) => {
-    api
-      .post('/api/v1/car')
-      .set('authorization', token)
-      .set('Accept', 'application.json')
-      .field('manufacturer', assumedData.newAdvert.manufacturer)
-      .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
-      .field('year', assumedData.newAdvert.year)
-      .field('mileage', assumedData.newAdvert.mileage)
-      .field('state', assumedData.newAdvert.state)
-      .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
-      .field('licence', assumedData.newAdvert.licence)
-      .field('description', assumedData.newAdvert.description)
-      .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
-      .end((err, res) => {
-        res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(400);
-        res.body.should.have.property('error').equal('location field cannot be empty!');
-        res.body.should.have.property('success').equal('false');
-        done();
-      });
-  });
-
-  it('Should NOT let Auth User (Seller) to post new Advert without TRANSMISSION input', (done) => {
-    api
-      .post('/api/v1/car')
-      .set('authorization', token)
-      .set('Accept', 'application.json')
-      .field('manufacturer', assumedData.newAdvert.manufacturer)
-      .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
-      .field('year', assumedData.newAdvert.year)
-      .field('mileage', assumedData.newAdvert.mileage)
-      .field('state', assumedData.newAdvert.state)
-      .field('location', assumedData.newAdvert.location)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
-      .field('licence', assumedData.newAdvert.licence)
-      .field('description', assumedData.newAdvert.description)
-      .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
-      .end((err, res) => {
-        res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(400);
-        res.body.should.have.property('error').equal('transmission field cannot be empty!');
-        res.body.should.have.property('success').equal('false');
-        done();
-      });
-  });
-
-  it('Should NOT let Auth User (Seller) to post new Advert without Veh-Ins-Num input', (done) => {
-    api
-      .post('/api/v1/car')
-      .set('authorization', token)
-      .set('Accept', 'application.json')
-      .field('manufacturer', assumedData.newAdvert.manufacturer)
-      .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
-      .field('year', assumedData.newAdvert.year)
-      .field('mileage', assumedData.newAdvert.mileage)
-      .field('state', assumedData.newAdvert.state)
-      .field('location', assumedData.newAdvert.location)
-      .field('transmission', assumedData.newAdvert.transmission)
-      .field('licence', assumedData.newAdvert.licence)
-      .field('description', assumedData.newAdvert.description)
-      .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
-      .end((err, res) => {
-        res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(400);
-        res.body.should.have.property('error').equal('vehicle inspection number field cannot be empty!');
-        res.body.should.have.property('success').equal('false');
-        done();
-      });
-  });
-
-  it('Should NOT let Auth User (Seller) to post new Advert without LICENCE input', (done) => {
-    api
-      .post('/api/v1/car')
-      .set('authorization', token)
-      .set('Accept', 'application.json')
-      .field('manufacturer', assumedData.newAdvert.manufacturer)
-      .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
-      .field('year', assumedData.newAdvert.year)
-      .field('mileage', assumedData.newAdvert.mileage)
-      .field('state', assumedData.newAdvert.state)
-      .field('location', assumedData.newAdvert.location)
-      .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
-      .field('description', assumedData.newAdvert.description)
-      .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
-      .end((err, res) => {
-        res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(400);
-        res.body.should.have.property('error').equal('licence field cannot be empty!');
-        res.body.should.have.property('success').equal('false');
-        done();
-      });
-  });
-
-  it('Should NOT let Auth User (Seller) to post new Advert without MILEAGE input', (done) => {
-    api
-      .post('/api/v1/car')
-      .set('authorization', token)
-      .set('Accept', 'application.json')
-      .field('manufacturer', assumedData.newAdvert.manufacturer)
-      .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
-      .field('year', assumedData.newAdvert.year)
-      .field('state', assumedData.newAdvert.state)
-      .field('location', assumedData.newAdvert.location)
-      .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
-      .field('licence', assumedData.newAdvert.licence)
-      .field('description', assumedData.newAdvert.description)
-      .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
-      .end((err, res) => {
-        res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(400);
-        res.body.should.have.property('error').equal('mileage field cannot be empty!');
-        res.body.should.have.property('success').equal('false');
-        done();
-      });
-  });
-
   it('Should NOT let Auth User (Seller) to post new Advert with INVALID MILEAGE input', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
       .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('body_type', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', 'mileage')
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
       .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(422);
@@ -375,49 +220,23 @@ describe('User Seller Activities', () => {
       });
   });
 
-  it('Should NOT let Auth User (Seller) to post new Advert without DESCRIPTION input', (done) => {
-    api
-      .post('/api/v1/car')
-      .set('authorization', token)
-      .set('Accept', 'application.json')
-      .field('manufacturer', assumedData.newAdvert.manufacturer)
-      .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
-      .field('year', assumedData.newAdvert.year)
-      .field('mileage', assumedData.newAdvert.mileage)
-      .field('state', assumedData.newAdvert.state)
-      .field('location', assumedData.newAdvert.location)
-      .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
-      .field('licence', assumedData.newAdvert.licence)
-      .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
-      .end((err, res) => {
-        res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(400);
-        res.body.should.have.property('error').equal('description field cannot be empty!');
-        res.body.should.have.property('success').equal('false');
-        done();
-      });
-  });
-
   it('Should NOT let Auth User (Seller) to post new Advert without PRICE input', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
       .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('body_type', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -430,21 +249,21 @@ describe('User Seller Activities', () => {
   it('Should NOT let Auth User (Seller) to post new Advert with INVALID PRICE input', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
       .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('body_type', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('price', 'price')
       .field('description', assumedData.newAdvert.description)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(422);
@@ -455,49 +274,24 @@ describe('User Seller Activities', () => {
   });
 
 
-  it('should NOT let Auth User (Seller) to post new Advert without CAR IMAGE input', (done) => {
-    api
-      .post('/api/v1/car')
-      .set('authorization', token)
-      .set('Accept', 'application.json')
-      .field('manufacturer', assumedData.newAdvert.manufacturer)
-      .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
-      .field('year', assumedData.newAdvert.year)
-      .field('mileage', assumedData.newAdvert.mileage)
-      .field('state', assumedData.newAdvert.state)
-      .field('location', assumedData.newAdvert.location)
-      .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
-      .field('licence', assumedData.newAdvert.licence)
-      .field('description', assumedData.newAdvert.description)
-      .field('price', assumedData.newAdvert.price)
-      .end((err, res) => {
-        res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(400);
-        res.body.should.have.property('error').equal('Upload at least one image!');
-        done();
-      });
-  });
-
   it('should NOT let Auth User (Seller) to post new Advert without valid IMAGE format', (done) => {
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
       .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('body_type', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
       .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/blank.pdf`)
+      .attach('image_url', `${__dirname}/assumed/blank.pdf`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(422);
@@ -510,21 +304,21 @@ describe('User Seller Activities', () => {
     this.timeout(20000);
     api
       .post('/api/v1/car')
-      .set('authorization', token)
+      .set('token', token)
       .set('Accept', 'application.json')
       .field('manufacturer', assumedData.newAdvert.manufacturer)
       .field('model', assumedData.newAdvert.model)
-      .field('bodyType', assumedData.newAdvert.bodyType)
+      .field('body_type', assumedData.newAdvert.bodyType)
       .field('year', assumedData.newAdvert.year)
       .field('mileage', assumedData.newAdvert.mileage)
       .field('state', assumedData.newAdvert.state)
       .field('location', assumedData.newAdvert.location)
       .field('transmission', assumedData.newAdvert.transmission)
-      .field('vehicleInspectionNumber', assumedData.newAdvert.vehicleInspectionNumber)
+      .field('vehicle_inspection_number', assumedData.newAdvert.vehicleInspectionNumber)
       .field('licence', assumedData.newAdvert.licence)
       .field('description', assumedData.newAdvert.description)
       .field('price', assumedData.newAdvert.price)
-      .attach('carImage', `${__dirname}/assumed/download.png`)
+      .attach('image_url', `${__dirname}/assumed/download.png`)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(201);
@@ -532,7 +326,7 @@ describe('User Seller Activities', () => {
         expect(res)
           .to.have.nested.property('body.data')
           .that.includes.all.keys(['id', 'email', 'created_on', 'manufacturer', 'model',
-            'price', 'state', 'status', 'imageGallery']);
+            'price', 'state', 'status', 'image_gallery']);
         res.body.data.id.should.be.a('number');
         res.body.data.email.should.be.a('string');
         res.body.data.created_on.should.be.a('string');
@@ -541,7 +335,7 @@ describe('User Seller Activities', () => {
         res.body.data.price.should.be.a('number');
         res.body.data.state.should.be.a('string');
         res.body.data.status.should.be.a('string');
-        res.body.data.imageGallery.should.be.a('array');
+        res.body.data.image_gallery.should.be.a('array');
         res.body.data.should.have.property('message').equal('Your Ad has been added successfully!');
         carId = res.body.data.id;
         done();
@@ -565,7 +359,7 @@ describe('User Seller Activities', () => {
     this.timeout(5000);
     api
       .patch('/api/v1/car/5/price')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.newPrice)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -580,7 +374,7 @@ describe('User Seller Activities', () => {
   it('Should NOT let Auth User (Seller) change Ad price to invalid value ', (done) => {
     api
       .patch(`/api/v1/car/${carId}/price`)
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.invalidPrice)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -593,11 +387,12 @@ describe('User Seller Activities', () => {
   it('should NOT let Auth User (Seller) change Ad price with invalid reference', (done) => {
     api
       .patch('/api/v1/car/:carId/price')
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.newPrice)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
+        res.body.should.have.property('field').equal('car_id');
         res.body.should.have.property('error').equal('Invalid Car ID!');
         done();
       });
@@ -607,7 +402,7 @@ describe('User Seller Activities', () => {
     this.timeout(20000);
     api
       .patch(`/api/v1/car/${carId}/price`)
-      .set('authorization', token)
+      .set('token', token)
       .send(assumedData.newPrice)
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -649,7 +444,7 @@ describe('User Seller Activities', () => {
   it('Should NOT let Auth User (Seller) change status to sold of NOT OWNED AD', (done) => {
     api
       .patch('/api/v1/car/1/status')
-      .set('authorization', token)
+      .set('token', token)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(403);
@@ -663,7 +458,7 @@ describe('User Seller Activities', () => {
   it('should NOT let Auth User (Seller) Mark Ad as sold with invalid reference', (done) => {
     api
       .patch('/api/v1/car/:carId/status')
-      .set('authorization', token)
+      .set('token', token)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -678,7 +473,7 @@ describe('User Seller Activities', () => {
     this.timeout(20000);
     api
       .patch(`/api/v1/car/${carId}/status`)
-      .set('authorization', token)
+      .set('token', token)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(201);

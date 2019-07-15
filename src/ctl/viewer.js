@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable camelcase */
 /* eslint-disable no-lonely-if */
 /* eslint-disable no-else-return */
 import express from 'express';
@@ -62,7 +64,10 @@ class Viewer {
 
   static dynamicView(req, res) {
     // eslint-disable-next-line object-curly-newline
-    let { status, state, minPrice, maxPrice, manufacturer, model, bodyType } = req.query;
+    let { status, state, min_price, max_price, manufacturer, model, body_type } = req.query;
+    let minPrice = min_price;
+    let maxPrice = max_price;
+    let bodyType = body_type;
     // eslint-disable-next-line object-curly-newline
     const searchObjects = { state, minPrice, maxPrice, manufacturer, model, bodyType };
     const searchTerm = [state, minPrice, maxPrice, manufacturer, model, bodyType];
@@ -79,7 +84,7 @@ class Viewer {
       }
       if (maxPrice || minPrice) {
         if (undefined === maxPrice) {
-          maxPrice = 1000000000;
+          maxPrice = 100000000;
         }
         const searchString = generateSearchString(searchObjects);
         pool.query(`SELECT * FROM cars WHERE round(price::numeric, 2) >= $1 AND round(price::numeric, 2) <= $2 AND status = $3 ${searchString}`, [minPrice, maxPrice, 'available'],
