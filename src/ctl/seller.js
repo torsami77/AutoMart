@@ -216,7 +216,6 @@ class Seller {
   }
 
   static updatePrice(req, res) {
-    console.log(req.body);
     if (isNaN(parseFloat(req.body.price))) {
       res.status(400).send({
         status: 400,
@@ -259,7 +258,7 @@ class Seller {
               theCar = data.rows[0];
               if (theCar) {
                 return res.status(201).send({
-                  status: 201,
+                  status: 200,
                   data: {
                     id: carId,
                     owner: req.userData.id,
@@ -308,7 +307,7 @@ class Seller {
         const theCar = data.rows[0];
         if (theCar) {
           return res.status(201).send({
-            status: 201,
+            status: 200,
             data: {
               id: carId,
               owner: req.userData.id,

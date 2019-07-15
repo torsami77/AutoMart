@@ -406,7 +406,7 @@ describe('User Seller Activities', () => {
       .send(assumedData.newPrice)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(201);
+        res.body.should.have.property('status').equal(200);
         res.body.should.have.property('data');
         res.body.data.should.be.a('object');
         expect(res)
@@ -476,7 +476,7 @@ describe('User Seller Activities', () => {
       .set('token', token)
       .end((err, res) => {
         res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(201);
+        res.body.should.have.property('status').equal(200);
         res.body.should.have.property('data');
         res.body.data.should.be.a('object');
         expect(res)
