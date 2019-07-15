@@ -17,6 +17,8 @@ var _pg = _interopRequireDefault(require("../mid/pg"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable camelcase */
+
 /* eslint-disable prefer-const */
 const app = (0, _express.default)();
 app.use(_bodyParser.default.json());
@@ -31,10 +33,12 @@ app.use(_bodyParser.default.json({
 const signUp = (req, res) => {
   let {
     username,
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     address
-  } = req.body; // eslint-disable-next-line prefer-const
+  } = req.body;
+  const firstName = first_name;
+  const lastName = last_name; // eslint-disable-next-line prefer-const
 
   const {
     email,
@@ -66,7 +70,7 @@ const signUp = (req, res) => {
       status: 400,
       error: 'Please Enter your First Name',
       success: 'false',
-      field: 'firstName'
+      field: 'first_name'
     });
   }
 
@@ -75,7 +79,7 @@ const signUp = (req, res) => {
       status: 400,
       error: 'Please Enter your Last Name',
       success: 'false',
-      field: 'lastName'
+      field: 'last_name'
     });
   }
 
@@ -106,7 +110,7 @@ const signUp = (req, res) => {
     });
   }
 
-  if (verify !== password) {
+  if (verify && verify !== password) {
     return res.status(400).send({
       status: 400,
       error: 'Verifiable Password Does not Match!',

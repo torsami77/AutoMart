@@ -14,6 +14,8 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 class Buyer {
   static order(req, res) {
+    const carId = req.body.car_id;
+
     if (isNaN(parseFloat(req.body.amount))) {
       res.status(400).send({
         status: 400,
@@ -23,12 +25,12 @@ class Buyer {
       });
       return false;
     }
-    if (isNaN(parseInt(req.body.carId, 10))) {
+    if (isNaN(parseInt(carId, 10))) {
       res.status(400).send({
         status: 400,
         error: 'Please provide a valid order reference!',
         success: 'false',
-        field: 'carId',
+        field: 'car_id',
       });
       return false;
     }
@@ -36,14 +38,14 @@ class Buyer {
     let price;
     // db.cars.map((car) => {
 
-    pool.query('SELECT price, orders FROM cars WHERE id = $1', [req.body.carId],
+    pool.query('SELECT price, orders FROM cars WHERE id = $1', [carId],
       (err, data) => {
         let ordersArray;
         if (typeof (data.rows[0]) !== 'undefined') {
           ordersArray = data.rows[0].orders;
           newOrder.id = ordersArray.length + 1;
           newOrder.buyer = req.userData.id;
-          newOrder.carId = req.body.carId;
+          newOrder.car_id = carId;
           newOrder.amount = [parseFloat(req.body.amount)];
           newOrder.status = 'pending';
           newOrder.created_on = new Date();
@@ -51,14 +53,14 @@ class Buyer {
           price = data.rows[0].price;
           ordersArray.push(newOrder);
 
-          pool.query('UPDATE cars SET orders = $1 WHERE id = $2', [ordersArray, req.body.carId],
+          pool.query('UPDATE cars SET orders = $1 WHERE id = $2', [ordersArray, carId],
             (_error, resulted) => {
               if (resulted) {
                 return res.status(201).send({
                   status: 201,
                   data: {
                     id: newOrder.id,
-                    carId: newOrder.carId,
+                    car_id: newOrder.car_id,
                     created_on: newOrder.created_on,
                     status: newOrder.status,
                     price,
@@ -77,7 +79,7 @@ class Buyer {
             status: 404,
             error: 'Ad not found, Please provide actual car Id!',
             success: 'false',
-            field: 'carId',
+            field: 'car_id',
           });
         }
         return false;
@@ -86,6 +88,7 @@ class Buyer {
   }
 
   static updateOrder(req, res) {
+    const carId = req.body.car_id;
     if (isNaN(parseInt(req.params.orderId, 10))) {
       return res.status(400).send({
         status: 400,
@@ -94,38 +97,36 @@ class Buyer {
         field: 'order',
       });
     }
-    if (isNaN(parseFloat(req.body.amount))) {
+    if (isNaN(parseFloat(req.body.price))) {
       return res.status(400).send({
         status: 400,
         error: 'Please provide a valid price value!',
         success: 'false',
-        field: 'car',
+        field: 'amount',
       });
     }
-    if (isNaN(parseInt(req.body.carId, 10))) {
+    if (isNaN(parseInt(carId, 10))) {
       return res.status(400).send({
         status: 400,
         error: 'Please provide a valid AD reference!',
         suceess: 'false',
-        field: 'car',
+        field: 'car_id',
       });
     }
 
-    pool.query('SELECT price, orders FROM cars WHERE id = $1', [req.body.carId],
+    pool.query('SELECT price, orders FROM cars WHERE id = $1', [carId],
       (_err, data) => {
         if (data.rows[0]) {
           const ordersArray = data.rows[0].orders;
           // eslint-disable-next-line max-len
           let theOrder;
-          // eslint-disable-next-line camelcase
           let old_price_offered;
-          // eslint-disable-next-line camelcase
           let new_price_offered;
           ordersArray.map((order) => {
             const checkOrder = JSON.parse(order);
             if (checkOrder.buyer === req.userData.id && checkOrder.id === parseInt(req.params.orderId, 10)) {
               theOrder = checkOrder;
-              theOrder.amount.push(parseFloat(req.body.amount));
+              theOrder.amount.push(parseFloat(req.body.price));
               old_price_offered = theOrder.amount[theOrder.amount.length - 1];
               new_price_offered = theOrder.amount[theOrder.amount.length - 2];
             }
@@ -142,7 +143,7 @@ class Buyer {
               });
             // eslint-disable-next-line no-else-return
             } else {
-              pool.query('UPDATE cars SET orders = $1 WHERE id = $2', [ordersArray, parseInt(req.body.carId, 10)],
+              pool.query('UPDATE cars SET orders = $1 WHERE id = $2', [ordersArray, parseInt(carId, 10)],
                 // eslint-disable-next-line no-unused-vars
                 (error, _resulted) => {
                   if (!error) {
@@ -150,7 +151,7 @@ class Buyer {
                       status: 201,
                       data: {
                         id: theOrder.id,
-                        carId: theOrder.carId,
+                        car_id: theOrder.car_id,
                         status: theOrder.status,
                         old_price_offered,
                         new_price_offered,
@@ -185,7 +186,8 @@ class Buyer {
   }
 
   static flag(req, res) {
-    if (isNaN(parseInt(req.body.carId, 10))) {
+    const carId = req.body.car_id;
+    if (isNaN(parseInt(carId, 10))) {
       return res.status(400).send({
         status: 400,
         error: 'Please provide a valid Ad reference!',
@@ -210,19 +212,19 @@ class Buyer {
       });
     }
     const newFlag = {};
-    pool.query('SELECT flags FROM cars WHERE id = $1', [parseInt(req.body.carId, 10)],
+    pool.query('SELECT flags FROM cars WHERE id = $1', [parseInt(carId, 10)],
     // eslint-disable-next-line no-unused-vars
       (error, resulted) => {
         if (resulted.rows[0]) {
           const flagsArray = resulted.rows[0].flags;
           newFlag.id = flagsArray.length + 1;
-          newFlag.car_Id = req.body.carId;
+          newFlag.car_Id = carId;
           newFlag.reason = req.body.reason;
           newFlag.description = req.body.description;
           newFlag.created_on = new Date();
           flagsArray.push(newFlag);
 
-          pool.query('UPDATE cars SET flags = $1 WHERE id = $2', [flagsArray, parseInt(req.body.carId, 10)],
+          pool.query('UPDATE cars SET flags = $1 WHERE id = $2', [flagsArray, parseInt(carId, 10)],
           // eslint-disable-next-line no-unused-vars
             (err, result) => {
               if (!err) {

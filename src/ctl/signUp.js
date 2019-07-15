@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable prefer-const */
 import express from 'express';
 import bcrypt from 'bcryptjs';
@@ -15,8 +16,10 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 const signUp = (req, res) => {
   let {
-    username, firstName, lastName, address,
+    username, first_name, last_name, address,
   } = req.body;
+  const firstName = first_name;
+  const lastName = last_name;
   // eslint-disable-next-line prefer-const
 
   const {
@@ -47,7 +50,7 @@ const signUp = (req, res) => {
       status: 400,
       error: 'Please Enter your First Name',
       success: 'false',
-      field: 'firstName',
+      field: 'first_name',
     });
   }
 
@@ -57,7 +60,7 @@ const signUp = (req, res) => {
       status: 400,
       error: 'Please Enter your Last Name',
       success: 'false',
-      field: 'lastName',
+      field: 'last_name',
     });
   }
 
@@ -88,7 +91,7 @@ const signUp = (req, res) => {
     });
   }
 
-  if (verify !== password) {
+  if (verify && verify !== password) {
     return res.status(400).send({
       status: 400,
       error: 'Verifiable Password Does not Match!',

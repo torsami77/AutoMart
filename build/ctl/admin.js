@@ -9,15 +9,17 @@ var _express = _interopRequireDefault(require("express"));
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 
-var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
-
 var _handyFuncs = _interopRequireDefault(require("../hlp/handyFuncs"));
 
 var _pg = _interopRequireDefault(require("../mid/pg"));
 
-var _verifyToken = _interopRequireDefault(require("../mid/verifyToken"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* eslint-disable camelcase */
+
+/* eslint-disable prefer-const */
+
+/* eslint-disable no-restricted-globals */
 
 /* eslint-disable no-lonely-if */
 
@@ -33,22 +35,6 @@ app.use(_bodyParser.default.json({
 }));
 
 const employJwt = (req, res) => {
-  const {
-    authorization
-  } = req.headers;
-
-  try {
-    const decoded = _jsonwebtoken.default.verify(authorization, process.env.SECRET_KEY);
-
-    req.userData = decoded;
-  } catch (error) {
-    return res.status(401).send({
-      status: 401,
-      error: 'Unauthorised User!',
-      success: 'false'
-    });
-  }
-
   if (req.userData && req.userData.is_admin === false) {
     return res.status(403).send({
       status: 403,
@@ -99,14 +85,18 @@ class Admin {
     let {
       status,
       state,
-      minPrice,
-      maxPrice,
+      min_price,
+      max_price,
       manufacturer,
       model,
-      bodyType
-    } = req.query; // eslint-disable-next-line object-curly-newline
+      body_type
+    } = req.query;
+    let minPrice = min_price;
+    let maxPrice = max_price;
+    let bodyType = body_type; // eslint-disable-next-line object-curly-newline
 
     const searchObjects = {
+      status,
       state,
       minPrice,
       maxPrice,
@@ -114,7 +104,7 @@ class Admin {
       model,
       bodyType
     };
-    const searchTerm = [state, minPrice, maxPrice, manufacturer, model, bodyType];
+    const searchTerm = [status, state, minPrice, maxPrice, manufacturer, model, bodyType];
     const searchFields = [];
     searchTerm.forEach(item => {
       if (undefined !== item) {
@@ -130,7 +120,7 @@ class Admin {
 
       if (maxPrice || minPrice) {
         if (undefined === maxPrice) {
-          maxPrice = 1000000000;
+          maxPrice = 10000000000;
         }
 
         const searchString = (0, _handyFuncs.default)(searchObjects);
@@ -186,7 +176,7 @@ class Admin {
           status: 400,
           error: 'Please provide a valid Ad reference!',
           success: 'false',
-          field: 'order'
+          field: 'ADs'
         });
       } else {
         _pg.default.query('DELETE FROM cars WHERE id = $1', [parseInt(req.params.carId, 10)], (err, data) => {
@@ -208,6 +198,8 @@ class Admin {
         });
       }
     }
+
+    return false;
   }
 
 }

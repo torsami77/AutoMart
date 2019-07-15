@@ -7,9 +7,19 @@ exports.default = void 0;
 
 const generateSearchString = searchObjects => {
   let searchString = '';
+  let column;
   Object.keys(searchObjects).forEach(keyItem => {
     if (typeof searchObjects[keyItem] !== 'undefined' && keyItem !== 'minPrice' && keyItem !== 'maxPrice') {
-      searchString += `AND "${keyItem}" = '${searchObjects[keyItem].toLowerCase()}'`;
+      switch (keyItem) {
+        case 'bodyType':
+          column = 'body_type';
+          break;
+
+        default:
+          column = keyItem;
+      }
+
+      searchString += `AND "${column}" = '${searchObjects[keyItem].toLowerCase()}'`;
     }
   });
 

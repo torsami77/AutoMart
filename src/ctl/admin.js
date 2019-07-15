@@ -1,11 +1,12 @@
+/* eslint-disable camelcase */
+/* eslint-disable prefer-const */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-lonely-if */
 /* eslint-disable no-else-return */
 import express from 'express';
 import bodyParser from 'body-parser';
-import jwt from 'jsonwebtoken';
 import generateSearchString from '../hlp/handyFuncs';
 import pool from '../mid/pg';
-import verifyToken from '../mid/verifyToken';
 
 
 const app = express();
@@ -16,17 +17,6 @@ app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/json' }));
 
 const employJwt = (req, res) => {
-  const { authorization } = req.headers;
-  try {
-    const decoded = jwt.verify(authorization, process.env.SECRET_KEY);
-    req.userData = decoded;
-  } catch (error) {
-    return res.status(401).send({
-      status: 401,
-      error: 'Unauthorised User!',
-      success: 'false',
-    });
-  }
   if (req.userData && req.userData.is_admin === false) {
     return res.status(403).send({
       status: 403,
@@ -50,7 +40,6 @@ class Admin {
         });
       }
       pool.query('SELECT * FROM cars WHERE id = $1', [parseInt(req.params.carId, 10)], (_err, result) => {
-
         if (result.rows[0]) {
           return res.status(200).send({
             status: 200,
@@ -71,10 +60,13 @@ class Admin {
 
   static dynamicView(req, res) {
     // eslint-disable-next-line object-curly-newline
-    let { status, state, minPrice, maxPrice, manufacturer, model, bodyType } = req.query;
+    let { status, state, min_price, max_price, manufacturer, model, body_type } = req.query;
+    let minPrice = min_price;
+    let maxPrice = max_price;
+    let bodyType = body_type;
     // eslint-disable-next-line object-curly-newline
-    const searchObjects = { state, minPrice, maxPrice, manufacturer, model, bodyType };
-    const searchTerm = [state, minPrice, maxPrice, manufacturer, model, bodyType];
+    const searchObjects = { status, state, minPrice, maxPrice, manufacturer, model, bodyType };
+    const searchTerm = [status, state, minPrice, maxPrice, manufacturer, model, bodyType];
     const searchFields = [];
     searchTerm.forEach((item) => {
       if (undefined !== item) {
@@ -89,7 +81,7 @@ class Admin {
       }
       if (maxPrice || minPrice) {
         if (undefined === maxPrice) {
-          maxPrice = 1000000000;
+          maxPrice = 10000000000;
         }
         const searchString = generateSearchString(searchObjects);
         pool.query(`SELECT * FROM cars WHERE round(price::numeric, 2) >= $1 AND round(price::numeric, 2) <= $2 ${searchString}`, [parseFloat(minPrice), parseFloat(maxPrice)],
@@ -166,6 +158,7 @@ class Admin {
         });
       }
     }
+    return false;
   }
 }
 

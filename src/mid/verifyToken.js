@@ -13,9 +13,9 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 
 const verifyToken = (req, res, next) => {
-  const { authorization } = req.headers;
+  const { token } = req.headers;
   try {
-    const decoded = jwt.verify(authorization, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
     req.userData = decoded;
     next();
   } catch (error) {

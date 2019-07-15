@@ -31,8 +31,6 @@ var _verifyToken = _interopRequireDefault(require("./mid/verifyToken"));
 
 var _cloudinaryAndMulter = _interopRequireDefault(require("./mid/cloudinaryAndMulter"));
 
-var _example = _interopRequireDefault(require("./mod/example"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const PORT = process.env.PORT || 5000;
@@ -62,20 +60,19 @@ app.use((0, _cookieParser.default)());
 app.get('/', (req, res) => {
   res.sendFile(_path.default.resolve('./ui/index.html'));
 });
-app.post('/api/v1/signup', _signUp.default);
-app.post('/api/v1/signin', _signIn.default);
-app.post('/api/v1/car', _verifyToken.default, upload.single('carImage'), _seller.default.postAd);
+app.post('/api/v1/auth/signup', _signUp.default);
+app.post('/api/v1/auth/signin', _signIn.default);
+app.post('/api/v1/car', _verifyToken.default, upload.single('image_url'), _seller.default.postAd);
 app.patch('/api/v1/car/:carId/price', _verifyToken.default, _seller.default.updatePrice);
 app.patch('/api/v1/car/:carId/status', _verifyToken.default, _seller.default.markAsSold);
-app.get('/api/v1/car', _viewer.default.dynamicView);
-app.get('/api/v1/car/:carId/', _viewer.default.specificCar);
+app.get('/api/v1/car', _verifyToken.default, _viewer.default.dynamicView);
+app.get('/api/v1/car/:carId/', _verifyToken.default, _viewer.default.specificCar);
 app.post('/api/v1/flag', _verifyToken.default, _buyer.default.flag);
 app.post('/api/v1/order', _verifyToken.default, _buyer.default.order);
 app.patch('/api/v1/order/:orderId/price', _verifyToken.default, _buyer.default.updateOrder);
 app.delete('/api/v1/car/:carId/', _verifyToken.default, _admin.default.deleteCar);
 app.post('/api/v1/users/:email/reset_password', _resetPassword.default.resetRequest);
 app.post('/api/v1/users/createnew_password', _verifyToken.default, _resetPassword.default.createNewPassword);
-app.get('/api/v1/example', _example.default);
 app.all('*', (req, res) => {
   res.status(404).send({
     status: 404,

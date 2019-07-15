@@ -11,7 +11,6 @@ import admin from './ctl/admin';
 import password from './ctl/resetPassword';
 import verifyToken from './mid/verifyToken';
 import cloudUpload from './mid/cloudinaryAndMulter';
-import example from './mod/example';
 
 
 const PORT = process.env.PORT || 5000;
@@ -39,20 +38,19 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve('./ui/index.html'));
 });
 
-app.post('/api/v1/signup', signUp);
-app.post('/api/v1/signin', signIn);
-app.post('/api/v1/car', verifyToken, upload.single('carImage'), seller.postAd);
+app.post('/api/v1/auth/signup', signUp);
+app.post('/api/v1/auth/signin', signIn);
+app.post('/api/v1/car', verifyToken, upload.single('image_url'), seller.postAd);
 app.patch('/api/v1/car/:carId/price', verifyToken, seller.updatePrice);
 app.patch('/api/v1/car/:carId/status', verifyToken, seller.markAsSold);
-app.get('/api/v1/car', viewer.dynamicView);
-app.get('/api/v1/car/:carId/', viewer.specificCar);
+app.get('/api/v1/car', verifyToken, viewer.dynamicView);
+app.get('/api/v1/car/:carId/', verifyToken, viewer.specificCar);
 app.post('/api/v1/flag', verifyToken, buyer.flag);
 app.post('/api/v1/order', verifyToken, buyer.order);
 app.patch('/api/v1/order/:orderId/price', verifyToken, buyer.updateOrder);
 app.delete('/api/v1/car/:carId/', verifyToken, admin.deleteCar);
 app.post('/api/v1/users/:email/reset_password', password.resetRequest);
 app.post('/api/v1/users/createnew_password', verifyToken, password.createNewPassword);
-app.get('/api/v1/example', example);
 app.all('*', (req, res) => {
   res.status(404).send({
     status: 404,

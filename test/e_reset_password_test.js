@@ -79,7 +79,7 @@ describe('CREATE NEW PASSWORD', () => {
   it('Should respond to user with empty PASSWORD FIELD', (done) => {
     api
       .post('/api/v1/users/createnew_password')
-      .set('authorization', token)
+      .set('token', token)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(400);
@@ -92,7 +92,7 @@ describe('CREATE NEW PASSWORD', () => {
   it('Should respond to user with short PASSWORD', (done) => {
     api
       .post('/api/v1/users/createnew_password')
-      .set('authorization', token)
+      .set('token', token)
       .send({ password: 'asdf', verify: 'asdf' })
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -106,7 +106,7 @@ describe('CREATE NEW PASSWORD', () => {
   it('Should respond to user with NOT MATCHING PASSWORD', (done) => {
     api
       .post('/api/v1/users/createnew_password')
-      .set('authorization', token)
+      .set('token', token)
       .send({ password: 'asdfghjkl' })
       .end((err, res) => {
         res.body.should.be.a('object');
@@ -121,7 +121,7 @@ describe('CREATE NEW PASSWORD', () => {
     this.timeout(20000);
     api
       .post('/api/v1/users/createnew_password/')
-      .set('authorization', token)
+      .set('token', token)
       .send({ password: 'asdfghjkl', verify: 'asdfghjkl' })
       .end((err, res) => {
         res.body.should.be.a('object');

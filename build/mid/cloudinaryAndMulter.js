@@ -17,6 +17,7 @@ var _cloudinary = _interopRequireDefault(require("cloudinary"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable camelcase */
 const app = (0, _express.default)();
 
 _dotenv.default.config();
@@ -31,8 +32,8 @@ app.use(_bodyParser.default.json({
 }));
 
 const storage = _multer.default.diskStorage({
-  filename: (req, carImage, callback) => {
-    callback(null, new Date().toISOString() + carImage.originalname);
+  filename: (req, image_url, callback) => {
+    callback(null, new Date().toISOString() + image_url.originalname);
   }
 });
 
