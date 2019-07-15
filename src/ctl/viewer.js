@@ -35,7 +35,7 @@ class Viewer {
     pool.query('SELECT * FROM cars WHERE id = $1', [req.params.carId],
       (_err, data) => {
         const specifiedCar = data.rows[0];
-        if (!specifiedCar) {
+        if ((!data) || (!data.rows[0])) {
           return res.status(404).send({
             status: 404,
             error: 'Ad not found!',
@@ -71,14 +71,22 @@ class Viewer {
     let maxPrice = max_price;
     let bodyType = body_type;
     // eslint-disable-next-line object-curly-newline
-    const searchObjects = { state, minPrice, maxPrice, manufacturer, model, bodyType };
-    const searchTerm = [state, minPrice, maxPrice, manufacturer, model, bodyType];
+    const searchObjects = { status, state, minPrice, maxPrice, manufacturer, model, bodyType };
+    const searchTerm = [status, state, minPrice, maxPrice, manufacturer, model, bodyType];
     const searchFields = [];
     searchTerm.forEach((item) => {
       if (undefined !== item) {
         searchFields.push(item);
       }
     });
+    if (searchTerm.length < 1) {
+      return res.status(404).send({
+        status: 401,
+        error: 'Please provide query parameter',
+        success: 'false',
+        field: 'car',
+      });
+    }
 
     // if (status === 'available') {
       if (undefined === minPrice) {
