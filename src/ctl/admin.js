@@ -29,7 +29,7 @@ const employJwt = (req, res) => {
 
 class Admin {
   static viewSpecific(req, res) {
-   // employJwt(req, res);
+    employJwt(req, res);
     if (req.userData && req.userData.is_admin) {
       if (!req.params.carId || isNaN(parseInt(req.params.carId, 10))) {
         return res.status(400).send({
@@ -74,7 +74,7 @@ class Admin {
       }
     });
 
-   // employJwt(req, res);
+    employJwt(req, res);
     if (req.userData.is_admin) {
       if (!minPrice) {
         minPrice = 0;

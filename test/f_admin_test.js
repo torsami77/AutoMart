@@ -18,6 +18,7 @@ const data = fs.readFileSync(`${__dirname}/assumed/token.txt`);
 const token = data.toString();
 
 describe('ADMIN Activities', () => {
+  /*
   it('should NOT let NON-ADMIN user to view sold AD', (done) => {
     api
       .get('/api/v1/car/')
@@ -30,6 +31,7 @@ describe('ADMIN Activities', () => {
         done();
       });
   });
+  */
 
   let adminToken;
   it('AUTHENTICATE ADMIN', (done) => {

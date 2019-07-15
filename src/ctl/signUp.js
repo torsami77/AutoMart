@@ -15,7 +15,6 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 
 const signUp = (req, res) => {
-  console.log(req.body);
   let {
     username, first_name, last_name, address,
   } = req.body;

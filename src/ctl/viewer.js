@@ -45,7 +45,7 @@ class Viewer {
         // eslint-disable-next-line no-else-return
         } else {
           // eslint-disable-next-line no-lonely-if
-          if (specifiedCar.status === 'available') {
+         // if (specifiedCar.status === 'available') {
             return res.status(200).send({
               status: 200,
               data: specifiedCar,
@@ -53,9 +53,11 @@ class Viewer {
               field: 'car',
             });
           // eslint-disable-next-line no-else-return
+          /*
           } else {
             admin.viewSpecific(req, res);
           }
+          */
         }
         return false;
       });
@@ -78,7 +80,7 @@ class Viewer {
       }
     });
 
-    if (status === 'available') {
+    // if (status === 'available') {
       if (undefined === minPrice) {
         minPrice = 0;
       }
@@ -126,11 +128,13 @@ class Viewer {
             }
           });
       }
+    /*
     } else {
       // If status=available not specified, search falls back to admin's view (sold and available)
       // admin.viewAll(req, res);
       admin.dynamicView(req, res);
     }
+    */
     return false;
   }
 }
