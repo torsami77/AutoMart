@@ -98,7 +98,7 @@ const signUp = (req, res) => {
 
   // const emailSearch = db.users.find(user => user.email === email);
   // const userNameSearch = db.users.find(user => user.username === username);
-  pool.query('SELECT email, username FROM users WHERE email = $1 OR username = $2', [email, username],
+  pool.query('SELECT email FROM users WHERE email = $1 OR username = $2', [email, username],
     (_err, data) => {
       if (data && data.rows[0]) {
         if (data.rows[0].email === email) {
