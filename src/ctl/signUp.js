@@ -109,6 +109,7 @@ const signUp = (req, res) => {
             field: 'email',
           });
         }
+        /*
         if (data.rows[0].username === username) {
           return res.status(400).send({
             status: 400,
@@ -117,6 +118,7 @@ const signUp = (req, res) => {
             field: 'username',
           });
         }
+        */
         return false;
       // eslint-disable-next-line no-else-return
       } else {
