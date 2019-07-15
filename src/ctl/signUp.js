@@ -15,6 +15,7 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 
 const signUp = (req, res) => {
+  console.log(req.body);
   let {
     username, first_name, last_name, address,
   } = req.body;
@@ -147,7 +148,6 @@ const signUp = (req, res) => {
           // eslint-disable-next-line max-len
           [newUser.email, newUser.username, newUser.first_name, newUser.last_name, newUser.password, newUser.address, newUser.is_admin, newUser.created_on],
           (err, resp) => {
-            console.log('err and resp', err, resp);
             if (resp) {
               const { id } = resp.rows[0];
               const token = jwt.sign({
