@@ -216,6 +216,7 @@ class Seller {
   }
 
   static updatePrice(req, res) {
+    console.log(req.body);
     if (isNaN(parseFloat(req.body.price))) {
       res.status(400).send({
         status: 400,
@@ -291,7 +292,6 @@ class Seller {
   }
 
   static markAsSold(req, res) {
-    console.log(req.body);
     if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
