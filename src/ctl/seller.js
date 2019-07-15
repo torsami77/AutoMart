@@ -291,6 +291,7 @@ class Seller {
   }
 
   static markAsSold(req, res) {
+    console.log(req.body);
     if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
