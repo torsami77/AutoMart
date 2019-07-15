@@ -38,7 +38,7 @@ const signIn = (req, res) => {
 
   pool.query('SELECT id,email,password,is_admin FROM users WHERE email = $1', [email],
     (_err, data) => {
-      if (undefined === data.rows[0]) {
+      if (typeof (data.rows[0]) === 'undefined') {
         return res.status(401).json({
           status: 401,
           error: 'Invalid Signin Credentials!',
