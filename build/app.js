@@ -65,11 +65,11 @@ app.post('/api/v1/auth/signin', _signIn.default);
 app.post('/api/v1/car', _verifyToken.default, upload.single('image_url'), _seller.default.postAd);
 app.patch('/api/v1/car/:carId/price', _verifyToken.default, _seller.default.updatePrice);
 app.patch('/api/v1/car/:carId/status', _verifyToken.default, _seller.default.markAsSold);
-app.get('/api/v1/car', _verifyToken.default, _viewer.default.dynamicView);
-app.get('/api/v1/car/:carId/', _verifyToken.default, _viewer.default.specificCar);
+app.get('/api/v1/car', _viewer.default.dynamicView);
+app.get('/api/v1/car/:carId/', _viewer.default.specificCar);
 app.post('/api/v1/flag', _verifyToken.default, _buyer.default.flag);
-app.post('/api/v1/order', _verifyToken.default, _buyer.default.order); // app.patch('/api/v1/order/:orderId/price', verifyToken, buyer.updateOrder);
-
+app.post('/api/v1/order', _verifyToken.default, _buyer.default.order);
+app.patch('/api/v1/order/:orderId/price', _verifyToken.default, _buyer.default.updateOrder);
 app.delete('/api/v1/car/:carId/', _verifyToken.default, _admin.default.deleteCar);
 app.post('/api/v1/users/:email/reset_password', _resetPassword.default.resetRequest);
 app.post('/api/v1/users/createnew_password', _verifyToken.default, _resetPassword.default.createNewPassword);

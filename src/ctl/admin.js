@@ -28,6 +28,7 @@ const employJwt = (req, res) => {
 };
 
 class Admin {
+  /*
   static viewSpecific(req, res) {
     employJwt(req, res);
     if (req.userData && req.userData.is_admin) {
@@ -126,6 +127,7 @@ class Admin {
     }
     return false;
   }
+*/
 
   static deleteCar(req, res) {
     employJwt(req, res);

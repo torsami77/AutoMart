@@ -298,8 +298,8 @@ class Seller {
           theCar = data.rows[0];
 
           if (theCar) {
-            return res.status(201).send({
-              status: 201,
+            return res.status(200).send({
+              status: 200,
               data: {
                 id: carId,
                 owner: req.userData.id,
@@ -349,8 +349,8 @@ class Seller {
       const theCar = data.rows[0];
 
       if (theCar) {
-        return res.status(201).send({
-          status: 201,
+        return res.status(200).send({
+          status: 200,
           data: {
             id: carId,
             owner: req.userData.id,
