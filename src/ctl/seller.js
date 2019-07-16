@@ -295,6 +295,7 @@ class Seller {
     const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
     if (undefined === email || (!email.match(mailformat)) || req.userData.email !== email) {
+      console.log(email, req.userData.email);
       return res.status(403).send({
         status: 403,
         error: 'You are not allowed to mark this Ad as sold!',
