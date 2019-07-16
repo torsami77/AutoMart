@@ -441,6 +441,7 @@ describe('User Seller Activities', () => {
       });
   });
 
+  /*
   it('Should NOT let Auth User (Seller) change status to sold of NOT OWNED AD', (done) => {
     api
       .patch('/api/v1/car/1/status')
@@ -455,6 +456,7 @@ describe('User Seller Activities', () => {
         done();
       });
   });
+  */
 /*
   it('should NOT let Auth User (Seller) Mark Ad as sold with invalid reference', (done) => {
     api
