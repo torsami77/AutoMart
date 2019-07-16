@@ -291,19 +291,6 @@ class Seller {
   }
 
   static markAsSold(req, res) {
-    const { email } = req.body;
-    const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-
-    if (undefined === email || (!email.match(mailformat)) || req.userData.email !== email) {
-      console.log(email, req.userData.email);
-      return res.status(403).send({
-        status: 403,
-        error: 'You are not allowed to mark this Ad as sold!',
-        success: 'false',
-        field: 'status',
-      });
-    }
-
     if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
