@@ -291,6 +291,7 @@ class Seller {
   }
 
   static markAsSold(req, res) {
+    console.log(req.params, req.body);
     if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
@@ -304,8 +305,9 @@ class Seller {
 
     pool.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
       ['sold', carId, req.userData.id], (_err, data) => {
+        console.log(_err, data);
         const theCar = data.rows[0];
-        if (theCar) {
+        if (data && data.rows[0]) {
           return res.status(200).send({
             status: 200,
             data: {
