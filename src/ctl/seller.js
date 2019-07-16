@@ -216,7 +216,7 @@ class Seller {
   }
 
   static updatePrice(req, res) {
-    console.log(typeof (parseFloat(req.body.price)));
+    console.log(typeof (parseFloat(req.params.carId)));
     if (isNaN(parseFloat(req.body.price))) {
       res.status(400).send({
         status: 400,
@@ -244,15 +244,7 @@ class Seller {
       (err, resp) => {
         console.log(err, resp);
         let theCar = resp.rows[0];
-        if (!theCar) {
-          return res.status(404).send({
-            status: 404,
-            error: 'Ad not found or not owned by you!',
-            success: 'false',
-            field: 'price',
-          });
-        // eslint-disable-next-line no-else-return
-        } else {
+        if (resp && resp.rows[0]) {
           pool.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3 AND status != $4) RETURNING created_on, manufacturer, model, price, state, status',
             [newPrice, carId, req.userData.id, 'sold'],
             (_err, data) => {
@@ -286,6 +278,13 @@ class Seller {
                 });
               }
             });
+        } else {
+          return res.status(404).send({
+            status: 404,
+            error: 'Ad not found or not owned by you!',
+            success: 'false',
+            field: 'price',
+          });
         }
         return false;
       });
