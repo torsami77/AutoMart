@@ -216,7 +216,7 @@ class Seller {
   }
 
   static updatePrice(req, res) {
-    console.log(req.body, req.params);
+    console.log(typeof (req.body.price));
     if (isNaN(parseFloat(req.body.price))) {
       res.status(400).send({
         status: 400,
