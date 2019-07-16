@@ -216,7 +216,7 @@ class Seller {
   }
 
   static updatePrice(req, res) {
-    if (isNaN(req.body.price)) {
+    if (isNaN(parseFloat(req.body.price))) {
       res.status(400).send({
         status: 400,
         error: 'Invalid Price value!',
@@ -226,7 +226,7 @@ class Seller {
       return false;
     }
 
-    if (isNaN(req.params.carId, 10)) {
+    if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
         error: 'Invalid Car ID!',
@@ -241,15 +241,15 @@ class Seller {
     pool.query('SELECT status FROM cars WHERE id = $1 AND owner = $2', [carId, req.userData.id],
     // eslint-disable-next-line no-unused-vars
       (err, resp) => {
-        console.log(err, resp);
         let theCar = resp.rows[0];
         if (resp && resp.rows[0]) {
           pool.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3 AND status != $4) RETURNING created_on, manufacturer, model, price, state, status',
             [newPrice, carId, req.userData.id, 'sold'],
             (_err, data) => {
+              console.log(_err, data);
               // eslint-disable-next-line prefer-destructuring
               theCar = data.rows[0];
-              if (theCar) {
+              if (data && data.rows[0]) {
                 return res.status(200).send({
                   status: 200,
                   data: {
