@@ -64,7 +64,6 @@ class Viewer {
   }
 
   static dynamicView(req, res) {
-    console.log(req.query, req.body);
     // eslint-disable-next-line object-curly-newline
     let { status, state, min_price, max_price, manufacturer, model, body_type } = req.query;
     let minPrice = min_price;

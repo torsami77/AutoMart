@@ -22,6 +22,7 @@ const assumedData = {
     verify: 'password101',
     address: 'Jos',
     is_admin: false,
+    status: 'sold',
   },
   noAddressUsers: {
     email: 'torsami@automart.com',
