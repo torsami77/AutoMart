@@ -295,11 +295,11 @@ class Seller {
     const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
     if (undefined === email || (!email.match(mailformat)) || req.userData.email !== email) {
-      return res.status(400).send({
-        status: 400,
-        error: 'Please Enter a Valid Email!',
+      return res.status(403).send({
+        status: 403,
+        error: 'You are not allowed to mark this Ad as sold!',
         success: 'false',
-        field: 'email',
+        field: 'status',
       });
     }
 
@@ -339,7 +339,7 @@ class Seller {
           });
 
         // eslint-disable-next-line no-else-return
-        } else {
+        } /* else {
           return res.status(403).send({
             status: 403,
             error: 'You are not allowed to mark this Ad as sold!',
@@ -347,6 +347,7 @@ class Seller {
             field: 'status',
           });
         }
+        */
       });
     return false;
   }
