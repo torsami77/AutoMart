@@ -27,13 +27,8 @@ const signUp = (req, res) => {
   } = req.body;
   const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-  if (undefined === username || username === '') {
-    return res.status(400).send({
-      status: 400,
-      error: 'Please Provide a Username',
-      success: 'false',
-      field: 'username',
-    });
+  if (!username) {
+    username = 'No Username';
   }
 
   if (undefined === email || !email.match(mailformat)) {
@@ -102,9 +97,10 @@ const signUp = (req, res) => {
 
   // const emailSearch = db.users.find(user => user.email === email);
   // const userNameSearch = db.users.find(user => user.username === username);
-  pool.query('SELECT email, username FROM users WHERE email = $1 OR username = $2', [email, username],
-    (_err, data) => {
-      if (typeof (data.rows[0]) !== 'undefined') {
+  // pool.query('SELECT email, username FROM users WHERE email = $1 OR username = $2', [email, username],
+  pool.query('SELECT email FROM users WHERE email = $1', [email],
+  (_err, data) => {
+      if (data && data.rows[0]) {
         if (data.rows[0].email === email) {
           return res.status(400).send({
             status: 400,
@@ -113,6 +109,7 @@ const signUp = (req, res) => {
             field: 'email',
           });
         }
+        /*
         if (data.rows[0].username === username) {
           return res.status(400).send({
             status: 400,
@@ -121,10 +118,12 @@ const signUp = (req, res) => {
             field: 'username',
           });
         }
+        */
         return false;
       // eslint-disable-next-line no-else-return
       } else {
         bcrypt.hash(password, 10, (error, hash) => {
+          /*
           if (error) {
             return res.status(500).send({
               status: 500,
@@ -132,6 +131,7 @@ const signUp = (req, res) => {
               field: 'password',
             });
           }
+          */
           const newUser = {
             email,
             username,
@@ -174,12 +174,14 @@ const signUp = (req, res) => {
                 },
               });
             }
+            /*
             if (err) {
               return res.status(500).send({
                 status: 500,
                 error: 'Internal Server Error, Please consult your Admin',
               });
             }
+            */
             return false;
           });
           return false;

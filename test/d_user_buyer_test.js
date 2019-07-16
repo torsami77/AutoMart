@@ -92,7 +92,7 @@ describe('User Buyer Activities', () => {
         res.body.data.car_id.should.be.a('number');
         res.body.data.created_on.should.be.a('string');
         res.body.data.status.should.be.a('string');
-        res.body.data.price.should.be.a('string');
+        res.body.data.price.should.be.a('number');
         res.body.data.price_offered.should.be.a('number');
         orderId = res.body.data.id;
         done();
@@ -140,31 +140,16 @@ describe('User Buyer Activities', () => {
       });
   });
 
-
-  it('should NOT let auth user (buyer) to attempt a UPDATE purchase with NOT Found Ad', (done) => {
-    api
-      .patch(`/api/v1/order/${orderId}/price`)
-      .set('token', token)
-      .send(assumedData.AdFoundorderNotFound)
-      .end((err, res) => {
-        res.body.should.be.a('object');
-        res.body.should.have.property('status').equal(404);
-        res.body.should.have.property('success').equal('false');
-        res.body.should.have.property('error').equal('Ad not found!');
-        done();
-      });
-  });
-
   it('should NOT let auth user (buyer) to attempt a UPDATE purchase with NOT Found order', (done) => {
     api
-      .patch(`/api/v1/order/${orderId}/price`)
+      .patch('/api/v1/order/1000000/price')
       .set('token', token)
       .send(assumedData.AdFoundorderNotFound)
       .end((err, res) => {
         res.body.should.be.a('object');
         res.body.should.have.property('status').equal(404);
         res.body.should.have.property('success').equal('false');
-        res.body.should.have.property('error').equal('Ad not found!');
+        res.body.should.have.property('error').equal('Order not found!');
         done();
       });
   });

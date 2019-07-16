@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/json' }));
 
+
 const employJwt = (req, res) => {
   if (req.userData && req.userData.is_admin === false) {
     return res.status(403).send({
@@ -28,6 +29,7 @@ const employJwt = (req, res) => {
 };
 
 class Admin {
+  /*
   static viewSpecific(req, res) {
     employJwt(req, res);
     if (req.userData && req.userData.is_admin) {
@@ -126,6 +128,7 @@ class Admin {
     }
     return false;
   }
+*/
 
   static deleteCar(req, res) {
     employJwt(req, res);
