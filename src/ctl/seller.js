@@ -291,7 +291,6 @@ class Seller {
   }
 
   static markAsSold(req, res) {
-    console.log(req.body);
     const { status } = req.body;
     if (!status || status === ' ') {
       res.status(400).send({
