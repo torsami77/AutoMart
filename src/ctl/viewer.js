@@ -79,14 +79,7 @@ class Viewer {
         searchFields.push(item);
       }
     });
-    if (searchFields.length < 1) {
-      return res.status(400).send({
-        status: 400,
-        error: 'Please provide query parameter',
-        success: 'false',
-        field: 'search_query',
-      });
-    }
+
 
     // if (status === 'available') {
     if (undefined === minPrice) {
