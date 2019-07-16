@@ -291,6 +291,17 @@ class Seller {
   }
 
   static markAsSold(req, res) {
+    const { email } = req.body;
+    if (email && typeof email === Number) {
+      res.status(400).send({
+        status: 400,
+        error: 'Invalid Car ID!',
+        success: 'false',
+        field: 'carId',
+      });
+      return false;
+    }
+
     if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
@@ -336,6 +347,7 @@ class Seller {
           });
         }
         */
+        return false;
       });
     return false;
   }
