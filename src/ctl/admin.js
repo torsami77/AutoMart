@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/json' }));
 
+
 const employJwt = (req, res) => {
   if (req.userData && req.userData.is_admin === false) {
     return res.status(403).send({
