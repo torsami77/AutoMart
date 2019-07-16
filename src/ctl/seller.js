@@ -291,7 +291,18 @@ class Seller {
   }
 
   static markAsSold(req, res) {
-    console.log(req.body.email, req.body, req.userData);
+    const { email } = req.body;
+    const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (undefined === email || (!email.match(mailformat)) || req.userData.email !== email) {
+      return res.status(400).send({
+        status: 400,
+        error: 'Please Enter a Valid Email!',
+        success: 'false',
+        field: 'email',
+      });
+    }
+
     if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
@@ -301,11 +312,11 @@ class Seller {
       });
       return false;
     }
+
     const carId = parseInt(req.params.carId, 10);
 
     pool.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
       ['sold', carId, req.userData.id], (_err, data) => {
-        console.log(_err, data);
         const theCar = data.rows[0];
         if (data && data.rows[0]) {
           return res.status(200).send({
