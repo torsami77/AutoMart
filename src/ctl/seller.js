@@ -216,6 +216,7 @@ class Seller {
   }
 
   static updatePrice(req, res) {
+    console.log(req.body, req.params);
     if (isNaN(parseFloat(req.body.price))) {
       res.status(400).send({
         status: 400,
@@ -241,6 +242,7 @@ class Seller {
     pool.query('SELECT status FROM cars WHERE id = $1 AND owner = $2', [carId, req.userData.id],
     // eslint-disable-next-line no-unused-vars
       (err, resp) => {
+        console.log(err, resp);
         let theCar = resp.rows[0];
         if (!theCar) {
           return res.status(404).send({
