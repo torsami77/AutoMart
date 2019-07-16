@@ -315,7 +315,8 @@ class Seller {
 
     const carId = parseInt(req.params.carId, 10);
 
-    pool.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
+    // pool.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
+    pool.query('UPDATE cars SET status=$1 WHERE id = $2 RETURNING created_on, manufacturer, model, price, state, status',
       ['sold', carId, req.userData.id], (_err, data) => {
         const theCar = data.rows[0];
         if (data && data.rows[0]) {
