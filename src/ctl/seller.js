@@ -292,12 +292,12 @@ class Seller {
 
   static markAsSold(req, res) {
     const { status } = req.body;
-    if (!status || status === ' ') {
+    if (!status || status !== 'sold') {
       res.status(400).send({
         status: 400,
-        error: 'Invalid Car ID!',
+        error: 'incorect intending status',
         success: 'false',
-        field: 'carId',
+        field: 'status',
       });
       return false;
     }

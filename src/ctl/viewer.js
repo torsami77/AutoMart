@@ -79,12 +79,12 @@ class Viewer {
         searchFields.push(item);
       }
     });
-    if (searchTerm.length < 1) {
+    if (searchFields.length < 1) {
       return res.status(404).send({
         status: 401,
         error: 'Please provide query parameter',
         success: 'false',
-        field: 'car',
+        field: 'search_query',
       });
     }
 
