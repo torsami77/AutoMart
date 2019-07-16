@@ -291,8 +291,9 @@ class Seller {
   }
 
   static markAsSold(req, res) {
-    const { email } = req.body;
-    if (email && typeof email === Number) {
+    console.log(req.body);
+    const { status } = req.body;
+    if (!status || status === ' ') {
       res.status(400).send({
         status: 400,
         error: 'Invalid Car ID!',
@@ -315,8 +316,8 @@ class Seller {
     const carId = parseInt(req.params.carId, 10);
 
     // pool.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
-    pool.query('UPDATE cars SET status=$1 WHERE id = $2 RETURNING created_on, manufacturer, model, price, state, status',
-      ['sold', carId], (_err, data) => {
+    pool.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
+      ['sold', carId, req.userData.id], (_err, data) => {
         const theCar = data.rows[0];
         if (data && data.rows[0]) {
           return res.status(200).send({
