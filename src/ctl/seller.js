@@ -216,8 +216,7 @@ class Seller {
   }
 
   static updatePrice(req, res) {
-    console.log(typeof (parseFloat(req.params.carId)));
-    if (isNaN(parseFloat(req.body.price))) {
+    if (isNaN(req.body.price)) {
       res.status(400).send({
         status: 400,
         error: 'Invalid Price value!',
@@ -227,7 +226,7 @@ class Seller {
       return false;
     }
 
-    if (isNaN(parseInt(req.params.carId, 10))) {
+    if (isNaN(req.params.carId, 10)) {
       res.status(400).send({
         status: 400,
         error: 'Invalid Car ID!',
