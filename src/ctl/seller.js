@@ -243,10 +243,10 @@ class Seller {
       (err, resp) => {
         let theCar = resp.rows[0];
         if (resp && resp.rows[0]) {
-          pool.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3 AND status != $4) RETURNING created_on, manufacturer, model, price, state, status',
-            [newPrice, carId, req.userData.id, 'sold'],
+          // pool.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3 AND status != $4) RETURNING created_on, manufacturer, model, price, state, status',
+          pool.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
+            [newPrice, carId, req.userData.id],
             (_err, data) => {
-              console.log(_err, data);
               // eslint-disable-next-line prefer-destructuring
               theCar = data.rows[0];
               if (data && data.rows[0]) {
