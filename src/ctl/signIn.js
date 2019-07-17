@@ -46,6 +46,7 @@ const signIn = (req, res) => {
               status: 401,
               error: 'Invalid Signin Credentials!',
               success: 'false',
+              field: 'password',
             });
           // eslint-disable-next-line no-else-return
           }
@@ -78,6 +79,7 @@ const signIn = (req, res) => {
           status: 401,
           error: 'Invalid Signin Credentials!',
           success: 'false',
+          field: 'password',
         });
       // eslint-disable-next-line no-else-return
       }

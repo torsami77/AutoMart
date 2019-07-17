@@ -15,7 +15,7 @@
         </title>
     </head>
 
-    <body onload="memberArea('signup');">
+    <body>
         <header>
             <a href="index.html">
                 <div class="logo-frame">
@@ -33,24 +33,29 @@
                 </div>
             </a>
 
-            <div class="search">
-            </div>
 
-            <div class="right-pane">
-                <button onclick="memberArea('signin');" class="button">Sign in</button>
-                <button onclick="memberArea('signup');" class="button">Sign up</button>
-            </div>
         </header>
-        <div class="sub-menu">
+
+        <div class="menu">
+              <span>Your Favourite platform to buy and sale vehicles...</span>
         </div>
-
-        <div id="pop-up" class="pop-up">
-        </div>
-
-
+      
         <div class="main">
             <section id="section" class="section">
-               
+                <div id="asection" class="asection-min">
+                    <fieldset>
+                        <div id="memberForm">
+                            <legend><h2>Admin Sign Up</h2></legend>
+                            <div id="info">
+                            </div>
+                            <div>
+                                <form>
+                                    <p><i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Enter your email" autofocus required/></p>
+                                    <p><i class="material-icons">lock</i><input type="password" name="password" id="password" class="input-field" placeholder="Create a password" required/></p>
+                                    <p><i class="material-icons">lock</i><input type="password" name="verify" id="verify" class="input-field" placeholder="Verify your password" required /></p>
+                                    <p><button type="submit" id="signup-admin" onclick="signUpAdmin();" class="button-enabled">Sign Up Admin</button></p>
+                                </form>
+                </div>
             </section>
             
             <div class="load-div">
@@ -87,7 +92,5 @@
         </script>
         <script src="./js/htmlvariables.js" type="text/javascript">
         </script>
-          <script src="./js/fetch/authentication.js" type="text/javascript">
-          </script>
     </body>
 </html>

@@ -55,8 +55,8 @@ class Viewer {
       const specifiedCar = data.rows[0];
 
       if (!data || !data.rows[0]) {
-        return res.status(404).send({
-          status: 404,
+        return res.status(400).send({
+          status: 400,
           error: 'Ad not found!',
           success: 'false',
           field: 'car'
@@ -77,8 +77,6 @@ class Viewer {
         }
         */
       }
-
-      return false;
     });
 
     return false;
@@ -114,17 +112,7 @@ class Viewer {
       if (undefined !== item) {
         searchFields.push(item);
       }
-    });
-
-    if (searchTerm.length < 1) {
-      return res.status(404).send({
-        status: 401,
-        error: 'Please provide query parameter',
-        success: 'false',
-        field: 'car'
-      });
-    } // if (status === 'available') {
-
+    }); // if (status === 'available') {
 
     if (undefined === minPrice) {
       minPrice = 0;
@@ -139,8 +127,8 @@ class Viewer {
 
       _pg.default.query(`SELECT * FROM cars WHERE round(price::numeric, 2) >= $1 AND round(price::numeric, 2) <= $2 AND status = $3 ${searchString}`, [minPrice, maxPrice, 'available'], (err, data) => {
         if (err || data.rows.length < 1) {
-          return res.status(404).send({
-            status: 404,
+          return res.status(400).send({
+            status: 400,
             error: 'Your Search wasn\'t found',
             success: 'false',
             field: searchFields
@@ -165,8 +153,8 @@ class Viewer {
             data: data.rows
           });
         } else {
-          return res.status(404).send({
-            status: 404,
+          return res.status(400).send({
+            status: 400,
             error: 'Your Search wasn\'t found',
             success: 'false',
             field: searchFields

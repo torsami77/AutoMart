@@ -20,6 +20,15 @@ header {
     height: 13%;
 }
 
+fieldset {
+    border-color: #00007C;
+}
+
+.title-background {
+    background-color: #00007c;
+    height: 20%;
+}
+
 .material-icons {
     vertical-align: middle;
 }
@@ -137,7 +146,7 @@ button, .button-enabled {
     height: 5%;
 }
 
-.sub-menu {
+.sub-menu{
     margin-top: 8%;
     background-color: rgb(255, 255, 255);
     color: #00007C;
@@ -151,19 +160,6 @@ button, .button-enabled {
     font-size: 20px;
     clear: both;
     height: 1%;
-}
-
-.required,.false {
-    color: red;
-}
-
-.true {
-    color: green;
-}
-
-.center {
-    width: 100%;
-    margin: 0 auto;
 }
 
 .sort {

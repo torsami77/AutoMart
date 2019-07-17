@@ -373,6 +373,16 @@
                   "required":true,
                   "type":"integer",
                   "format":"int64"
+               },
+               {  
+                  "name":"status",
+                  "in":"body",
+                  "description":"Value must be 'sold'",
+                  "required":true,
+                  "type":"string",
+                  "schema":{  
+                     "$ref":"#/definitions/updateStatus"
+                  }
                }
             ],
             "responses":{  
@@ -927,6 +937,18 @@
          },
            "xml":{
                "name":"updatePrice"
+           }
+      },
+      "updateStatus":{  
+         "type":"object",
+         "properties":{
+           "status":{  
+              "type":"string",
+              "example": "sold"
+           }
+         },
+           "xml":{
+               "name":"updateStatus"
            }
       },
       "updatePriceOrder":{  

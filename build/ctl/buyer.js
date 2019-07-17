@@ -140,7 +140,7 @@ class Buyer {
               return res.status(201).send({
                 status: 201,
                 data: {
-                  id: orderId,
+                  id: parseInt(orderId, 10),
                   car_id: carId,
                   status,
                   old_price_offered: parseFloat(old_price_offered),
