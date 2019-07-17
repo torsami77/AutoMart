@@ -195,20 +195,11 @@ const viewImage = `
                 <div class="left">
                     <div>
                         <p id="info"></p>
-                        <p>
-                            <input type="number" name="amount" id="amount" placeholder="Enter your bargain price" autofocus/></br>
-                            <span id="purchase-info"></span>
-                        </p>
-                        <div id="order-button">
-                            <button class="button" onclick="placeOrder({data.data.id});">
-                                <i class="material-icons">add_shopping_cart</i> Place order
-                            </button>
-                        </div>
+                        <p><input type="number" name="client-price" id="client-price" placeholder="Enter your bargain price" autofocus/></p>
+                        <button class="button"><i class="material-icons">add_shopping_cart</i> Place order</button>
                     </div>
-                    <div id="flag-area">
-                        <button class="button" onclick="showFlagArea();>
-                            <i class="material-icons red-icon">flag</i>Report
-                        </button>
+                    <div>
+                        <button class="button"><i class="material-icons red-icon">flag</i>Report</button>
                     </div>
                 </div>
 
@@ -234,15 +225,18 @@ const signInForm = `
         <fieldset>
             <div id="memberForm">
                 <legend><h2>Sign in</h2></legend>
+                <div id="info">
+                </div>
                 <p>Don't have an account? 
                 <span class="link" onclick="memberArea('signup')">Sign up here</span>
                 </p>
-                <div id="signin-info"></div>
                 <div>
+                    <form>
                         <p><i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Enter your email" autofocus required /></p>
                         <p><i class="material-icons">lock</i><input type="password" name="password" id="password" class="input-field" placeholder="Create a password" required/></p>
-                        <p><button type="submit" id="signIn" onclick="signIn();" class="button-enabled">Sign In</button></p>
+                        <p><button type="submit" id="login" onclick="signIn();" class="button-enabled">Sign In</button></p>
                         <p class="link" onclick="memberArea('forgotPassword');">Forgot password? Click here</p>
+                    </form>
                 </div>
             </div> 
         </fieldset>
@@ -258,10 +252,7 @@ const forgotPasswordForm = `
                 </div>
                 <div>
                     <form>
-                        <p>
-                            <i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Enter your email" autofocus required /></br>
-                            <span id="info-passResetReq"></span>
-                        </p>
+                        <p><i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Enter your email" autofocus required /></p>
                         <p><button type="submit" id="recover-Password" onclick="sendPasswordLink();" class="button-enabled">Email me password reset link</button></p>
                         <p>Don't have an account? 
                             <span class="link" onclick="memberArea('signup')">Sign up here</span>
@@ -280,22 +271,24 @@ const signUpForm = `
 <div id="asection" class="asection-min">
         <fieldset>
             <div id="memberForm">
+            <div class="title-background"></div>
             <legend><h2>Sign Up</h2></legend>
+                <div id="info">
+                </div>
                 <p>Already own an account? 
                     <span class="link" onclick="memberArea('signin');">Sign in here</span>
                 </p>
-                <div id="signUp-info"></div>
                 <div>
-
+                    <form>
                         <p><i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Provide your email" autofocus required/></p>
-                        <p><i class="material-icons">person</i><input type="text" name="first_name" id="first_name" class="input-field" placeholder="Enter your first name" required /></p>
-                        <p><i class="material-icons">person</i><input type="text" name="last_name" id="last_name" class="input-field" placeholder="Enter your last name" required /></p>
-                        <p><i class="material-icons">location_on</i><input type="text" id="address" name="address" placeholder="Enter your current location" required/></p>
+                        <p><i class="material-icons">person</i><input type="text" name="first-name" id="first-name" class="input-field" placeholder="Enter your first name" autofocus required /></p>
+                        <p><i class="material-icons">person</i><input type="text" name="last-name" id="last-name" class="input-field" placeholder="Enter your last name" autofocus required /></p>
                         <p><i class="material-icons">lock</i><input type="password" name="password" id="password" class="input-field" placeholder="Create a password" required/></p>
                         <p><i class="material-icons">lock</i><input type="password" name="verify" id="verify" class="input-field" placeholder="Verify your password" required/></p>
-                        <p><button type="submit" id="signUp" onclick="signUp();" class="button-enabled">Sign Up</button></p>
+                        <p><i class="material-icons">location_on</i><input type="text" id="location" name="location" placeholder="Enter your current location" required/></p>
+                        <p><button type="submit" id="login" onclick="signIn();" class="button-enabled">Sign Up</button></p>
                         <p class="link" onclick="memberArea('forgotPassword');">Forgot password? Click here</p>
-                   
+                    </form>
                 </div>
             </div>  
         </fieldset>
@@ -309,46 +302,40 @@ const createNewAdForm = `
             <div id="info">
                 <form class="text-align-left">
                     <p>
-                        <label for="manufacturer">Car Make:</label><span class="required">*</span></br>
-                        <select id="manufacturer" name="manufacturer" onchange="modifyModelOptions();">
-                        </select></br>
-                        <span id="info-manufacturer"></span>
+                        <label for="make">Car Make:</label></br>
+                        <select id="make" name="make" onchange="modifyModelOptions();">
+                        </select>
                     </p>
                     <p>
-                        <label for="model">Car Model:</label><span class="required">*</span></br>
+                        <label for="model">Car Model:</label></br>
                         <select id="model" name="model">
-                        </select></br>
-                        <span id="info-model"></span>
+                        </select>
                     </p>
                     <p>
-                        <label for="body_type">Body Type:</label><span class="required">*</span></br>
-                        <select id="body_type" name="body_type">
+                        <label for="bodytype">Body Type:</label></br>
+                        <select id="bodytype" name="bodytype">
                             <option selected disable>Select Body Type</option>
                             <option value="saloon">Saloon</option>
                             <option value="truck">Truck</option>
                             <option value="trailer">Trailer</option>
                             <option value"van">Van</option>
-                        </select></br>
-                        <span id="info-body_type"></span>
+                        </select>
                     </p>
                     <p>
                         <label for="year">Year:</label></br>
-                        <input type="number" name="year" id="year" placeholder="Enter Model Year"/></br>
-                        <span id="info-year"></span>
+                        <input type="number" id="model-year" placeholder="Enter Model Year"/>
                     </p>
                     <p>
                         <label for="mileage">Mileage:</label></br>
-                        <input type="number" name="mileage" id="mileage" placeholder="Enter Mileage On Car"/>Miles</br>
-                        <span id="info-mileage"></span>
+                        <input type="number" name="mileage" id="mileage" placeholder="Enter Mileage On Car"/>Miles
                     </p>
                     <p>
-                        <label for="state">State:</label><span class="required">*</span></br>
-                        <select name="state" id="state">
+                        <label for="condition">State:</label></br>
+                        <select name="condition" id="condition">
                             <option selected disable>Select Condition</option>
                             <option value="new">New</option>
                             <option value="used">Used</option>
-                        </select></br>
-                        <span id="info-state"></span>
+                        </select>
                     </p>
                     <p>
                         <label for="transmission">Transmission:</label></br>
@@ -356,56 +343,46 @@ const createNewAdForm = `
                             <option selected disable>Select Transmission</option>
                             <option value="new">Auto</option>
                             <option value="used">Manual</option>
-                        </select></br>
-                        <span id="info-transmission"></span>
+                        </select>
                     </p>
                     <p>
-                        <label for="vehicle_inspection_number">Vehicle Inspection Number:</label></br>
-                        <input type="text" name="vehicle_inspection_number" id="vehicle_inspection_number" placeholder="Enter Vehecle Inspection Number"/></br>
-                        <span id="info-vehicle_inspection_number"></span>
+                        <label for="vin">Vehicle Inspection Number:</label></br>
+                        <input type="text" name="vin" id="vin" placeholder="Enter VIN"/>
                     </p>
                     <p>
                         <label for="license">License Plate:</label></br>
-                        <input type="text" name="license" id="license" placeholder="Enter License Plate Number"/></br>
-                        <span id="info-licence"></span>
+                        <input type="text" name="license" id="license" placeholder="Enter License Plate Number"/>
                     </p>
                     <p>
-                        <label for="location">Location:</label></br>
-                        <input type="text" name="location" id="location" placeholder="Enter vehicle location"/></br>
-                        <span id="info-location"></span>
+                        <label for="state">Location:</label></br>
+                        <input type="text" name="location" id="location" placeholder="Enter vehicle location"/>
                     </p>
                     <p>
                         <label for="description">Car Description:</label></br>
-                        <textarea rows="4" cols="25" name="description" id="description" placeholder="Enter car description here..."></textarea></br>
-                        <span id="info-description"></span>
+                        <textarea rows="4" cols="25" name="description" id="description" placeholder="Enter car description here..."></textarea>
                     </p>
                     <p>
-                        <label for="price">Price:</label><span class="required">*</span></br>
-                        <input type="number" name="price" id="price" placeholder="Set Your Price"/>Naira</br>
-                        <span id="info-price"></span>
+                        <label for="price">Price:</label></br>
+                        <input type="number" name="price" id="price" placeholder="Set Your Price"/>Naira
                     </p>
                     <p>
-                        <label for="image_url">Upload 1st image:</label></br>
-                        <input type="file" name="image_url" id="image_url" accept="image/*"></br>
-                        <span id="info-image_url"></span>
+                        <label for="image1">Upload 1st image:</label></br>
+                        <input type="file" name="image1" accept="image/*">
                     </p>
                     <p>
                         <label for="image2">Upload 2nd image:</label></br>
-                        <input type="file" name="image2" id="image2" accept="image/*"></br>
-                        <span id="info-image2"></span>
+                        <input type="file" name="image2" accept="image/*">
                     </p>
                     <p>
                         <label for="image3">Upload 3rd image:</label></br>
-                        <input type="file" name="image3" id="image3" accept="image/*">
-                        <span id="info-image3"></span>
+                        <input type="file" name="image3" accept="image/*">
                     </p>
                     <p>
                         <label for="image4">Upload 4th image:</label></br>
-                        <input type="file" name="image4" id="image4" accept="image/*"><br/>
-                        <span id="info-image4"></span>
+                        <input type="file" name="image4" accept="image/*"><br/>
                     </p>
                 </form>
-                <p><button type="submit" id="login" onclick="postAnAdd" class="button-enabled">Add New Ad</button></p>
+                <p><button type="submit" id="login" onclick="AddNewAd()" class="button-enabled">Add New Ad</button></p>
             </div>
         </div> 
     </fieldset>
@@ -599,18 +576,3 @@ const adminView = `
 </table>
 `;
 
-const flagReportForm = `
-<form>
-    <p><input type="text" name="reason" id="reason" placeholder="Enter your Reason for this flaging"/></p>
-    <p>
-        <textarea name="description" id="description" placeholder="Described"/>
-            Enter Description ....
-        </textarea>
-    </p>
-    <p>
-        <button type="submit" name="flagReport" id="flagReport">
-        <i class="material-icons red-icon">flag</i>Create Report
-        </button>
-    </p>
-</form>
-`;

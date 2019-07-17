@@ -40,7 +40,7 @@ const signUp = (req, res) => {
     });
   }
 
-  if (undefined === firstName || firstName === ' ') {
+  if (undefined === firstName || firstName.trim() === '') {
     return res.status(400).send({
       status: 400,
       error: 'Please Enter your First Name',
@@ -50,7 +50,7 @@ const signUp = (req, res) => {
   }
 
 
-  if (undefined === lastName || lastName === ' ') {
+  if (undefined === lastName || lastName.trim() === '') {
     return res.status(400).send({
       status: 400,
       error: 'Please Enter your Last Name',
@@ -59,7 +59,7 @@ const signUp = (req, res) => {
     });
   }
 
-  if (undefined === address || address === ' ') {
+  if (undefined === address || address.trim() === '') {
     return res.status(400).send({
       status: 400,
       error: 'Please Enter your Address',
@@ -68,7 +68,7 @@ const signUp = (req, res) => {
     });
   }
 
-  if (undefined === password || password === ' ') {
+  if (undefined === password) {
     return res.status(400).send({
       status: 400,
       error: 'Please Provide a Password',

@@ -285,19 +285,13 @@ class Seller {
     (err, resp) => {
       let theCar = resp.rows[0];
 
-      if (!theCar) {
-        return res.status(404).send({
-          status: 404,
-          error: 'Ad not found or not owned by you!',
-          success: 'false',
-          field: 'price'
-        }); // eslint-disable-next-line no-else-return
-      } else {
-        _pg.default.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3 AND status != $4) RETURNING created_on, manufacturer, model, price, state, status', [newPrice, carId, req.userData.id, 'sold'], (_err, data) => {
+      if (resp && resp.rows[0]) {
+        // pool.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3 AND status != $4) RETURNING created_on, manufacturer, model, price, state, status',
+        _pg.default.query('UPDATE cars SET price=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status', [newPrice, carId, req.userData.id], (_err, data) => {
           // eslint-disable-next-line prefer-destructuring
           theCar = data.rows[0];
 
-          if (theCar) {
+          if (data && data.rows[0]) {
             return res.status(200).send({
               status: 200,
               data: {
@@ -324,6 +318,13 @@ class Seller {
             });
           }
         });
+      } else {
+        return res.status(404).send({
+          status: 404,
+          error: 'Ad not found or not owned by you!',
+          success: 'false',
+          field: 'price'
+        });
       }
 
       return false;
@@ -333,6 +334,20 @@ class Seller {
   }
 
   static markAsSold(req, res) {
+    const {
+      status
+    } = req.body;
+
+    if (!status || status !== 'sold') {
+      res.status(400).send({
+        status: 400,
+        error: 'incorect intending status',
+        success: 'false',
+        field: 'status'
+      });
+      return false;
+    }
+
     if (isNaN(parseInt(req.params.carId, 10))) {
       res.status(400).send({
         status: 400,
@@ -343,12 +358,12 @@ class Seller {
       return false;
     }
 
-    const carId = parseInt(req.params.carId, 10);
+    const carId = parseInt(req.params.carId, 10); // pool.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status',
 
     _pg.default.query('UPDATE cars SET status=$1 WHERE (id = $2 AND owner = $3) RETURNING created_on, manufacturer, model, price, state, status', ['sold', carId, req.userData.id], (_err, data) => {
       const theCar = data.rows[0];
 
-      if (theCar) {
+      if (data && data.rows[0]) {
         return res.status(200).send({
           status: 200,
           data: {
@@ -366,14 +381,19 @@ class Seller {
             field: 'sold'
           }
         }); // eslint-disable-next-line no-else-return
-      } else {
-        return res.status(403).send({
-          status: 403,
-          error: 'You are not allowed to mark this Ad as sold!',
-          success: 'false',
-          field: 'status'
-        });
       }
+      /* else {
+      return res.status(403).send({
+        status: 403,
+        error: 'You are not allowed to mark this Ad as sold!',
+        success: 'false',
+        field: 'status',
+      });
+      }
+      */
+
+
+      return false;
     });
 
     return false;
