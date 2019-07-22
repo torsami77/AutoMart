@@ -55,7 +55,7 @@ class Seller {
     const bodyType = body_type;
     let vehicleInspectionNumber = vehicle_inspection_number;
 
-    if (!manufacturer || manufacturer === ' ') {
+    if (!manufacturer || manufacturer.trim() === '') {
       res.status(400).send({
         status: 400,
         error: 'manufacturer field cannot be empty!',
@@ -65,7 +65,7 @@ class Seller {
       return false;
     }
 
-    if (!model || model === ' ') {
+    if (!model || model.trim() === '') {
       res.status(400).send({
         status: 400,
         error: 'model field cannot be empty!',
@@ -75,7 +75,7 @@ class Seller {
       return false;
     }
 
-    if (!bodyType || bodyType === ' ') {
+    if (!bodyType || bodyType.trim() === '') {
       res.status(400).send({
         status: 400,
         error: 'body type field cannot be empty!',
@@ -113,7 +113,7 @@ class Seller {
       mileage = 0;
     }
 
-    if (!state || state === ' ') {
+    if (!state || state.trim() === '') {
       res.status(400).send({
         status: 400,
         error: 'state field cannot be empty!',
@@ -123,15 +123,15 @@ class Seller {
       return false;
     }
 
-    if (!location || location === ' ') {
+    if (!location || location.trim() === '') {
       location = 'Not provided';
     }
 
-    if (!transmission || transmission === ' ') {
+    if (!transmission || transmission.trim() === '') {
       transmission = 'Not provided';
     }
 
-    if (!vehicleInspectionNumber || vehicleInspectionNumber === ' ') {
+    if (!vehicleInspectionNumber || vehicleInspectionNumber.trim() === '') {
       vehicleInspectionNumber = 'Not provided';
     }
 
@@ -139,7 +139,7 @@ class Seller {
       licence = 'Not provided';
     }
 
-    if (!description || description === ' ') {
+    if (!description || description.trim() === '') {
       description = 'Not provided';
     }
 

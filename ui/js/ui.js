@@ -365,7 +365,7 @@ const getCookie = (cname) => {
 const username = getCookie('username');
 const token = getCookie('token');
 
-const IS_DEV_MODE = false;
+const IS_DEV_MODE = true;
 
 // eslint-disable-next-line no-unused-vars
 const host = IS_DEV_MODE

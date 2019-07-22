@@ -254,22 +254,20 @@ const forgotPasswordForm = `
         <fieldset>
             <div id="memberForm">
                 <legend><h2>Forgotten Password!</h2></legend>
-                <div id="info">
+                <div id="info-passResetReq" class="false">
                 </div>
                 <div>
-                    <form>
-                        <p>
-                            <i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Enter your email" autofocus required /></br>
-                            <span id="info-passResetReq"></span>
-                        </p>
-                        <p><button type="submit" id="recover-Password" onclick="sendPasswordLink();" class="button-enabled">Email me password reset link</button></p>
-                        <p>Don't have an account? 
-                            <span class="link" onclick="memberArea('signup')">Sign up here</span>
-                        </p>
-                        <p>Still remember password? 
-                            <span class="link" onclick="memberArea('signin');">Sign in here</span>
-                        </p>    
-                    </form>
+                    <p>
+                        <i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Enter your email" autofocus required/></br>
+                        <span id="info-passResetReq"></span>
+                    </p>
+                    <p><button type="submit" id="recover-Password" onclick="sendPasswordLink();" class="button-enabled">Email me password reset link</button></p>
+                    <p>Don't have an account? 
+                        <span class="link" onclick="memberArea('signup')">Sign up here</span>
+                    </p>
+                    <p>Still remember password? 
+                        <span class="link" onclick="memberArea('signin');">Sign in here</span>
+                    </p>
                 </div>
             </div> 
         </fieldset>
@@ -286,16 +284,14 @@ const signUpForm = `
                 </p>
                 <div id="signUp-info"></div>
                 <div>
-
                         <p><i class="material-icons">email</i><input type="email" name="email" id="email" class="input-field" placeholder="Provide your email" autofocus required/></p>
-                        <p><i class="material-icons">person</i><input type="text" name="first_name" id="first_name" class="input-field" placeholder="Enter your first name" required /></p>
+                        <p><i class="material-icons">person</i><input type="text" name="first_name" id="first_name" class="input-field" placeholder="Enter your first name" /></p>
                         <p><i class="material-icons">person</i><input type="text" name="last_name" id="last_name" class="input-field" placeholder="Enter your last name" required /></p>
                         <p><i class="material-icons">location_on</i><input type="text" id="address" name="address" placeholder="Enter your current location" required/></p>
                         <p><i class="material-icons">lock</i><input type="password" name="password" id="password" class="input-field" placeholder="Create a password" required/></p>
                         <p><i class="material-icons">lock</i><input type="password" name="verify" id="verify" class="input-field" placeholder="Verify your password" required/></p>
                         <p><button type="submit" id="signUp" onclick="signUp();" class="button-enabled">Sign Up</button></p>
                         <p class="link" onclick="memberArea('forgotPassword');">Forgot password? Click here</p>
-                   
                 </div>
             </div>  
         </fieldset>

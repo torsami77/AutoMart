@@ -43,7 +43,7 @@ class Password {
       }); // eslint-disable-next-line no-else-return
     }
 
-    if (req.params.email === ' ' || !req.params.email.match(mailformat)) {
+    if (req.params.email.trim() === '' || !req.params.email.match(mailformat)) {
       return res.status(400).send({
         status: 400,
         error: 'Please provide a valid email!',
@@ -79,7 +79,7 @@ Hello ${firstName},
 You receive this email because there was an action to reset your password on 
 automart77.herokuapp.com. If you would like to proceed please copy the link below and paste in your browser address bar.
 
-https://automart77.herokuapp.com/createnewpassword/${token}
+https://automart77.herokuapp.com/createnewpassword.html/token?${token}
 
 The link will expire after 1hr.
 

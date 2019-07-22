@@ -3,7 +3,6 @@ const generateSearchString = (searchObjects) => {
   let column;
   Object.keys(searchObjects).forEach((keyItem) => {
     if (typeof (searchObjects[keyItem]) !== 'undefined' && keyItem !== 'minPrice' && keyItem !== 'maxPrice') {
-      
       switch (keyItem) {
         case 'bodyType':
           column = 'body_type';

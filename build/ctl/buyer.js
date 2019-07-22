@@ -357,7 +357,7 @@ class Buyer {
       });
     }
 
-    if (!req.body.reason || req.body.reason === ' ') {
+    if (!req.body.reason || req.body.reason.trim() === '') {
       return res.status(400).send({
         status: 400,
         error: 'Please indicate your reason for this red flag!',
@@ -366,7 +366,7 @@ class Buyer {
       });
     }
 
-    if (!req.body.description || req.body.description === ' ') {
+    if (!req.body.description || req.body.description.trim() === '') {
       return res.status(400).send({
         status: 400,
         error: 'Please enter description for your red flag!',
