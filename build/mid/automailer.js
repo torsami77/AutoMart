@@ -9,23 +9,11 @@ var _nodemailer = _interopRequireDefault(require("nodemailer"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*
-const transporter = nodemailer.createTransport({
+const transporter = _nodemailer.default.createTransport({
   service: 'gmail',
   auth: {
     user: 'automailer77@gmail.com',
-    pass: process.env.AUTOMAILER_PASS,
-  },
-});
-*/
-const transporter = _nodemailer.default.createTransport({
-  host: 'smtp.zoho.com',
-  port: 465,
-  secure: true,
-  // use SSL
-  auth: {
-    user: 'torsami77@zoho.com',
-    pass: 'zoho101'
+    pass: process.env.AUTOMAILER_PASS
   }
 }); // eslint-disable-next-line no-unused-vars
 

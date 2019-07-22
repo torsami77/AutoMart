@@ -186,7 +186,7 @@ class Seller {
       // eslint-disable-next-line max-len
       newCar.year, newCar.mileage, newCar.transmission, newCar.vehicleInspectionNumber, newCar.licence, newCar.description, newCar.imageGallery, newCar.orders, newCar.flags],
     (_err, data) => {
-      if (data.rows[0]) {
+      if (data && data.rows[0]) {
         const { id } = data.rows[0];
         return res.status(201).send({
           status: 201,
