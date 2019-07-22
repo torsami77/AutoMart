@@ -88,10 +88,55 @@ const signIn = () => {
 const sendPasswordLink = () => {
   const email = document.getElementById('email').value;
 
-  const uri = `${URL}/api/v1/users/:email/reset_password`;
+  const uri = `${host}/api/v1/users/${email}/reset_password`;
   const h = new Headers({ 'content-type': 'application/json' });
+
+
+  const req = new Request(uri, {
+    method: 'POST',
+    headers: h,
+  });
+
+
+  fetch(req)
+    .then(resp => resp.json())
+    .then((data) => {
+      if (data.error) {
+        document.getElementById('info-passResetReq').innerHTML = `${data.error}`;
+        document.getElementById('email').focus();
+        return false;
+      }
+      const success = `
+      <div id="asection" class="asection-min">
+        <fieldset>
+            <div id="memberForm">
+              <legend><h2 class="true" >${data.data.message}</h2></legend>
+              <p>
+                <span class="link" onclick="memberArea('forgotPassword');">Click here to resend link?</span>
+              </p>
+            </div>
+        </fieldset>
+      `;
+
+      document.getElementById('section').innerHTML = success;
+      return false;
+    });
+  return false;
+};
+
+createNewPassword = () => {
+  const url = window.location.href;
+  const params = url.split('?');
+  const token = params[1];
+
+  const password = document.getElementById('password').value;
+  const verify = document.getElementById('verify').value;
+
+  const uri = `${host}/api/v1/users/createnew_password`;
+  const h = new Headers({ 'content-type': 'application/json', token });
   const body = {
-    email,
+    password,
+    verify,
   };
 
 
@@ -105,23 +150,25 @@ const sendPasswordLink = () => {
   fetch(req)
     .then(resp => resp.json())
     .then((data) => {
-      if (data.success === 'true') {
-        const success = `
-        <div>
-        <p class="true" >${data.message}</p>
-        <p> <span class="link" onclick="memberArea('forgotPassword');">Click here to resend link?</span> </p>
-        </div>
-        `;
-
-        document.getElementById('memberForm').innerHTML = success;
-        return false;
-      } else {
-        document.getElementById('info-passResetReq').innerHTML = `${data.message}`;
-        document.getElementById('email').focus();
+      if (data.error) {
+        document.getElementById('info-create-password').innerHTML = `${data.error}`;
+        document.getElementById(data.field).focus();
         return false;
       }
+      const success = `
+      <div id="asection" class="asection-min">
+        <fieldset>
+            <div id="memberForm">
+              <legend><h2 class="true" >${data.data.message}</h2></legend>
+              <p>
+                <span class="link" onclick="memberArea('signin');">Click here to sign in</span>
+              </p>
+            </div>
+        </fieldset>
+      `;
 
+      document.getElementById('section').innerHTML = success;
       return false;
     });
   return false;
-}
+};

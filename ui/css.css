@@ -329,6 +329,7 @@ h1 {
 .input-field:focus {
     background-color: rgb(255, 255, 180);
     outline: none;
+    border: 2px solid red;
 }
 
 .link {
