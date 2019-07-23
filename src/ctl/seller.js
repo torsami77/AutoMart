@@ -338,7 +338,7 @@ class Seller {
           });
 
         // eslint-disable-next-line no-else-return
-        } /* else {
+        } else {
           return res.status(403).send({
             status: 403,
             error: 'You are not allowed to mark this Ad as sold!',
@@ -346,8 +346,6 @@ class Seller {
             field: 'status',
           });
         }
-        */
-        return false;
       });
     return false;
   }
