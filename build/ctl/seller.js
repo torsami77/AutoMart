@@ -226,7 +226,7 @@ class Seller {
         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING id`, // eslint-disable-next-line max-len
     [req.userData.id, newCar.created_on, newCar.manufacturer, newCar.model, newCar.bodyType, newCar.price, newCar.state, newCar.status, // eslint-disable-next-line max-len
     newCar.year, newCar.mileage, newCar.transmission, newCar.vehicleInspectionNumber, newCar.licence, newCar.description, newCar.imageGallery, newCar.orders, newCar.flags], (_err, data) => {
-      if (data.rows[0]) {
+      if (data && data.rows[0]) {
         const {
           id
         } = data.rows[0];
